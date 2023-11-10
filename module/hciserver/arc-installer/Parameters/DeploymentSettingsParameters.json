@@ -1,0 +1,148 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apiVersion": {
+            "value": "2023-08-01-preview"
+        },
+        "name": {
+            "value": "demohcicluster"
+        },
+        "arcNodeResourceIds": {
+            "value": [
+                "/subscriptions/6e0219f5-327a-4365-904f-05eed4227ad7/resourceGroups/testAtasiRg/providers/Microsoft.HybridCompute/machines/v-Host1"
+            ]
+        },
+        "domainFqdn": {
+            "value": "hi"
+        },
+        "namingPrefix": {
+            "value": "hello"
+        },
+        "adouPath": {
+            "value": "hello2"
+        },
+        "securityLevel": {
+            "value": "Customized"
+        },
+        "driftControlEnforced": {
+            "value": true
+        },
+        "credentialGuardEnforced": {
+            "value": false
+        },
+        "smbSigningEnforced": {
+            "value": false
+        },
+        "smbClusterEncryption": {
+            "value": true
+        },
+        "bitlockerBootVolume": {
+            "value": true
+        },
+        "bitlockerDataVolumes": {
+            "value": true
+        },
+        "wdacEnforced": {
+            "value": true
+        },
+        "streamingDataClient": {
+            "value": true
+        },
+        "euLocation": {
+            "value": true
+        },
+        "episodicDataUpload": {
+            "value": false
+        },
+        "clusterName": {
+            "value": "demohcicluster"
+        },
+        "cloudAccountName": {
+            "value": ""
+        },
+        "configurationMode": {
+            "value": "InfraOnly"
+        },
+        "subnetMask": {
+            "value": "10.0.0.3"
+        },
+        "defaultGateway": {
+            "value": "10.0.0.5"
+        },
+        "startingIPAddress": {
+            "value": "10.0.0.1"
+        },
+        "endingIPAddress": {
+            "value": "10.0.0.2"
+        },
+        "dnsServers": {
+            "value": [
+                "10.0.0.8",
+                "10.0.0.6"
+            ]
+        },
+        "physicalNodesSettings": {
+            "value": []
+        },
+        "networkingType": {
+            "value": "singleServerDeployment"
+        },
+        "networkingPattern": {
+            "value": "hyperConverged"
+        },
+        "intentList": {
+            "value": [
+                {
+                    "name": "Compute_Management_Storage",
+                    "trafficType": [
+                        "Compute",
+                        "Management",
+                        "Storage"
+                    ],
+                    "adapter": [
+                        ""
+                    ],
+                    "overrideVirtualSwitchConfiguration": false,
+                    "virtualSwitchConfigurationOverrides": {
+                        "enableIov": "",
+                        "loadBalancingAlgorithm": ""
+                    },
+                    "overrideQosPolicy": true,
+                    "qosPolicyOverrides": {
+                        "priorityValue8021Action_Cluster": "7",
+                        "priorityValue8021Action_SMB": "3",
+                        "bandwidthPercentage_SMB": "50"
+                    },
+                    "overrideAdapterProperty": true,
+                    "adapterPropertyOverrides": {
+                        "jumboPacket": "9014",
+                        "networkDirect": "Enabled",
+                        "networkDirectTechnology": "iWARP"
+                    }
+                }
+            ]
+        },
+        "storageNetworkList": {
+            "value": [
+                {
+                    "name": "",
+                    "networkAdapterName": "",
+                    "vlanId": "711"
+                }
+            ]
+        },
+        "secretsLocation":{
+            "value": "testKv.vault.azure.net"
+        },
+        "storageConnectivitySwitchless": {
+            "value": false
+        },
+        "customLocation": {
+            "value": "customloc"
+        },
+        "deploymentMode":{
+            "value": "Validate"
+        }
+    }
+}

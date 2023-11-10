@@ -1,0 +1,146 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "tenantId": {
+      "type": "string",
+      "defaultValue": "[subscription().tenantId]"
+    },
+    "localAdminSecretName": {
+      "type": "string",
+      "defaultValue": "LocalAdminCredential"
+    },
+    "localAdminSecretValue": {
+      "type": "securestring"
+    },
+    "domainAdminSecretName": {
+      "type": "string",
+      "defaultValue": "AzureStackLCMUserCredential"
+    },
+    "domainAdminSecretValue": {
+      "type": "securestring"
+    },
+    "arbDeploymentSpnName": {
+      "type": "string",
+      "defaultValue": "DefaultARBApplication"
+    },
+    "arbDeploymentSpnValue": {
+      "type": "securestring"
+    },
+    "storageWitnessName": {
+      "type": "string",
+      "defaultValue": "WitnessStorageKey"
+    },
+    "storageWitnessValue": {
+      "type": "securestring"
+    },
+    "softDeleteRetentionDays": {
+      "type": "int",
+      "defaultValue": 30
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enabledForDeployment": true,
+        "enabledForTemplateDeployment": true,
+        "enabledForDiskEncryption": true,
+        "enableSoftDelete": false,
+        "softDeleteRetentionInDays": "[parameters('softDeleteRetentionDays')]",
+        "enableRbacAuthorization": true,
+        "publicNetworkAccess": "Enabled",
+        "accessPolicies": [],
+        "tenantId": "[parameters('tenantId')]",
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('domainAdminSecretName'))]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "contentType": "Secret",
+        "value": "[parameters('domainAdminSecretValue')]",
+        "attributes": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('localAdminSecretName'))]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "contentType": "Secret",
+        "value": "[parameters('localAdminSecretValue')]",
+        "attributes": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('arbDeploymentSpnName'))]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "contentType": "Secret",
+        "value": "[parameters('arbDeploymentSpnValue')]",
+        "attributes": {
+          "enabled": true
+        }
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[concat(parameters('keyVaultName'), '/', parameters('storageWitnessName'))]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "contentType": "Secret",
+        "value": "[parameters('storageWitnessValue')]",
+        "attributes": {
+          "enabled": true
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "keyVaultId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+    }
+  }
+}
