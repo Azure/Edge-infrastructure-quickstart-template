@@ -1,9 +1,9 @@
 provider "azurerm" {
   features {
   }
-  subscription_id = "<subscriptionId>"
+  subscription_id = hci.var.subId
 }
 
 provider "azapi" {
-  subscription_id = "<subscriptionId>"
+  subscription_id = hci.var.subId
 }

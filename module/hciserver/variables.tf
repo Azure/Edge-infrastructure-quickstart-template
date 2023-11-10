@@ -1,40 +1,47 @@
-variable "serverName" {
-  type = string
-}
-
-variable "resourceGroup" {
-  type = string
-}
-
-variable "localAdminUser" {
+variable "serverName" {  
+  type        = string  
+  description = "The name of the server."  
+}  
   
-}
-
-variable "localAdminPassword" {
+variable "resourceGroup" {  
+  type        = string  
+  description = "The name of the resource group."  
+}  
   
-}
-
-variable "serverIP" {
-  type = string
-}
-
-variable "subId" {
-    type = string
-}
-
-variable "location" {
-    type = string
-}
-
-variable "tenant" {
-    type = string
-}
-
-variable "servicePricipalId" {
-    type = string
-}
-
-variable "servicePricipalSecret" {
-    type = string
-    
-}
+variable "localAdminUser" {  
+  description = "The username for the local administrator account."  
+}  
+  
+variable "localAdminPassword" {  
+  description = "The password for the local administrator account."  
+}  
+  
+variable "serverIP" {  
+  type        = string  
+  description = "The IP address of the server."  
+}  
+  
+variable "subId" {  
+  type        = string  
+  description = "The subscription ID for the Azure account."  
+}  
+  
+variable "location" {  
+  type        = string  
+  description = "The Azure region where the resources will be deployed."  
+}  
+  
+variable "tenant" {  
+  type        = string  
+  description = "The tenant ID for the Azure account."  
+}  
+  
+variable "servicePricipalId" {  
+  type        = string  
+  description = "The service principal ID for the Azure account."  
+}  
+  
+variable "servicePricipalSecret" {  
+  type        = string  
+  description = "The service principal secret for the Azure account."  
+}  
