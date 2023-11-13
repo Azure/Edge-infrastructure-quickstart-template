@@ -4,6 +4,7 @@
   
 # Terraform provider plugins  
 .terraform/  
+.terraform
   
 # IDE and editor files  
 .vscode/  

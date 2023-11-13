@@ -23,10 +23,6 @@ variable "servers" {
 variable "domainServerIP" {
   description = "The ip of the domain server."
   type = string
-  validation {
-    condition     = can(regex("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", var.ip_address))
-    error_message = "Invalid IP address provided."
-  }
 }
 
 variable "domainName" {
@@ -64,8 +60,8 @@ variable "arbDeploymentSpnValue" {
 }
 
 //deploymentSettings related variables  
-variable "domainSuffix" {
-  description = "The domain FQDN is going to be '{var.siteId}.{var.domainSuffix}'."
+variable "domainFqdn" {
+  description = "The domain FQDN."
 }
 
 variable "subnetMask" {

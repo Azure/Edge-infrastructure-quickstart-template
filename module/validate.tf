@@ -3,7 +3,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   name                      = "default"
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster1.id
-  depends_on                = [module.server-1, module.server-2, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.storageWitnessName, azapi_resource.cluster1]
+  depends_on                = [module.servers, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.storageWitnessName, azapi_resource.cluster1]
   timeouts {
     create = "10m"
     update = "10m"
@@ -11,7 +11,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   }
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = [module.server-1.server.id, module.server-2.server.id]
+      arcNodeResourceIds = [flatten([for server in module.servers: server.server.id])]
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"
@@ -46,7 +46,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 configurationMode = "Express" //
               }
               namingPrefix = var.siteId
-              domainFqdn   = "${var.siteId}.${var.domainSuffix}"
+              domainFqdn   = "${var.domainFqdn}"
               infrastructureNetwork = [{
                 subnetMask = var.subnetMask
                 gateway    = var.defaultGateway
