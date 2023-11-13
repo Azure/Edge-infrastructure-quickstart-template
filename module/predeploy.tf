@@ -74,7 +74,7 @@ resource "azurerm_key_vault_secret" "storageWitnessName" {
 
 module "server" {
   for_each              = toset(var.servers)
-  depends_on            = [azurerm_resource_group.rg]
+  depends_on            = [azurerm_resource_group.rg,terraform_data.ad_creation_provisioner]
   source                = "./hciserver"
   resourceGroup         = azurerm_resource_group.rg.name
   serverName            = each.value.name

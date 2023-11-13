@@ -3,7 +3,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   name                      = "default"
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster1.id
-  depends_on                = [module.server-1, module.server-2, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.storageWitnessName]
+  depends_on                = [module.server-1, module.server-2, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.storageWitnessName, azapi_resource.cluster1]
   timeouts {
     create = "10m"
     update = "10m"
