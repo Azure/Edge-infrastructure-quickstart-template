@@ -54,11 +54,6 @@ variable "localAdminPassword" {
   description = "The password for the local administrator account."
 }
 
-variable "arbDeploymentSpnValue" {
-  sensitive   = true
-  description = "The service principal value for the deployment in the format '<ServicePrincipalId>:<ServicePrincipalSecret>'."
-}
-
 //deploymentSettings related variables  
 variable "domainFqdn" {
   description = "The domain FQDN."

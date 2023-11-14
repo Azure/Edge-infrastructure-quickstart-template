@@ -56,7 +56,7 @@ resource "azurerm_key_vault_secret" "LocalAdminCredential" {
 resource "azurerm_key_vault_secret" "arbDeploymentSpnName" {
   name         = "DefaultARBApplication"
   content_type = "Secret"
-  value        = base64encode(var.arbDeploymentSpnValue)
+  value        = base64encode("${var.servicePricipalId}:${var.servicePricipalSecret}")
   key_vault_id = azurerm_key_vault.DeploymentKeyVault.id
   depends_on   = [azurerm_key_vault.DeploymentKeyVault]
 }
