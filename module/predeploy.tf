@@ -89,7 +89,7 @@ module "servers" {
     for index, server in var.servers :
     server.name => server.ipv4Address
   }
-  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.wsmansetting]
+  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.WSManSetting]
   source                = "./hciserver"
   resourceGroup         = azurerm_resource_group.rg.name
   serverName            = each.key
