@@ -39,5 +39,6 @@ resource "azurerm_role_assignment" "MachineRoleAssign-1" {
 }
 
 output "server" {
-  value = data.azurerm_arc_machine.server
+  value       = data.azurerm_arc_machine.server
+  description = "The arc server object"
 }

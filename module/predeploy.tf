@@ -5,8 +5,8 @@ locals {
     "User Access Administrator",
     "contributor"
   ]
-
 }
+
 resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
   for_each             = toset(local.SPRoleList)
   scope                = azurerm_resource_group.rg.id

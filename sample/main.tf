@@ -13,7 +13,6 @@
 #   domainAdminPassword   = "<domainAdminPassword>"
 #   localAdminUser        = "<localAdminUser>"
 #   localAdminPassword    = "<localAdminPassword>"
-#   arbDeploymentSpnValue = "<arbDeploymentSpnValue>"
 #   domainFqdn            = "<domainFqdn>"
 #   startingAddress       = "<startingAddress>"
 #   endingAddress         = "<endingAddress>"
