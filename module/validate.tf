@@ -11,7 +11,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   }
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = [flatten([for server in module.servers: server.server.id])]
+      arcNodeResourceIds = flatten([for server in module.servers: server.server.id])
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"

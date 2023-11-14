@@ -9,7 +9,6 @@ $script:ErrorActionPreference = 'Stop'
 echo "Hello!"
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-enable-wsmancredssp -role client -delegatecomputer $ip -force
 $session = New-PSSession -ComputerName $ip -Authentication Credssp -Credential $cred
 
 

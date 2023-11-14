@@ -25,7 +25,7 @@ data "azurerm_arc_machine" "server" {
 
 locals {
   RoleList = [
-    "Azure Stack HCI registration role",
+    "Azure Stack HCI Edge Devices role",
     "Key Vault Secrets User",
     //"Azure Stack HCI Device Management Role"
   ]

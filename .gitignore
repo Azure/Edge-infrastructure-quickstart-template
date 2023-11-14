@@ -5,6 +5,7 @@
 # Terraform provider plugins  
 .terraform/  
 .terraform
+.terraform.lock.hcl
   
 # IDE and editor files  
 .vscode/  
