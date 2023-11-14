@@ -19,8 +19,9 @@ To get started, follow these steps:
   
 After setting up the repository, navigate to sample folder that containing the Terraform configuration files and perform the following steps:  
 
-0. Open a powershell as administrator, az login with the account that has proper permission.
-    - the permission contains [TODO]
+0. Open a powershell as administrator, az login with the account that has proper permission over the subscription.
+    - the permission contains Key Vault Administrator and Owner.
+    - you can also use service principal, refer to the [Authenticating using a Service Principal with a Client Secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
 1. Initialize the Terraform working directory by running `terraform init`.  
 2. Plan and review the resources to be created by running `terraform plan`.  
 3. Apply the Terraform configuration and create the resources by running `terraform apply`.  
