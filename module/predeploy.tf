@@ -72,23 +72,23 @@ resource "azurerm_key_vault_secret" "storageWitnessName" {
 //6. Get Arc server & assign roles to its system identity
 # Get resources by type
 
-//setup wsmancredssp
-locals{
-  iplist = join(",",[for server in var.servers: server.ipv4Address])
+//setup WSManCredSSP
+locals {
+  iplist = join(",", [for server in var.servers : server.ipv4Address])
 }
-resource "terraform_data" "wsmansetting" {
-    provisioner "local-exec" {
-    command = "enable-wsmancredssp -role client -delegatecomputer ${local.iplist} -force"
-    interpreter = [ "PowerShell" ]
+resource "terraform_data" "WSManSetting" {
+  provisioner "local-exec" {
+    command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force"
+    interpreter = ["PowerShell"]
   }
 }
 
 module "servers" {
-  for_each              = {
-    for index,server in var.servers:
-      server.name =>server.ipv4Address
+  for_each = {
+    for index, server in var.servers :
+    server.name => server.ipv4Address
   }
-  depends_on            = [azurerm_resource_group.rg,terraform_data.ad_creation_provisioner,terraform_data.wsmansetting]
+  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.wsmansetting]
   source                = "./hciserver"
   resourceGroup         = azurerm_resource_group.rg.name
   serverName            = each.key
