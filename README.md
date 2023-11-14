@@ -3,7 +3,7 @@
 This repository provides a simple and efficient way for customers to provision AzureStackHCI 23H2 using Terraform. By forking this repository and modifying the parameters, you can quickly and easily deploy AzureStackHCI 23H2 to your environment.  
 
 ## Prerequisites 
-Follow step1(Prepare Active Directory) and step2(Install OS) of this [official doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-tool-active-directory)
+Follow the step2(Install OS) of this [official doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-tool-active-directory)
 
 ## Getting Started  
   
@@ -13,11 +13,11 @@ To get started, follow these steps:
 2. Clone the forked repository to your local machine.  
 3. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
 4. Configure your Azure account credentials by following the [Azure Provider documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli).  
-5. Modify the variables in the `store0/main.tf` file to fit your environment's requirements.  
+5. Modify the variables in the `sample/main.tf` file or to fit your environment's requirements.  
   
 ## Usage  
   
-After setting up the repository, navigate to store0 folder that containing the Terraform configuration files and perform the following steps:  
+After setting up the repository, navigate to sample folder that containing the Terraform configuration files and perform the following steps:  
 
 0. Open a powershell as administrator, az login with the account that has proper permission.
     - the permission contains [TODO]
