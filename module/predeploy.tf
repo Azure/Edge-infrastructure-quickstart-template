@@ -77,6 +77,7 @@ locals {
   iplist = join(",", [for server in var.servers : server.ipv4Address])
 }
 resource "terraform_data" "WSManSetting" {
+  depends_on = [ terraform_data.ad_creation_provisioner ]
   provisioner "local-exec" {
     command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force"
     interpreter = ["PowerShell"]

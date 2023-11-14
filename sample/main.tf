@@ -24,7 +24,6 @@
 #   servicePricipalId     = "<servicePricipalId>"
 #   servicePricipalSecret = "<servicePricipalSecret>"
 #   domainServerIP        = "<domainServerIP>"
-#   destory_adou          = true
 #   servers = [
 #     {
 #       name              = "<server1Name>",
