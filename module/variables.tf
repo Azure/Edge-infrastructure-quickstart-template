@@ -20,8 +20,18 @@ variable "servers" {
   }))
 }
 
+variable "domainServerIP" {
+  description = "The ip of the domain server."
+  type = string
+}
+
 variable "domainName" {
   description = "The domain name for the environment."
+}
+
+variable "destory_adou" {
+  description = "whether destroy previous adou"
+  default = false
 }
 
 variable "domainAdminUser" {
@@ -45,13 +55,13 @@ variable "localAdminPassword" {
 }
 
 variable "arbDeploymentSpnValue" {
-  sensitive = true
+  sensitive   = true
   description = "The service principal value for the deployment in the format '<ServicePrincipalId>:<ServicePrincipalSecret>'."
 }
 
 //deploymentSettings related variables  
-variable "domainSuffix" {
-  description = "The domain FQDN is going to be '{var.siteId}.{var.domainSuffix}'."
+variable "domainFqdn" {
+  description = "The domain FQDN."
 }
 
 variable "subnetMask" {

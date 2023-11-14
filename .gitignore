@@ -1,0 +1,28 @@
+# Compiled files  
+*.tfstate  
+*.tfstate.backup  
+  
+# Terraform provider plugins  
+.terraform/  
+.terraform
+.terraform.lock.hcl
+  
+# IDE and editor files  
+.vscode/  
+.idea/  
+*.swp  
+*.swo  
+*.swn  
+*.bak  
+  
+# Temporary files  
+*.tmp  
+*.log  
+*.gz  
+*.zip  
+*.tar  
+*.tgz  
+  
+# OS-specific files  
+.DS_Store  
+Thumbs.db  
