@@ -62,8 +62,8 @@ project
 ```
 The steps to provision a HCI cluster is
 
-2. Install OS to all nodes (prerequisites)
-1. Prepare Active Directory(done by this repo, hciserver folder)
+1. Install OS to all nodes (prerequisites)
+2. Prepare Active Directory(done by this repo, hciserver folder)
 3. onboard all nodes to arc machine (done by this repo, hciserver folder)
 4. create a HCI cluster and deploymentsetting (done by this repo, module folder)
 
