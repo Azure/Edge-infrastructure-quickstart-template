@@ -46,10 +46,10 @@ Our infrasture as code automation service will help to automate these steps:)
 ```
 project
 │   README.md
-└───Module               //module used to provision hci cluster
+└───Module               // module used to provision hci cluster
 │   │   main.tf          // deploy resource group and hci cluster
 │   │   predeploy.tf     // deploy key vault/ witness storage account and assign role
-|   |   validate.tf      //deploymentsetting that used to validate cluster creation parameters
+|   |   validate.tf      // deploymentsetting that used to validate cluster creation parameters
 |   |   deploy.tf        // deploymentsetting that used to deploy cluster, it depend on validatedeployemntsetting
 │   │   ...
 │   └───hciserver        // module used to onboard arc machine
