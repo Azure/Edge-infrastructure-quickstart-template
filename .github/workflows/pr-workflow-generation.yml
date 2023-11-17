@@ -9,8 +9,6 @@ jobs:
     generateworkflow:
         name: generateworkflow
         runs-on: windows-latest
-        permissions:
-          contents: write
         steps:
           - name: Checkout
             uses: actions/checkout@v3
@@ -19,6 +17,7 @@ jobs:
             run:  |
                 .\.azure\generateworkflow.ps1
           - name: Commit & Push
-            uses: stefanzweifel/git-auto-commit-action@v4
             with:
-              commit_message: Generate apply infra workflow
+                github_token: ${{ secrets.GENERATE_WORKFLOW_TOKEN }}
+                commit_message: Generate apply infra workflow
+            uses: stefanzweifel/git-auto-commit-action@v4
