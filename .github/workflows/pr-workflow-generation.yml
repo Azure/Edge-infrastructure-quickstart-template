@@ -11,13 +11,14 @@ jobs:
         runs-on: windows-latest
         steps:
           - name: Checkout
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
+            with:
+                token: ${{ secrets.GENERATE_WORKFLOW_TOKEN }}
           - name: Execute generateworkflow
             shell: pwsh
             run:  |
                 .\.azure\generateworkflow.ps1
           - name: Commit & Push
             with:
-                github_token: ${{ secrets.GENERATE_WORKFLOW_TOKEN }}
                 commit_message: Generate apply infra workflow
             uses: stefanzweifel/git-auto-commit-action@v4
