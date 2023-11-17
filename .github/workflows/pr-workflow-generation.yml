@@ -10,8 +10,7 @@ jobs:
         name: generateworkflow
         runs-on: windows-latest
         permissions:
-            actions: write
-            contents: write
+            write-all
         steps:
           - name: Checkout
             uses: actions/checkout@v4
