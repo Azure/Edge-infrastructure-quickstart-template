@@ -77,8 +77,10 @@ locals {
   iplist = join(",", [for server in var.servers : server.ipv4Address])
 }
 resource "terraform_data" "WSManSetting" {
+  depends_on = [ terraform_data.ad_creation_provisioner ]
+  count = var.virtualHostIp == "" ? 1 : 0
   provisioner "local-exec" {
-    command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force"
+    command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force -ErrorAction SilentlyContinue"
     interpreter = ["PowerShell"]
   }
 }
@@ -88,13 +90,14 @@ module "servers" {
     for index, server in var.servers :
     server.name => server.ipv4Address
   }
-  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.wsmansetting]
+  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.WSManSetting]
   source                = "./hciserver"
   resourceGroup         = azurerm_resource_group.rg.name
   serverName            = each.key
   localAdminUser        = var.localAdminUser
   localAdminPassword    = var.localAdminPassword
-  serverIP              = each.value
+  serverIP              = var.virtualHostIp == "" ? each.value : var.virtualHostIp
+  winrmPort             = var.serverPorts[each.key] != null ? var.serverPorts[each.key] : 5985
   subId                 = var.subId
   location              = var.location
   tenant                = var.tenant

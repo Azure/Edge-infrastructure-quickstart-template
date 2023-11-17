@@ -68,8 +68,8 @@ resource "azapi_resource" "validatedeploymentsetting" {
                       "Compute"
                     ],
                     adapter = [
-                      "ethernet",
-                      "ethernet 2"
+                      "FABRIC",
+                      "FABRIC2"
                     ],
                     overrideVirtualSwitchConfiguration = false,
                     overrideQosPolicy                  = false,
@@ -95,8 +95,8 @@ resource "azapi_resource" "validatedeploymentsetting" {
                       "Storage"
                     ],
                     adapter = [
-                      "ethernet 3",
-                      "ethernet 4"
+                      "StorageA",
+                      "StorageB"
                     ],
                     overrideVirtualSwitchConfiguration = false,
                     overrideQosPolicy                  = false,
@@ -120,13 +120,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 storageNetworks = [
                   {
                     name               = "Storage1Network",
-                    networkAdapterName = "ethernet 3",
-                    vlanId             = "711"
+                    networkAdapterName = "StorageA",
+                    vlanId             = "20"
                   },
                   {
                     name               = "Storage2Network",
-                    networkAdapterName = "ethernet 4",
-                    vlanId             = "712"
+                    networkAdapterName = "StorageB",
+                    vlanId             = "21"
                   }
                 ]
                 storageConnectivitySwitchless = false

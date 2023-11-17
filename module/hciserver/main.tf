@@ -1,15 +1,10 @@
-data "azurerm_resources" "arcnodes" {
-  name                = var.serverName
-  resource_group_name = var.resourceGroup
-  type                = "Microsoft.HybridCompute/machines"
-}
-
 resource "terraform_data" "provisioner" {
-  //count = length(data.azurerm_resources.arcnodes.resources) == 0 ? 1 : 0
-
-  //triggers_replace = file("${path.module}/connect.ps1")
   provisioner "local-exec" {
-    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}\\connect.ps1 -userName .\\${var.localAdminUser} -password ${var.localAdminPassword} -ip ${var.serverIP} -subId ${var.subId} -resourceGroupName ${var.resourceGroup} -region ${var.location} -tenant ${var.tenant} -servicePricipalId ${var.servicePricipalId} -servicePricipalSecret ${var.servicePricipalSecret}"
+    command = "echo Connect ${var.serverName} to Azure Arc..."
+  }
+
+  provisioner "local-exec" {
+    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}\\connect.ps1 -userName .\\${var.localAdminUser} -password ${var.localAdminPassword} -ip ${var.serverIP} -port ${var.winrmPort} -subId ${var.subId} -resourceGroupName ${var.resourceGroup} -region ${var.location} -tenant ${var.tenant} -servicePricipalId ${var.servicePricipalId} -servicePricipalSecret ${var.servicePricipalSecret}"
   }
 
   provisioner "local-exec" {
@@ -27,7 +22,6 @@ locals {
   RoleList = [
     "Azure Stack HCI Edge Devices role",
     "Key Vault Secrets User",
-    //"Azure Stack HCI Device Management Role"
   ]
 }
 

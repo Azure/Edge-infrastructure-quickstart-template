@@ -48,3 +48,9 @@ variable "servicePricipalSecret" {
   sensitive   = true
   description = "The service principal secret for the Azure account."
 }
+
+variable "winrmPort" {
+  type        = number
+  description = "WinRM port"
+  default     = 5985
+}

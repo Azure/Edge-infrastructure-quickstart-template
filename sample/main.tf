@@ -8,7 +8,6 @@
 #   source                = "../module"
 #   location              = "<location>"
 #   siteId                = "<siteId>"
-#   domainName            = "<domainName>"
 #   domainAdminUser       = "<domainAdminUser>"
 #   domainAdminPassword   = "<domainAdminPassword>"
 #   localAdminUser        = "<localAdminUser>"
