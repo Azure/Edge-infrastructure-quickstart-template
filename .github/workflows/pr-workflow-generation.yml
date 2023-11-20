@@ -1,16 +1,14 @@
 name: Generate workflow
 
-on:
-    pull_request:
-        branches:
-            - main
+on:   
+    workflow_dispatch:
 
 jobs:
     generateworkflow:
         name: generateworkflow
         runs-on: windows-latest
         permissions:
-            actions: write
+            contents: write
         steps:
           - name: Checkout
             uses: actions/checkout@v4
