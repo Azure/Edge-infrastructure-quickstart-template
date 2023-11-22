@@ -19,8 +19,9 @@ To get started, follow these steps:
   
 After setting up the repository, navigate to sample folder that containing the Terraform configuration files and perform the following steps:  
 
-0. Open a powershell as administrator, az login with the account that has proper permission.
-    - the permission contains [TODO]
+0. Open a powershell as administrator, az login with the account that has proper permission over the subscription.
+    - the permission contains Key Vault Administrator and Owner.
+    - you can also use service principal, refer to the [Authenticating using a Service Principal with a Client Secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
 1. Initialize the Terraform working directory by running `terraform init`.  
 2. Plan and review the resources to be created by running `terraform plan`.  
 3. Apply the Terraform configuration and create the resources by running `terraform apply`.  
@@ -45,10 +46,10 @@ Our infrasture as code automation service will help to automate these steps:)
 ```
 project
 │   README.md
-└───Module               //module used to provision hci cluster
+└───Module               // module used to provision hci cluster
 │   │   main.tf          // deploy resource group and hci cluster
 │   │   predeploy.tf     // deploy key vault/ witness storage account and assign role
-|   |   validate.tf      //deploymentsetting that used to validate cluster creation parameters
+|   |   validate.tf      // deploymentsetting that used to validate cluster creation parameters
 |   |   deploy.tf        // deploymentsetting that used to deploy cluster, it depend on validatedeployemntsetting
 │   │   ...
 │   └───hciserver        // module used to onboard arc machine
@@ -77,7 +78,33 @@ You can modify the module for your needs.
   
 To destroy the resources created by this Terraform configuration, run `terraform destroy` in the directory containing the configuration files.  
   
-  
+## Parameters
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_adouPath"></a> [adouPath](#input\_adouPath) | The Active Directory OU path. | `string` | n/a | yes |
+| <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway) | The default gateway for the network. | `string` | n/a | yes |
+| <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers) | A list of DNS server IP addresses. | `list(string)` | n/a | yes |
+| <a name="input_domainAdminPassword"></a> [domainAdminPassword](#input\_domainAdminPassword) | The password for the domain administrator account. | `string` | n/a | yes |
+| <a name="input_domainAdminUser"></a> [domainAdminUser](#input\_domainAdminUser) | The username for the domain administrator account. | `string` | n/a | yes |
+| <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn) | The domain FQDN. | `string` | n/a | yes |
+| <a name="input_domainName"></a> [domainName](#input\_domainName) | The domain name for the environment. | `string` | n/a | yes |
+| <a name="input_domainServerIP"></a> [domainServerIP](#input\_domainServerIP) | The ip of the domain server. | `string` | n/a | yes |
+| <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress) | The ending IP address of the IP address range. | `string` | n/a | yes |
+| <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword) | The password for the local administrator account. | `string` | n/a | yes |
+| <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser) | The username for the local administrator account. | `string` | n/a | yes |
+| <a name="input_servers"></a> [servers](#input\_servers) | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a | yes |
+| <a name="input_servicePricipalId"></a> [servicePricipalId](#input\_servicePricipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePricipalSecret"></a> [servicePricipalSecret](#input\_servicePricipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
+| <a name="input_siteId"></a> [siteId](#input\_siteId) | A unique identifier for the site. | `string` | n/a | yes |
+| <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress) | The starting IP address of the IP address range. | `string` | n/a | yes |
+| <a name="input_subId"></a> [subId](#input\_subId) | The subscription ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_tenant"></a> [tenant](#input\_tenant) | The tenant ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_destory_adou"></a> [destory\_adou](#input\_destory\_adou) | whether destroy previous adou | `bool` | `false` | no |
+| <a name="input_location"></a> [location](#input\_location) | The Azure region where the resources will be deployed. | `string` | `"eastus"` | no |
+| <a name="input_rp_principal_id"></a> [rp\_principal\_id](#input\_rp\_principal\_id) | The principal ID of the resource provider. | `string` | `"f0e0e122-3f80-44ed-95d2-f56e6fdc514c"` | no |
+| <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask) | The subnet mask for the network. | `string` | `"255.255.255.0"` | no |
+
 ## License  
   
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.  

@@ -9,11 +9,13 @@ variable "resourceGroup" {
 }
 
 variable "localAdminUser" {
+  type        = string
   sensitive   = true
   description = "The username for the local administrator account."
 }
 
 variable "localAdminPassword" {
+  type        = string
   sensitive   = true
   description = "The password for the local administrator account."
 }

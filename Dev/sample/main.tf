@@ -12,7 +12,6 @@
 #   domainAdminPassword   = "<domainAdminPassword>"
 #   localAdminUser        = "<localAdminUser>"
 #   localAdminPassword    = "<localAdminPassword>"
-#   arbDeploymentSpnValue = "<arbDeploymentSpnValue>"
 #   domainFqdn            = "<domainFqdn>"
 #   startingAddress       = "<startingAddress>"
 #   endingAddress         = "<endingAddress>"
@@ -24,7 +23,6 @@
 #   servicePricipalId     = "<servicePricipalId>"
 #   servicePricipalSecret = "<servicePricipalSecret>"
 #   domainServerIP        = "<domainServerIP>"
-#   destory_adou          = true
 #   servers = [
 #     {
 #       name              = "<server1Name>",
