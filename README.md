@@ -15,7 +15,29 @@ To get started, follow these steps:
 4. Configure your Azure account credentials by following the [Azure Provider documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli).  
 5. Modify the variables in the `sample/main.tf` file or to fit your environment's requirements.  
   
-## Usage  
+## Setup CICD
+### Prerequisite
+1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
+    1. Contributor(to create resource group/keyvault/HCIcluster...)
+    1. Key Vault Secrets Officer(to create secret in azure keyvault)
+    1. User Access Administrator(to grant role for arc-enabled server)
+4. If the remote powershell port(5985)node of HCI is accessible from the Internet or you want to skip prepare AD and onboard arc-server part, you don't need this, otherwise you need to [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners) for your repo, the self host runner need able to access 5985 port of your ad server and hci nodes.
+2. Setup repository secret:
+    * domainAdminUser
+    * domainAdminPassword
+    * localAdminUser
+    * localAdminPassword
+    * servicePricipalId
+    * servicePricipalSecret 
+3. Setup terraform backend
+4. Prepare git hooks, using the command to setup github hooks, every time you commit, it recreate the github action for you.
+ 
+`Git config --local core.hooksPath ./.azure/hooks/`
+
+after setup, everytime you push cotents to main branch, it will automatically trigger infrasture update workflow. If your hci nodes can't accessible from the Internet, you need to register yout accessible machine as [self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners)
+
+
+## Usage - manual apply
   
 After setting up the repository, navigate to sample folder that containing the Terraform configuration files and perform the following steps:  
 
