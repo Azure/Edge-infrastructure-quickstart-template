@@ -10,6 +10,10 @@ resource "terraform_data" "waitServersReady" {
   }
 }
 
+locals {
+  storageAdapters = flatten([for storageNetwork in var.storageNetworks : storageNetwork.networkAdapterName])
+}
+
 
 resource "azapi_resource" "validatedeploymentsetting" {
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
@@ -87,10 +91,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                       "Management",
                       "Compute"
                     ],
-                    adapter = [
-                      "FABRIC",
-                      "FABRIC2"
-                    ],
+                    adapter = var.managementAdapters
                     overrideVirtualSwitchConfiguration = false,
                     overrideQosPolicy                  = false,
                     overrideAdapterProperty            = false,
@@ -114,10 +115,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                     trafficType = [
                       "Storage"
                     ],
-                    adapter = [
-                      "StorageA",
-                      "StorageB"
-                    ],
+                    adapter = local.storageAdapters,
                     overrideVirtualSwitchConfiguration = false,
                     overrideQosPolicy                  = false,
                     overrideAdapterProperty            = false,
@@ -137,18 +135,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                     }
                   }
                 ]
-                storageNetworks = [
-                  {
-                    name               = "Storage1Network",
-                    networkAdapterName = "StorageA",
-                    vlanId             = "20"
-                  },
-                  {
-                    name               = "Storage2Network",
-                    networkAdapterName = "StorageB",
-                    vlanId             = "21"
-                  }
-                ]
+                storageNetworks = var.storageNetworks
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath

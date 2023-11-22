@@ -134,3 +134,16 @@ variable "serverPorts" {
   description = "Server winrm ports in virtual host"
   default     = {}
 }
+
+variable "managementAdapters" {
+  type = list(string)
+  default = [ "ethernet", "ethernet 2" ]  
+}
+
+variable "storageNetworks" {
+  type = list(object({
+    name = string
+    networkAdapterName = string
+    vlanId = string
+  }))
+}
