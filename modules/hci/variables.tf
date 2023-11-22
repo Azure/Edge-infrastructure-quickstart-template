@@ -117,6 +117,20 @@ variable "servicePricipalSecret" {
   description = "The service principal secret for the Azure account."
 }
 
+variable "managementAdapters" {
+  type = list(string)
+  default = [ "ethernet", "ethernet 2" ]  
+}
+
+variable "storageNetworks" {
+  type = list(object({
+    name = string
+    networkAdapterName = string
+    vlanId = string
+  }))
+}
+
+# Virtual host related variables
 variable "virtualHostIp" {
   type        = string
   description = "The virtual host IP address."
@@ -133,17 +147,4 @@ variable "serverPorts" {
   type        = map(number)
   description = "Server winrm ports in virtual host"
   default     = {}
-}
-
-variable "managementAdapters" {
-  type = list(string)
-  default = [ "ethernet", "ethernet 2" ]  
-}
-
-variable "storageNetworks" {
-  type = list(object({
-    name = string
-    networkAdapterName = string
-    vlanId = string
-  }))
 }
