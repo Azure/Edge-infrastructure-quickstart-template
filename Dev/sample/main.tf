@@ -5,10 +5,9 @@
 # }
 
 # module "hci" {
-#   source                = "../module"
+#   source                = "../../modules/hci"
 #   location              = "<location>"
 #   siteId                = "<siteId>"
-#   domainName            = "<domainName>"
 #   domainAdminUser       = "<domainAdminUser>"
 #   domainAdminPassword   = "<domainAdminPassword>"
 #   localAdminUser        = "<localAdminUser>"
@@ -32,6 +31,19 @@
 #     {
 #       name              = "<server2Name>",
 #       ipv4Address       = "<server2Ipv4Address>"
+#     }
+#   ]
+#   managementAdapters = ["<managementAdapter1>", "<managementAdapter2>"]
+#   storageNetworks = [
+#     {
+#       name               = "Storage1Network",
+#       networkAdapterName = "<storageAdapter1>",
+#       vlanId             = "<storageAdapter1Vlan>"
+#     },
+#     {
+#       name               = "Storage2Network",
+#       networkAdapterName = "<storageAdapter2>",
+#       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
 # }

@@ -4,7 +4,7 @@ param(
     $siteID,
     $adouPath,
     $computerNames,
-    $ip,
+    $ip, $port,
     $domainFqdn,
     $ifdeleteadou,
     $domainAdminUser,
@@ -15,8 +15,12 @@ $script:ErrorActionPreference = 'Stop'
 echo "Enter !"
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-enable-wsmancredssp -role client -delegatecomputer $ip -force
-$session = New-PSSession -ComputerName $ip -Authentication Credssp -Credential $cred
+try {
+    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+} catch {
+    echo "Enable-WSManCredSSP failed"
+}
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
 $computerNameList = $computerNames -split ","
 echo $computerNameList
 if ($ifdeleteadou) {
@@ -42,11 +46,12 @@ if ($ifdeleteadou) {
 $domainsecpasswd = ConvertTo-SecureString $domainAdminPassword -AsPlainText -Force
 $domaincred = New-Object System.Management.Automation.PSCredential -ArgumentList $domainAdminUser, $domainsecpasswd
 Invoke-Command -Session $session -ScriptBlock {
-    Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force
-    echo "Installed"
+    echo "Install Nuget Provider"
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
+    echo "Install AsHciADArtifactsPreCreationTool"
+    Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force -Confirm:$false
+    echo "Add KdsRootKey"
     Add-KdsRootKey -EffectiveTime ((Get-Date).addhours(-10))
-    echo "Add-KdsRootKey"
-
-    
+    echo "New HciAdObjectsPreCreation"    
     New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:domaincred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName "$Using:siteID-cl" -AsHciDeploymentPrefix $Using:siteID
 }

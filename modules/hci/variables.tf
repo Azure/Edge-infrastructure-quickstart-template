@@ -25,17 +25,12 @@ variable "servers" {
 
 variable "domainServerIP" {
   description = "The ip of the domain server."
-  type = string
-}
-
-variable "domainName" {
-  description = "The domain name for the environment."
   type        = string
 }
 
 variable "destory_adou" {
   description = "whether destroy previous adou"
-  default = false
+  default     = false
   type        = bool
 }
 
@@ -120,4 +115,35 @@ variable "servicePricipalSecret" {
   type        = string
   sensitive   = true
   description = "The service principal secret for the Azure account."
+}
+
+variable "virtualHostIp" {
+  type        = string
+  description = "The virtual host IP address."
+  default     = ""
+}
+
+variable "dcPort" {
+  type        = number
+  description = "Domain controller winrm port in virtual host"
+  default     = 5985
+}
+
+variable "serverPorts" {
+  type        = map(number)
+  description = "Server winrm ports in virtual host"
+  default     = {}
+}
+
+variable "managementAdapters" {
+  type = list(string)
+  default = [ "ethernet", "ethernet 2" ]  
+}
+
+variable "storageNetworks" {
+  type = list(object({
+    name = string
+    networkAdapterName = string
+    vlanId = string
+  }))
 }

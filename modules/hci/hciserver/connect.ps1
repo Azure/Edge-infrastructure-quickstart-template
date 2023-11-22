@@ -1,7 +1,7 @@
 param(
     $userName,
     $password,
-    $ip,
+    $ip, $port,
     $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret
 )
 
@@ -9,7 +9,7 @@ $script:ErrorActionPreference = 'Stop'
 echo "Hello!"
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-$session = New-PSSession -ComputerName $ip -Authentication Credssp -Credential $cred
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
 
 
 Invoke-Command -Session $session -ScriptBlock {
@@ -40,6 +40,8 @@ Invoke-Command -Session $session -ScriptBlock {
         }
     }
     $creds = [System.Management.Automation.PSCredential]::new($servicePricipalId, (ConvertTo-SecureString $servicePricipalSecret -AsPlainText -Force))
+
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
 
     Install-ModuleIfMissing -Name Az -Repository PSGallery -Force
 
