@@ -97,7 +97,7 @@ module "servers" {
   localAdminUser        = var.localAdminUser
   localAdminPassword    = var.localAdminPassword
   serverIP              = var.virtualHostIp == "" ? each.value : var.virtualHostIp
-  winrmPort             = var.serverPorts[each.key] != null ? var.serverPorts[each.key] : 5985
+  winrmPort             = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key] 
   subId                 = var.subId
   location              = var.location
   tenant                = var.tenant
