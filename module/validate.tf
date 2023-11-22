@@ -1,9 +1,29 @@
+/*
+ * There is a bug currently with the LCM extension. It needs to wait 10-20 minutes to allow the servers to be ready before it can be deployed.
+ */
+
+resource "terraform_data" "waitServersReady" {
+  depends_on = [ module.servers ]
+
+  provisioner "local-exec" {
+    command     = "sleep 1200"
+  }
+}
+
+
 resource "azapi_resource" "validatedeploymentsetting" {
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster1.id
-  depends_on                = [module.servers, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.arbDeploymentSpnName, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.storageWitnessName, azapi_resource.cluster1]
+  depends_on                = [
+    terraform_data.waitServersReady,
+    azurerm_key_vault_secret.arbDeploymentSpnName,
+    azurerm_key_vault_secret.AzureStackLCMUserCredential,
+    azurerm_key_vault_secret.LocalAdminCredential,
+    azurerm_key_vault_secret.storageWitnessName,
+    azapi_resource.cluster1
+  ]
   timeouts {
     create = "10m"
     update = "10m"
