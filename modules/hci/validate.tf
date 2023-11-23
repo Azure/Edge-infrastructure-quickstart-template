@@ -112,6 +112,10 @@ resource "azapi_resource" "validatedeploymentsetting" {
     update = "10m"
     delete = "10m"
   }
+  // ignore the deployment mode change after the first deployment
+  ignore_body_changes = [
+    "properties.deploymentMode"
+  ]
   body = jsonencode({
     properties = {
       arcNodeResourceIds = flatten([for server in module.servers : server.server.id])
@@ -200,6 +204,10 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     update = "10m"
     delete = "10m"
   }
+  // ignore the deployment mode change after the first deployment
+  ignore_body_changes = [
+    "properties.deploymentMode"
+  ]
   body = jsonencode({
     properties = {
       arcNodeResourceIds = flatten([for server in module.servers : server.server.id])
