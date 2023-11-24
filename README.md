@@ -99,6 +99,10 @@ You can modify the module for your needs.
 ## Cleaning Up  
   
 To destroy the resources created by this Terraform configuration, run `terraform destroy` in the directory containing the configuration files.  
+
+To remove git hooks
+`git config --unset core.hookspath`
+  
   
 ## Parameters
 
