@@ -6,7 +6,7 @@ resource "terraform_data" "waitServersReady" {
   depends_on = [module.servers]
 
   provisioner "local-exec" {
-    command     = "powershell -command sleep 1200"
+    command = "powershell -command sleep 1200"
   }
 }
 
