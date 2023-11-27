@@ -1,0 +1,23 @@
+module "hci" {
+  source          = "../hci"
+  location        = var.location
+  siteId          = var.siteId
+  domainFqdn      = var.domainFqdn
+  startingAddress = var.startingAddress
+  endingAddress   = var.endingAddress
+  defaultGateway  = var.defaultGateway
+  dnsServers      = var.dnsServers
+  adouPath        = var.adouPath
+  tenant          = var.tenant
+  domainServerIP  = var.domainServerIP
+  servers               = var.servers
+  managementAdapters    = var.managementAdapters
+  storageNetworks       = var.storageNetworks
+  subId                 = var.subId
+  domainAdminUser       = var.domainAdminUser
+  domainAdminPassword   = var.domainAdminPassword
+  localAdminUser        = var.localAdminUser
+  localAdminPassword    = var.localAdminPassword
+  servicePricipalId     = var.servicePricipalId
+  servicePricipalSecret = var.servicePricipalSecret
+}

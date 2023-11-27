@@ -1,5 +1,5 @@
-# module "hci" {
-#   source                = "../../modules/hci"
+# module "base" {
+#   source                = "../../modules/Base"
 #   location              = "<location>"
 #   siteId                = "<siteId>"
 #   domainFqdn            = "<domainFqdn>"

@@ -68,20 +68,30 @@ Our infrasture as code automation service will help to automate these steps:)
 ```
 project
 │   README.md
-└───Module               // module used to provision hci cluster
-│   │   main.tf          // deploy resource group and hci cluster
-│   │   predeploy.tf     // deploy key vault/ witness storage account and assign role
-|   |   validate.tf      // deploymentsetting that used to validate cluster creation parameters
-|   |   deploy.tf        // deploymentsetting that used to deploy cluster, it depend on validatedeployemntsetting
-│   │   ...
-│   └───hciserver        // module used to onboard arc machine
-│       │   connect.ps1  // script used to onboard arc
-│       │   main.tf      // terraform code used to get arc machine arm resource
+└───Module                   // folders that contain terraform module
+|   └───Base                 // the base module of customer, customer can change the module manually 
+|   └───hci                  // the microsoft maintained module, used to create a hci cluster
+│       │   main.tf          // deploy resource group and hci cluster
+│       │   predeploy.tf     // deploy key vault/ witness storage account and assign role
+|       |   validate.tf      // deploymentsetting that used to validate cluster creation parameters
+|       |   deploy.tf        // deploymentsetting that used to deploy cluster, it depend on validatedeployemntsetting
 │       │   ...
+│       └───hciserver        // module used to onboard arc machine
+│           │   connect.ps1  // script used to onboard arc
+│           │   main.tf      // terraform code used to get arc machine arm resource
+│           │   ...
 │   
-└───store0               // store folder, you can copy the folder to do manual scale
-    │   main.tf          // the main file that customer need to change
-    │   ...
+└───Dev                      // dev stage folder, contains store folders, all store in this folders will be in Dev stage
+    └───sample               // sample store
+        │   main.tf          // the main file that customer need to change
+        │   ...
+└───QA                       // QA stage folder, contains store folders, all store in this folders will be in QA stage
+└───Prod                     // prod stage folder, contains store folders, all store in this folders will be in Prod stage
+```
+
+The stage in the repo has following running sequence
+```
+Dev -> QA(after all store in Dev run successfully) -> Prod(after all store in QA run successfully)
 ```
 The steps to provision a HCI cluster is
 
