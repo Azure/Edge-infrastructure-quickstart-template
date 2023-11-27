@@ -8,12 +8,16 @@ Follow the step2(Install OS) of this [official doc](https://learn.microsoft.com/
 ## Getting Started  
   
 To get started, follow these steps:  
-  
-1. Fork this repository to your GitHub account.  
+1. Create a repository base on this template.
+2. Setup CICD.
+3. Modify the variables Modify the variables in the `Dev/sample/main.tf` file and commit.
+
+if you don't want CICD:
+1. Create a repository base on this template.
 2. Clone the forked repository to your local machine.  
 3. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
 4. Configure your Azure account credentials by following the [Azure Provider documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli).  
-5. Modify the variables in the `sample/main.tf` file or to fit your environment's requirements.  
+5. Modify the variables in the `Dev/sample/main.tf` file or to fit your environment's requirements.  
   
 ## Setup CICD
 1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
