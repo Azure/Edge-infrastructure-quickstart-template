@@ -73,5 +73,4 @@ Invoke-Command -Session $session -ScriptBlock {
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
     Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
-    echo "Registered new server"
 } -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret

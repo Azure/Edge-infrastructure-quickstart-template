@@ -1,27 +1,14 @@
-# variable "subscriptionId" {
-#   description           = "The subscription id to register this environment."
-#   type                  = string
-#   default               = "<subscriptionId>"
-# }
-
 # module "hci" {
 #   source                = "../../modules/hci"
 #   location              = "<location>"
 #   siteId                = "<siteId>"
-#   domainAdminUser       = "<domainAdminUser>"
-#   domainAdminPassword   = "<domainAdminPassword>"
-#   localAdminUser        = "<localAdminUser>"
-#   localAdminPassword    = "<localAdminPassword>"
 #   domainFqdn            = "<domainFqdn>"
 #   startingAddress       = "<startingAddress>"
 #   endingAddress         = "<endingAddress>"
 #   defaultGateway        = "<defaultGateway>"
 #   dnsServers            = ["<dnsServer1>"]
 #   adouPath              = "<adouPath>"
-#   subId                 = var.subscriptionId
 #   tenant                = "<tenant>"
-#   servicePricipalId     = "<servicePricipalId>"
-#   servicePricipalSecret = "<servicePricipalSecret>"
 #   domainServerIP        = "<domainServerIP>"
 #   servers = [
 #     {
@@ -46,4 +33,11 @@
 #       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
+#     subId                 = var.subscriptionId
+#     domainAdminUser       = var.domainAdminUser
+#     domainAdminPassword   = var.domainAdminPassword
+#     localAdminUser        = var.localAdminUser
+#     localAdminPassword    = var.localAdminPassword
+#     servicePricipalId     = var.servicePricipalId
+#     servicePricipalSecret = var.servicePricipalSecret
 # }
