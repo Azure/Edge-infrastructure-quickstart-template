@@ -56,3 +56,8 @@ variable "winrmPort" {
   description = "WinRM port"
   default     = 5985
 }
+
+variable "expandC" {
+  type = bool
+  default = false
+}

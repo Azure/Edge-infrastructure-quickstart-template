@@ -2,7 +2,7 @@ param(
     $userName,
     $password,
     $ip, $port,
-    $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret
+    $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret, $expandC
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -13,7 +13,7 @@ $session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -
 
 
 Invoke-Command -Session $session -ScriptBlock {
-    if(Test-Path c:\arc-installer) {
+    if (Test-Path c:\arc-installer) {
         rm c:\arc-installer -r
     }
 }
@@ -27,18 +27,29 @@ Invoke-Command -Session $session -ScriptBlock {
     set-executionpolicy Bypass -force
     function Install-ModuleIfMissing {
         param(
-            [Parameter(Mandatory=$true)]
+            [Parameter(Mandatory = $true)]
             [string]$Name,
             [string]$Repository = 'PSGallery',
             [switch]$Force
         )
         $script:ErrorActionPreference = 'Stop'
         $module = Get-Module -Name $Name -ListAvailable
-        if(!$module) {
+        if (!$module) {
             Write-Host "Installing module $Name"
             Install-Module -Name $Name -Repository $Repository -Force:$Force
         }
     }
+
+    if ($expandC) {
+        # Expand C volume as much as possible
+        $drive_letter = "C"
+        $size = (Get-PartitionSupportedSize -DriveLetter $drive_letter)
+        if ($size.SizeMax -gt (Get-Partition -DriveLetter $drive_letter).Size) {
+            echo "Resizing volume"
+            Resize-Partition -DriveLetter $drive_letter -Size $size.SizeMax
+        }
+    }
+
     $creds = [System.Management.Automation.PSCredential]::new($servicePricipalId, (ConvertTo-SecureString $servicePricipalSecret -AsPlainText -Force))
 
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
@@ -53,14 +64,14 @@ Invoke-Command -Session $session -ScriptBlock {
     Install-ModuleIfMissing Az.ConnectedMachine -Force
     Install-ModuleIfMissing Az.Resources -Force
     $module = Get-Module -Name AzStackHci.EnvironmentChecker -ListAvailable
-    if($module) {
+    if ($module) {
         Write-Host "Removing module AzStackHci.EnvironmentChecker"
         Uninstall-Module -Name AzStackHci.EnvironmentChecker -Force
     }
     echo "Installed modules"
-    $id= (Get-AzContext).Tenant.Id
+    $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token
-    $accountid= (Get-AzContext).Account.Id
+    $accountid = (Get-AzContext).Account.Id
     Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
     echo "Registered new server"
 } -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret

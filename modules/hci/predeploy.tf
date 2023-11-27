@@ -77,8 +77,8 @@ locals {
   iplist = join(",", [for server in var.servers : server.ipv4Address])
 }
 resource "terraform_data" "WSManSetting" {
-  depends_on = [ terraform_data.ad_creation_provisioner ]
-  count = var.virtualHostIp == "" ? 1 : 0
+  depends_on = [terraform_data.ad_creation_provisioner]
+  count      = var.virtualHostIp == "" ? 1 : 0
   provisioner "local-exec" {
     command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force -ErrorAction SilentlyContinue"
     interpreter = ["PowerShell"]
@@ -97,10 +97,11 @@ module "servers" {
   localAdminUser        = var.localAdminUser
   localAdminPassword    = var.localAdminPassword
   serverIP              = var.virtualHostIp == "" ? each.value : var.virtualHostIp
-  winrmPort             = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key] 
+  winrmPort             = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key]
   subId                 = var.subId
   location              = var.location
   tenant                = var.tenant
   servicePricipalId     = var.servicePricipalId
   servicePricipalSecret = var.servicePricipalSecret
+  expandC               = var.virtualHostIp == "" ? false : true
 }
