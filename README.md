@@ -16,7 +16,6 @@ To get started, follow these steps:
 5. Modify the variables in the `sample/main.tf` file or to fit your environment's requirements.  
   
 ## Setup CICD
-### Prerequisite
 1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
     1. Contributor(to create resource group/keyvault/HCIcluster...)
     1. Key Vault Secrets Officer(to create secret in azure keyvault)
