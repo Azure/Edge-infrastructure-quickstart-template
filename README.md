@@ -32,11 +32,14 @@ If you don't want CICD:
     * localAdminPassword
     * servicePricipalId
     * servicePricipalSecret 
-    * AZURE_CLIENT_ID of the service principle in step 1.
-    * AZURE_SUBSCRIPTION_ID of the service principle in step 1.
-    * AZURE_TENANT_ID of the service principle in step 1.
-3. Setup terraform backend in .azure/backendTemplate.tf file
-4. Prepare git hooks, using the command to setup github hooks, every time you commit, it recreate the github action for you.
+    * AZURE_CLIENT_ID: The client ID of the service principle in step 1.
+    * AZURE_SUBSCRIPTION_ID: The subscription ID of the service principle in step 1.
+    * AZURE_TENANT_ID: The tenant ID of the service principle in step 1.
+3. Setup terraform storage account backend in .azure/backendTemplate.tf file, using a exist storage account of Azure_Subscription_ID, change following:
+    * ResourceGroupName
+    * StorageAccountName
+    * StorageContainerName
+5. Prepare git hooks, using the command to setup github hooks, every time you commit, it recreate the github action for you.
  
 `Git config --local core.hooksPath ./.azure/hooks/`
 
