@@ -9,10 +9,10 @@ Follow the step2(Install OS) of this [official doc](https://learn.microsoft.com/
   
 To get started, follow these steps:  
 1. Create a repository base on this template.
-2. Setup CICD.
+2. [Setup CICD](https://github.com/Azure/Edge-infrastructure-quickstart-template/tree/main#setup-cicd).
 3. Modify the variables Modify the variables in the `Dev/sample/main.tf` file and commit.
 
-if you don't want CICD:
+If you don't want CICD:
 1. Create a repository base on this template.
 2. Clone the forked repository to your local machine.  
 3. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
