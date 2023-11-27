@@ -20,7 +20,7 @@ env:
 jobs:
   terraform:
     name: 'Terraform'
-    runs-on: [self-hosted, vhci1, x64]
+    runs-on: [self-hosted, hci, x64]
     environment: terraform
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
