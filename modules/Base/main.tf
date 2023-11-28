@@ -1,3 +1,7 @@
+locals {
+  serverNames = [for server in var.servers : server.name]
+}
+
 module "hci" {
   source                = "../hci"
   location              = var.location
@@ -21,4 +25,25 @@ module "hci" {
   servicePricipalId     = var.servicePricipalId
   servicePricipalSecret = var.servicePricipalSecret
   destory_adou          = var.destory_adou
+  virtualHostIp         = var.virtualHostIp
+  dcPort                = var.dcPort
+  serverPorts           = var.serverPorts
+}
+
+module "extension" {
+  source        = "../hci-extensions"
+  depends_on    = [module.hci]
+  resourceGroup = module.hci.resourceGroup
+  siteId        = var.siteId
+  clusterId     = module.hci.cluster.id
+  serverNames   = local.serverNames
+}
+
+module "vm" {
+  source           = "../hci-vm"
+  depends_on       = [module.hci]
+  customLocationId = module.hci.customlocation.id
+  resourceGroupId  = module.hci.resourceGroup.id
+  userStorageId    = module.hci.userStorage1.id
+  location         = module.hci.resourceGroup.location
 }
