@@ -148,9 +148,3 @@ variable "serverPorts" {
   description = "Server winrm ports in virtual host"
   default     = {}
 }
-
-variable "destory_adou" {
-  description = "whether destroy previous adou"
-  default     = false
-  type        = bool
-}
