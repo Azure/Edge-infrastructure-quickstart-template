@@ -61,3 +61,8 @@ variable "expandC" {
   type = bool
   default = false
 }
+
+variable "internetAdapterAlias" {
+  type = string
+  default = ""
+}

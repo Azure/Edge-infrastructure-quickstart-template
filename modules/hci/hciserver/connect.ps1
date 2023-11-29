@@ -2,7 +2,7 @@ param(
     $userName,
     $password,
     $ip, $port,
-    $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret, $expandC
+    $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret, $expandC, $internetAdapterAlias
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -48,6 +48,14 @@ Invoke-Command -Session $session -ScriptBlock {
             echo "Resizing volume"
             Resize-Partition -DriveLetter $drive_letter -Size $size.SizeMax
         }
+    }
+
+    if ($internetAdapterAlias) {
+        echo "Setting internet connectivity for $internetAdapterAlias"
+        Set-NetConnectionProfile -InterfaceAlias $internetAdapterAlias -IPv4Connectivity Internet
+
+        echo "Validate BITS is working"
+        Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
     }
 
     $creds = [System.Management.Automation.PSCredential]::new($servicePricipalId, (ConvertTo-SecureString $servicePricipalSecret -AsPlainText -Force))

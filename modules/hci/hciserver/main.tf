@@ -4,7 +4,7 @@ resource "terraform_data" "provisioner" {
   }
 
   provisioner "local-exec" {
-    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}\\connect.ps1 -userName .\\${var.localAdminUser} -password ${var.localAdminPassword} -ip ${var.serverIP} -port ${var.winrmPort} -subId ${var.subId} -resourceGroupName ${var.resourceGroup} -region ${var.location} -tenant ${var.tenant} -servicePricipalId ${var.servicePricipalId} -servicePricipalSecret ${var.servicePricipalSecret} -expandC ${var.expandC}"
+    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}\\connect.ps1 -userName .\\${var.localAdminUser} -password ${var.localAdminPassword} -ip ${var.serverIP} -port ${var.winrmPort} -subId ${var.subId} -resourceGroupName ${var.resourceGroup} -region ${var.location} -tenant ${var.tenant} -servicePricipalId ${var.servicePricipalId} -servicePricipalSecret ${var.servicePricipalSecret} -expandC ${var.expandC} -internetAdapterAlias ${var.internetAdapterAlias}"
   }
 
   provisioner "local-exec" {

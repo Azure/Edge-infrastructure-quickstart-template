@@ -104,4 +104,5 @@ module "servers" {
   servicePricipalId     = var.servicePricipalId
   servicePricipalSecret = var.servicePricipalSecret
   expandC               = var.virtualHostIp == "" ? false : true
+  internetAdapterAlias  = var.virtualHostIp == "" ? "" : var.managementAdapters[0]
 }
