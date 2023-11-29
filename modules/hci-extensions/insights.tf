@@ -17,7 +17,7 @@ resource "azurerm_monitor_data_collection_rule" "dcr" {
   count                       = var.enableInsights ? 1 : 0
   data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.dce[0].id
   location                    = var.resourceGroup.location
-  name                        = "AzureStackHCI-dcr"
+  name                        = "AzureStackHCI-${var.siteId}-dcr"
   resource_group_name         = var.resourceGroup.name
   data_flow {
     destinations       = ["${var.siteId}-workspace"]
