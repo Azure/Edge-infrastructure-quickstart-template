@@ -33,6 +33,9 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
+      
+    - name: Install azure-cli
+      uses: pietrobolcato/install-azure-cli-action@main
     
     - name: Log in to Azure using OIDC
       uses: azure/login@v1
