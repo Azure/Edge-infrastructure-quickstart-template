@@ -153,3 +153,21 @@ variable "serverPorts" {
   description = "Server winrm ports in virtual host"
   default     = {}
 }
+
+variable "enableInsights" {
+  description = "Whether to enable Azure Monitor Insights."
+  type        = bool
+  default     = false
+}
+
+variable "enableAlerts" {
+  description = "Whether to enable Azure Monitor Alerts."
+  type        = bool
+  default     = false
+}
+
+variable "enableVM" {
+  description = "Whether to enable Azure Monitor Alerts."
+  type        = bool
+  default     = false
+}

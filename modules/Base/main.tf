@@ -31,15 +31,18 @@ module "hci" {
 }
 
 module "extension" {
-  source        = "../hci-extensions"
-  depends_on    = [module.hci]
-  resourceGroup = module.hci.resourceGroup
-  siteId        = var.siteId
-  clusterId     = module.hci.cluster.id
-  serverNames   = local.serverNames
+  source         = "../hci-extensions"
+  depends_on     = [module.hci]
+  resourceGroup  = module.hci.resourceGroup
+  siteId         = var.siteId
+  clusterId      = module.hci.cluster.id
+  serverNames    = local.serverNames
+  enableInsights = var.enableInsights
+  enableAlerts   = var.enableAlerts
 }
 
 module "vm" {
+  count            = var.enableVM ? 1 : 0
   source           = "../hci-vm"
   depends_on       = [module.hci]
   customLocationId = module.hci.customlocation.id

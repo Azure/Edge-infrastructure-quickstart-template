@@ -20,11 +20,11 @@ variable "serverNames" {
 variable "enableInsights" {
   description = "Whether to enable Azure Monitor Insights."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "enableAlerts" {
   description = "Whether to enable Azure Monitor Alerts."
   type        = bool
-  default     = true
+  default     = false
 }
