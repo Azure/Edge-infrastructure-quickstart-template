@@ -1,12 +1,10 @@
 resource "azurerm_log_analytics_workspace" "workspace" {
-  count               = var.enableInsights ? 1 : 0
   resource_group_name = var.resourceGroup.name
   location            = var.resourceGroup.location
   name                = "${var.siteId}-workspace"
 }
 
 resource "azurerm_monitor_data_collection_endpoint" "dce" {
-  count                         = var.enableInsights ? 1 : 0
   resource_group_name           = var.resourceGroup.name
   location                      = var.resourceGroup.location
   name                          = "${var.siteId}-dce"
@@ -14,8 +12,7 @@ resource "azurerm_monitor_data_collection_endpoint" "dce" {
 }
 
 resource "azurerm_monitor_data_collection_rule" "dcr" {
-  count                       = var.enableInsights ? 1 : 0
-  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.dce[0].id
+  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.dce.id
   location                    = var.resourceGroup.location
   name                        = "AzureStackHCI-${var.siteId}-dcr"
   resource_group_name         = var.resourceGroup.name
@@ -58,19 +55,18 @@ resource "azurerm_monitor_data_collection_rule" "dcr" {
   destinations {
     log_analytics {
       name                  = "${var.siteId}-workspace"
-      workspace_resource_id = azurerm_log_analytics_workspace.workspace[0].id
+      workspace_resource_id = azurerm_log_analytics_workspace.workspace.id
     }
     log_analytics {
       name                  = "2-90d1-e814dab6067e"
-      workspace_resource_id = azurerm_log_analytics_workspace.workspace[0].id
+      workspace_resource_id = azurerm_log_analytics_workspace.workspace.id
     }
   }
 }
 
 resource "azapi_resource" "monitor_agent" {
-  count     = var.enableInsights ? 1 : 0
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings/Extensions@2023-08-01"
-  parent_id = data.azapi_resource.arcSetting.id
+  parent_id = var.arcSettingId
   name      = "AzureMonitorWindowsAgent"
   body = jsonencode({
     properties = {
@@ -90,10 +86,10 @@ resource "azapi_resource" "monitor_agent" {
 resource "azurerm_monitor_data_collection_rule_association" "association" {
   for_each                    = toset(var.serverNames)
   data_collection_endpoint_id = null
-  data_collection_rule_id     = azurerm_monitor_data_collection_rule.dcr[0].id
+  data_collection_rule_id     = azurerm_monitor_data_collection_rule.dcr.id
   description                 = null
   name = "DCRA_${md5(
-    "${var.resourceGroup.id}/providers/Microsoft.HybridCompute/machines/${each.value}/${azurerm_monitor_data_collection_rule.dcr[0].id}"
+    "${var.resourceGroup.id}/providers/Microsoft.HybridCompute/machines/${each.value}/${azurerm_monitor_data_collection_rule.dcr.id}"
   )}"
   target_resource_id = "${var.resourceGroup.id}/providers/Microsoft.HybridCompute/machines/${each.value}"
 }
