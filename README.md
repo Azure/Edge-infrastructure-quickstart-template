@@ -9,7 +9,7 @@ Check deployment checklist and install AzureStack HCI OS on your servers to be d
   
 To get started, follow these steps:  
 1. Create a repository base on this template.
-1. [Setup pipeline](https://github.com/Azure/Edge-infrastructure-quickstart-template/tree/main#setup-pipeline).
+1. [Setup pipeline](#setup-pipeline).
 1. Create a branch from `main`.
 1. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
 1. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
@@ -23,7 +23,7 @@ To get started, follow these steps:
     1. Two storage paths named `UserStorage1`, `UserStorage2`
 1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
   
-## Setup pipeline
+## Setup Pipeline
 1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
     - Contributor (to create resource group / KeyVault / HCI cluster...)
     - Key Vault Secrets Officer (to create secret in azure KeyVault)
@@ -148,7 +148,7 @@ PROJECT_ROOT
     └───qa1
 ```
 
-## Customize the Deployment  
+## Customize The Deployment  
   
 You may edit `modules/base` to customize your deployment template for all sites. You may add default values for your sites in `modules/base/variables.tf`. For example, tenant name is likely to be the same for all sites. You can add a default value for `tenant` variable.
 ```hcl
