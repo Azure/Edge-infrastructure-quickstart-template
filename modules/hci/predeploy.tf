@@ -17,11 +17,20 @@ resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
 
 
 data "azurerm_client_config" "current" {}
+resource "random_id" "twobyte" {
+  keepers = {
+    # Generate a new ID only when a new resource group is defined
+    resource_group = azurerm_resource_group.rg.name
+  }
+
+  byte_length = 2
+}
 
 resource "azurerm_key_vault" "DeploymentKeyVault" {
-  name                = "${var.siteId}-kv"
+  name                = "${var.siteId}-kv-${random_id.twobyte.hex}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+  depends_on          = [terraform_data.ad_creation_provisioner]
 
   enabled_for_deployment          = true
   enabled_for_template_deployment = true
