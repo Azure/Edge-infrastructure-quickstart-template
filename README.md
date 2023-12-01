@@ -24,10 +24,14 @@ To get started, follow these steps:
 1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
   
 ## Setup Pipeline
-1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
-    - Contributor (to create resource group / KeyVault / HCI cluster...)
-    - Key Vault Secrets Officer (to create secret in azure KeyVault)
-    - User Access Administrator (to grant role for arc-enabled servers)
+1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment authenticate as the service principle. The detailed steps are described in [Azure documentation](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows). Here's the steps:
+   1. Create `terraform` environment in your GitHub repository. [Creating an environment]([https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#creating-an-environment))
+   1. Create a service principal in Microsoft Entra ID [Application and service principal objects in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser).
+   1. Add Federated credential to the service principal. Use `Environment` as entity type and input `terraform` to `Based on selection` input box.
+   1. Grant the following permissions to the service principle in your subscription:
+      - Contributor (to create resource group / KeyVault / HCI cluster...)
+      - Key Vault Secrets Officer (to create secret in azure KeyVault)
+      - User Access Administrator (to grant role for arc-enabled servers)
 1. Setup repository secret following [Managing secrets for your repository and organization for GitHub Codespaces](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-secrets-for-your-repository-and-organization-for-github-codespaces):
     - Pipeline secrets:
         * AZURE_CLIENT_ID: The client ID of the service principle in step 1.
