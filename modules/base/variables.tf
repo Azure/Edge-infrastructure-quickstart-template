@@ -110,13 +110,13 @@ variable "tenant" {
   description = "The tenant ID for the Azure account."
 }
 
-variable "servicePricipalId" {
+variable "servicePrincipalId" {
   type        = string
   sensitive   = true
   description = "The service principal ID for the Azure account."
 }
 
-variable "servicePricipalSecret" {
+variable "servicePrincipalSecret" {
   type        = string
   sensitive   = true
   description = "The service principal secret for the Azure account."
@@ -152,4 +152,22 @@ variable "serverPorts" {
   type        = map(number)
   description = "Server winrm ports in virtual host"
   default     = {}
+}
+
+variable "enableInsights" {
+  description = "Whether to enable Azure Monitor Insights."
+  type        = bool
+  default     = false
+}
+
+variable "enableAlerts" {
+  description = "Whether to enable Azure Monitor Alerts."
+  type        = bool
+  default     = false
+}
+
+variable "enableVM" {
+  description = "Whether to enable VM."
+  type        = bool
+  default     = false
 }

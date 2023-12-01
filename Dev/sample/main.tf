@@ -1,23 +1,23 @@
 # module "base" {
-#   source                = "../../modules/Base"
-#   location              = "<location>"
-#   siteId                = "<siteId>"
-#   domainFqdn            = "<domainFqdn>"
-#   startingAddress       = "<startingAddress>"
-#   endingAddress         = "<endingAddress>"
-#   defaultGateway        = "<defaultGateway>"
-#   dnsServers            = ["<dnsServer1>"]
-#   adouPath              = "<adouPath>"
-#   tenant                = "<tenant>"
-#   domainServerIP        = "<domainServerIP>"
+#   source          = "../../modules/base"
+#   location        = "<location>"
+#   siteId          = "<siteId>"
+#   domainFqdn      = "<domainFqdn>"
+#   startingAddress = "<startingAddress>"
+#   endingAddress   = "<endingAddress>"
+#   defaultGateway  = "<defaultGateway>"
+#   dnsServers      = ["<dnsServer1>"]
+#   adouPath        = "<adouPath>"
+#   tenant          = "<tenant>"
+#   domainServerIP  = "<domainServerIP>"
 #   servers = [
 #     {
-#       name              = "<server1Name>",
-#       ipv4Address       = "<server1Ipv4Address>"
+#       name        = "<server1Name>",
+#       ipv4Address = "<server1Ipv4Address>"
 #     },
 #     {
-#       name              = "<server2Name>",
-#       ipv4Address       = "<server2Ipv4Address>"
+#       name        = "<server2Name>",
+#       ipv4Address = "<server2Ipv4Address>"
 #     }
 #   ]
 #   managementAdapters = ["<managementAdapter1>", "<managementAdapter2>"]
@@ -33,11 +33,11 @@
 #       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
-#     subId                 = var.subscriptionId
-#     domainAdminUser       = var.domainAdminUser
-#     domainAdminPassword   = var.domainAdminPassword
-#     localAdminUser        = var.localAdminUser
-#     localAdminPassword    = var.localAdminPassword
-#     servicePricipalId     = var.servicePricipalId
-#     servicePricipalSecret = var.servicePricipalSecret
+#   subId                  = var.subscriptionId
+#   domainAdminUser        = var.domainAdminUser
+#   domainAdminPassword    = var.domainAdminPassword
+#   localAdminUser         = var.localAdminUser
+#   localAdminPassword     = var.localAdminPassword
+#   servicePrincipalId     = var.servicePrincipalId
+#   servicePrincipalSecret = var.servicePrincipalSecret
 # }

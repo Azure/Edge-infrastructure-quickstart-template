@@ -22,8 +22,8 @@ module "hci" {
   domainAdminPassword   = var.domainAdminPassword
   localAdminUser        = var.localAdminUser
   localAdminPassword    = var.localAdminPassword
-  servicePricipalId     = var.servicePricipalId
-  servicePricipalSecret = var.servicePricipalSecret
+  servicePrincipalId     = var.servicePrincipalId
+  servicePrincipalSecret = var.servicePrincipalSecret
   destory_adou          = var.destory_adou
   virtualHostIp         = var.virtualHostIp
   dcPort                = var.dcPort
@@ -37,12 +37,12 @@ module "extension" {
   siteId         = var.siteId
   clusterId      = module.hci.cluster.id
   serverNames    = local.serverNames
-  enableInsights = false
-  enableAlerts   = false
+  enableInsights = var.enableInsights
+  enableAlerts   = var.enableAlerts
 }
 
 module "vm" {
-  count            = 0
+  count            = var.enableVM ? 1 : 0
   source           = "../hci-vm"
   depends_on       = [module.hci]
   customLocationId = module.hci.customlocation.id

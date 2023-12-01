@@ -1,128 +1,188 @@
-# Edge infrastructure quickstart template Project
+# Edge Infrastructure QuickStart Template
   
-This repository provides a simple and efficient way for customers to provision AzureStackHCI 23H2 using Terraform. By forking this repository and modifying the parameters, you can quickly and easily deploy AzureStackHCI 23H2 to your environment.  
+This repository provides a simple and efficient way for users to provision AzureStack HCI clusters in a bunch of locations using Terraform. By forking this repository and modifying the parameters, you can quickly and easily deploy AzureStack HCI to your environment.
 
-## Prerequisites 
-Follow the step2(Install OS) of this [official doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-tool-active-directory)
+## Prerequisites
+Check deployment checklist and install AzureStack HCI OS on your servers to be deployed as AzureStack HCI clusters. Complete the step 2 (Download the software) & 3 (Install the OS) in this [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software). Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project. Follow the guidance in this repository to start HCI deployments.
 
 ## Getting Started  
   
 To get started, follow these steps:  
 1. Create a repository base on this template.
-2. [Setup CICD](https://github.com/Azure/Edge-infrastructure-quickstart-template/tree/main#setup-cicd).
-3. Modify the variables Modify the variables in the `Dev/sample/main.tf` file and commit.
-
-If you don't want CICD:
-1. Create a repository base on this template.
-2. Clone the forked repository to your local machine.  
-3. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
-4. Configure your Azure account credentials by following the [Azure Provider documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/azure_cli).  
-5. Modify the variables in the `Dev/sample/main.tf` file or to fit your environment's requirements.  
+1. [Setup pipeline](https://github.com/Azure/Edge-infrastructure-quickstart-template/tree/main#setup-pipeline).
+1. Create a branch from `main`.
+1. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
+1. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
+    1. A resource group name `<site>-rg`
+    1. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
+    1. Arc servers that make up the HCI cluster
+    1. A storage account used for HCI cloud witness
+    1. An HCI cluster name `<site>-cl`
+    1. Arc Resource Bridge named `<site>-cl-arcbridge`
+    1. Custom location of ARB named `<site>-customLocation`
+    1. Two storage paths named `UserStorage1`, `UserStorage2`
+1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
   
-## Setup CICD
+## Setup pipeline
 1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment can access the service principle , the principle will be run terraform apply in pipeline. the service principle need to grant following roles:
-    1. Contributor(to create resource group/keyvault/HCIcluster...)
-    1. Key Vault Secrets Officer(to create secret in azure keyvault)
-    1. User Access Administrator(to grant role for arc-enabled server)
-4. If the remote powershell port(5985)node of HCI is accessible from the Internet or you want to skip prepare AD and onboard arc-server part, you don't need this, otherwise you need to [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners) for your repo, the self host runner need able to access 5985 port of your ad server and hci nodes.
-2. Setup repository secret:
-    * domainAdminUser
-    * domainAdminPassword
-    * localAdminUser
-    * localAdminPassword
-    * servicePricipalId
-    * servicePricipalSecret 
-    * AZURE_CLIENT_ID: The client ID of the service principle in step 1.
-    * AZURE_SUBSCRIPTION_ID: The subscription ID of the service principle in step 1.
-    * AZURE_TENANT_ID: The tenant ID of the service principle in step 1.
-3. Setup terraform storage account backend in .azure/backendTemplate.tf file, using a exist storage account of Azure_Subscription_ID, change following:
-    * ResourceGroupName
-    * StorageAccountName
-    * StorageContainerName
-5. Prepare git hooks, using the command to setup github hooks, every time you commit, it recreate the github action for you.
+    - Contributor (to create resource group / KeyVault / HCI cluster...)
+    - Key Vault Secrets Officer (to create secret in azure KeyVault)
+    - User Access Administrator (to grant role for arc-enabled servers)
+1. Setup repository secret following [Managing secrets for your repository and organization for GitHub Codespaces](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-secrets-for-your-repository-and-organization-for-github-codespaces):
+    - Pipeline secrets:
+        * AZURE_CLIENT_ID: The client ID of the service principle in step 1.
+        * AZURE_SUBSCRIPTION_ID: The subscription ID of the service principle in step 1.
+        * AZURE_TENANT_ID: The tenant ID of the service principle in step 1.
+    - HCI secrets:
+        * domainAdminUser
+        * domainAdminPassword
+        * localAdminUser
+        * localAdminPassword
+        * servicePrincipalId
+        * servicePrincipalSecret 
+1. Setup Terraform backend:
+    1. Create a storage account in your Azure subscription (the same subscription as AZURE_SUBSCRIPTION_ID). Create a container in it.
+    1. Open `.azure/backendTemplate.tf` in this repository. Replace `\<ResourceGroupName\>`, `\<StorageAccountName\>`, `\<StorageContainerName\>` to the storage account and container you just created.
+    1. Commit `.azure/backendTemplate.tf` and push.
+1. Setup git hooks:
  
-`Git config --local core.hooksPath ./.azure/hooks/`
+    Run `git config --local core.hooksPath ./.azure/hooks/`.
+    This hook will generate the pipeline definition `deploy-infra.yml` when you commit changes to this repository.
+1. Setup GitHub runners.
+    - If the remote PowerShell port(5985) of HCI is exposed to the Internet. Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
+    ```yml
+        runs-on: [ubuntu-latest]
+        # runs-on: [self-hosted]
+    ```
+    - If your HCI nodes can be remote managed inside your CorpNet. You can [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Runner hosts must setup the following tools.
+        1. Install [Git](https://git-scm.com/downloads). Add `Git` to path. Run `git --version` to validate.
+        1. Add `<Git installation root>\usr\bin` to path. The default path is `C:\Program Files\Git\usr\bin`. 
+        1. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
+        1. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
+        1. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
 
-after setup, everytime you push cotents to main branch, it will automatically trigger infrasture update workflow. If your hci nodes can't accessible from the Internet, you need to register yout accessible machine as [self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners)
+## Add new sites
+After the first HCI deployment succeeds, you may want to scale the deployment to more sites. You can simply copy and paste your first site folder. Edit `main.tf` for each newly copied sites to the site specific values. Commit and create a pull request for the changes. Deployment pipeline and backend settings will be set during the commit. Once the pull request is merged into `main` branch, pipeline will be triggered and deploy new sites accordingly. An example could be
+```
+├───dev
+│   └───firstsite
+│           main.tf
+│           ...
+│
+├───prod
+│   ├───prod1
+│   │       main.tf
+│   │       ...
+│   │
+│   ├───prod2
+│   │       main.tf
+│   │       ...
+│   │
+│   └───prod3
+│           main.tf
+│           ...
+│
+└───qa
+    ├───qa1
+    │       main.tf
+    │       ...
+    │
+    └───qa2
+            main.tf
+            ...
+```
 
+## Telemetry
+Microsoft collects deployment pipeline telemetry. If you do not want to send telemetry, edit `.github/workflows/site-cd-workflow.yml`, remove all steps starts with `Telemetry`.
 
-## Usage - manual apply
+## Clean Up
+Removing one folder will not remove the resources created by this folder previously.
+
+You have 2 ways to cleanup if you do want to remove the resources.
+- Before removing the folder, run `terraform destroy` to destroy the resources created by this Terraform configuration. Then remove this folder.
+- Go to Azure portal or use CLI to remove `${siteId}-rg` resource group and remove this folder.
+
+# Advanced
+
+## Repo Structure
+```
+PROJECT_ROOT
+│
+├───.azure
+│   │   backendTemplate.tf              // Backend storage account config file
+│   │
+│   └───hooks
+│           pre-commit                  // Git hook to generate deployment workflow and set backend
+│
+├───.github
+│   └───workflows
+│           site-cd-workflow.yml        // Steps to deploy a single site
+│
+├───dev                                 // The first stage to deploy
+│   └───sample
+│           backend.tf
+│           main.tf                     // Main configuration file for the site
+│           provider.tf
+│           terraform.tf
+│           variables.tf
+│
+├───modules
+│   ├───base                            // Base module of all sites
+│   │       main.tf
+│   │       variables.tf
+│   │
+│   ├───hci                             // Module to manage HCI clusters
+│   │   │
+│   │   └───hciserver
+│   │
+│   ├───hci-extensions                  // Module to manage HCI extensions
+│   │
+│   └───hci-vm                          // Module to manage HCI VMs
+│
+├───prod                                // prod stage sites are deployed after qa stage
+│   │
+│   └───prod1
+│
+└───qa                                  // qa stage sites are deployed after dev stage
+    │
+    └───qa1
+```
+
+## Customize the Deployment  
   
-After setting up the repository, navigate to sample folder that containing the Terraform configuration files and perform the following steps:  
+You may edit `modules/base` to customize your deployment template for all sites. You may add default values for your sites in `modules/base/variables.tf`. For example, tenant name is likely to be the same for all sites. You can add a default value for `tenant` variable.
+```hcl
+variable "tenant" {
+  type        = string
+  description = "The tenant ID for the Azure account."
+  default     = "<your tennat ID>"
+}
+```
 
-0. Open a powershell as administrator, az login with the account that has proper permission over the subscription.
-    - the permission contains Key Vault Administrator and Owner.
-    - you can also use service principal, refer to the [Authenticating using a Service Principal with a Client Secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret).
+## Manual Apply
+
+If you want to deploy locally:
+1. Create a repository base on this template.
+1. Clone the forked repository to your local machine.  
+1. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
+1. Make sure you have the following permissions to the subscription you want to deploy HCI clusters.
+    - Contributor (to create resource group / KeyVault / HCI cluster...)
+    - Key Vault Secrets Officer (to create secret in azure KeyVault)
+    - User Access Administrator (to grant role for arc-enabled servers)
+1. Edit `dev/sample/backend.tf` to use local backend.
+    ```hcl
+    terraform {
+    backend "local" {}
+    }
+    ```
+1. Modify the variables in the `dev/sample/main.tf` file to fit your environment's requirements.
+1. Open a PowerShell as administrator, `az login` with your credentials.
+1. Go to the site folder `cd dev/sample`.
 1. Initialize the Terraform working directory by running `terraform init`.  
-2. Plan and review the resources to be created by running `terraform plan`.  
-3. Apply the Terraform configuration and create the resources by running `terraform apply`.  
+1. Apply the Terraform configuration and create the resources by running `terraform apply`.  
   
-The above commands will provision AzureStackHCI 23H2 in your Azure environment.  
+The above commands will provision an AzureStack HCI cluster in your Azure subscription.  
 
-## Output after terraform apply
-1. A resource group name [SiteID]-rg
-2. A HCI cluster name [SiteID]-cl
-3. A Resource Bridge named [SIteID]-cl-arcbridge
-4. A Custom location named [SiteID]-customLocation
-5. arc servers that make up the HCI cluster
-4. A KeyVault named [SiteID]-kv: Contains secrets that used for deploy
-5. A storage account used for witness
-6. 2 storage accounts used for HCI storage path
-
-## Scale
-if you want to provision multiple HCI, you need to create a folder and copy the the 3 tf file from store0, modify these variables in main.tf. and then run these terraform steps in the new folder. 
-Our infrasture as code automation service will help to automate these steps:)
-
-## Technical detail of this repository
-```
-project
-│   README.md
-└───Module                   // folders that contain terraform module
-|   └───Base                 // the base module of customer, customer can change the module manually 
-|   └───hci                  // the microsoft maintained module, used to create a hci cluster
-│       │   main.tf          // deploy resource group and hci cluster
-│       │   predeploy.tf     // deploy key vault/ witness storage account and assign role
-|       |   validate.tf      // deploymentsetting that used to validate cluster creation parameters
-|       |   deploy.tf        // deploymentsetting that used to deploy cluster, it depend on validatedeployemntsetting
-│       │   ...
-│       └───hciserver        // module used to onboard arc machine
-│           │   connect.ps1  // script used to onboard arc
-│           │   main.tf      // terraform code used to get arc machine arm resource
-│           │   ...
-│   
-└───Dev                      // dev stage folder, contains store folders, all store in this folders will be in Dev stage
-    └───sample               // sample store
-        │   main.tf          // the main file that customer need to change
-        │   ...
-└───QA                       // QA stage folder, contains store folders, all store in this folders will be in QA stage
-└───Prod                     // prod stage folder, contains store folders, all store in this folders will be in Prod stage
-```
-
-The stage in the repo has following running sequence
-```
-Dev -> QA(after all store in Dev run successfully) -> Prod(after all store in QA run successfully)
-```
-The steps to provision a HCI cluster is
-
-1. Install OS to all nodes (prerequisites)
-2. Prepare Active Directory(done by this repo, hciserver folder)
-3. onboard all nodes to arc machine (done by this repo, hciserver folder)
-4. create a HCI cluster and deploymentsetting (done by this repo, module folder)
-
-this repo is utilize the cloud deployment method that build by AzureStackHCI team.
-
-## Customizing the Deployment  
-  
-You can modify the module for your needs.
-  
-## Cleaning Up  
-  
-To destroy the resources created by this Terraform configuration, run `terraform destroy` in the directory containing the configuration files.  
-
-To remove git hooks
-`git config --unset core.hookspath`
-  
-  
 ## Parameters
 
 | Name | Description | Type | Default | Required |
@@ -139,8 +199,8 @@ To remove git hooks
 | <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword) | The password for the local administrator account. | `string` | n/a | yes |
 | <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser) | The username for the local administrator account. | `string` | n/a | yes |
 | <a name="input_servers"></a> [servers](#input\_servers) | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a | yes |
-| <a name="input_servicePricipalId"></a> [servicePricipalId](#input\_servicePricipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_servicePricipalSecret"></a> [servicePricipalSecret](#input\_servicePricipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
 | <a name="input_siteId"></a> [siteId](#input\_siteId) | A unique identifier for the site. | `string` | n/a | yes |
 | <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress) | The starting IP address of the IP address range. | `string` | n/a | yes |
 | <a name="input_subId"></a> [subId](#input\_subId) | The subscription ID for the Azure account. | `string` | n/a | yes |

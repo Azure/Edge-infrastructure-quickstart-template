@@ -20,7 +20,8 @@ env:
 jobs:
   terraform:
     name: 'Terraform'
-    runs-on: [self-hosted, hci, x64]
+    # runs-on: [ubuntu-latest]
+    runs-on: [self-hosted]
     environment: terraform
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -59,7 +60,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false -var "localAdminUser=${{ secrets.localAdminUser }}" -var "localAdminPassword=${{ secrets.localAdminPassword }}" -var "domainAdminUser=${{ secrets.domainAdminUser }}" -var "domainAdminPassword=${{ secrets.domainAdminPassword }}" -var "servicePricipalId=${{ secrets.servicePricipalId }}" -var "servicePricipalSecret=${{ secrets.servicePricipalSecret }}" -var "subscriptionId=${{ secrets.AZURE_SUBSCRIPTION_ID }}" -out="${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
+      run: terraform plan -input=false -var "localAdminUser=${{ secrets.localAdminUser }}" -var "localAdminPassword=${{ secrets.localAdminPassword }}" -var "domainAdminUser=${{ secrets.domainAdminUser }}" -var "domainAdminPassword=${{ secrets.domainAdminPassword }}" -var "servicePrincipalId=${{ secrets.servicePrincipalId }}" -var "servicePrincipalSecret=${{ secrets.servicePrincipalSecret }}" -var "subscriptionId=${{ secrets.AZURE_SUBSCRIPTION_ID }}" -out="${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
     
     - name: Upload the plan
       uses: actions/upload-artifact@v3

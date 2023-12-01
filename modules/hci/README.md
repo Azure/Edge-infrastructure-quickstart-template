@@ -57,8 +57,8 @@
 | <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword) | The password for the local administrator account. | `string` | n/a | yes |
 | <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser) | The username for the local administrator account. | `string` | n/a | yes |
 | <a name="input_servers"></a> [servers](#input\_servers) | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a | yes |
-| <a name="input_servicePricipalId"></a> [servicePricipalId](#input\_servicePricipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_servicePricipalSecret"></a> [servicePricipalSecret](#input\_servicePricipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
 | <a name="input_siteId"></a> [siteId](#input\_siteId) | A unique identifier for the site. | `string` | n/a | yes |
 | <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress) | The starting IP address of the IP address range. | `string` | n/a | yes |
 | <a name="input_subId"></a> [subId](#input\_subId) | The subscription ID for the Azure account. | `string` | n/a | yes |

@@ -36,8 +36,8 @@ No modules.
 | <a name="input_resourceGroup"></a> [resourceGroup](#input\_resourceGroup) | The name of the resource group. | `string` | n/a | yes |
 | <a name="input_serverIP"></a> [serverIP](#input\_serverIP) | The IP address of the server. | `string` | n/a | yes |
 | <a name="input_serverName"></a> [serverName](#input\_serverName) | The name of the server. | `string` | n/a | yes |
-| <a name="input_servicePricipalId"></a> [servicePricipalId](#input\_servicePricipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_servicePricipalSecret"></a> [servicePricipalSecret](#input\_servicePricipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
+| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
 | <a name="input_subId"></a> [subId](#input\_subId) | The subscription ID for the Azure account. | `string` | n/a | yes |
 | <a name="input_tenant"></a> [tenant](#input\_tenant) | The tenant ID for the Azure account. | `string` | n/a | yes |
 
