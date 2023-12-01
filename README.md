@@ -28,6 +28,7 @@ To get started, follow these steps:
    1. Create `terraform` environment in your GitHub repository. [Creating an environment]([https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#creating-an-environment))
    1. Create a service principal in Microsoft Entra ID [Application and service principal objects in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser).
    1. Add Federated credential to the service principal. Use `Environment` as entity type and input `terraform` to `Based on selection` input box.
+   1. Add a secret and save it to `servicePrincipalSecret` in the repo secrets described in the next step.
    1. Grant the following permissions to the service principle in your subscription:
       - Contributor (to create resource group / KeyVault / HCI cluster...)
       - Key Vault Secrets Officer (to create secret in azure KeyVault)
@@ -182,8 +183,18 @@ If you want to deploy locally:
 1. Modify the variables in the `dev/sample/main.tf` file to fit your environment's requirements.
 1. Open a PowerShell as administrator, `az login` with your credentials.
 1. Go to the site folder `cd dev/sample`.
-1. Initialize the Terraform working directory by running `terraform init`.  
-1. Apply the Terraform configuration and create the resources by running `terraform apply`.  
+1. Add `sample.tfvars` to assign values for variables.
+    ```hcl
+    subscriptionId         = "<your subscription id>"
+    localAdminUser         = "<local admin user name>"
+    localAdminPassword     = "<local admin password>"
+    domainAdminUser        = "<domain admin user name>"
+    domainAdminPassword    = "<domain admin user password>"
+    servicePrincipalId     = "<service principal id created in the first step of setting pipeline>"
+    servicePrincipalSecret = "<service principal secret created in the first step of setting pipeline>"
+    ```
+1. Initialize the Terraform working directory by running `terraform init`.
+1. Apply the Terraform configuration and create the resources by running `terraform apply -var-file="sample.tfvars"`.
   
 The above commands will provision an AzureStack HCI cluster in your Azure subscription.  
 
