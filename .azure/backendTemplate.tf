@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "<ResourceGroupName>"
     storage_account_name = "<StorageAccountName>"
     container_name       = "<StorageContainerName>"
-    key                  = "{{.StackName}}.tfstate"
+    key                  = "{{.GroupName}}.tfstate"
   }
 }
