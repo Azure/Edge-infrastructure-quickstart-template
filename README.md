@@ -174,7 +174,7 @@ If you want to deploy locally:
     - Contributor (to create resource group / KeyVault / HCI cluster...)
     - Key Vault Secrets Officer (to create secret in azure KeyVault)
     - User Access Administrator (to grant role for arc-enabled servers)
-1. Edit `dev/sample/backend.tf` to use local backend.
+1. Edit `.azure/backendTemplate.tf` to use local backend.
     ```hcl
     terraform {
     backend "local" {}
