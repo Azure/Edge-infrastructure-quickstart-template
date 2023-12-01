@@ -55,7 +55,10 @@ Invoke-Command -Session $session -ScriptBlock {
         Set-NetConnectionProfile -InterfaceAlias $internetAdapterAlias -IPv4Connectivity Internet
 
         echo "Validate BITS is working"
-        Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
+        $job = Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
+        if ($job.JobState -ne "Transferred") {
+            throw "BITS transfer failed"
+        }
     }
 
     $creds = [System.Management.Automation.PSCredential]::new($servicePrincipalId, (ConvertTo-SecureString $servicePrincipalSecret -AsPlainText -Force))
