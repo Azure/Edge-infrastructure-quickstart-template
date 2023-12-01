@@ -2,7 +2,7 @@ param(
     $userName,
     $password,
     $ip, $port,
-    $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC, $internetAdapterAlias
+    $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -50,15 +50,10 @@ Invoke-Command -Session $session -ScriptBlock {
         }
     }
 
-    if ($internetAdapterAlias) {
-        echo "Setting internet connectivity for $internetAdapterAlias"
-        Set-NetConnectionProfile -InterfaceAlias $internetAdapterAlias -IPv4Connectivity Internet
-
-        echo "Validate BITS is working"
-        $job = Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
-        if ($job.JobState -ne "Transferred") {
-            throw "BITS transfer failed"
-        }
+    echo "Validate BITS is working"
+    $job = Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
+    if ($job.JobState -ne "Transferred") {
+        throw "BITS transfer failed"
     }
 
     $creds = [System.Management.Automation.PSCredential]::new($servicePrincipalId, (ConvertTo-SecureString $servicePrincipalSecret -AsPlainText -Force))
