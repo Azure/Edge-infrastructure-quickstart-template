@@ -56,7 +56,7 @@ resource "azurerm_key_vault_secret" "LocalAdminCredential" {
 resource "azurerm_key_vault_secret" "arbDeploymentSpnName" {
   name         = "DefaultARBApplication"
   content_type = "Secret"
-  value        = base64encode("${var.servicePricipalId}:${var.servicePricipalSecret}")
+  value        = base64encode("${var.servicePrincipalId}:${var.servicePrincipalSecret}")
   key_vault_id = azurerm_key_vault.DeploymentKeyVault.id
   depends_on   = [azurerm_key_vault.DeploymentKeyVault]
 }
@@ -101,8 +101,8 @@ module "servers" {
   subId                 = var.subId
   location              = var.location
   tenant                = var.tenant
-  servicePricipalId     = var.servicePricipalId
-  servicePricipalSecret = var.servicePricipalSecret
+  servicePrincipalId     = var.servicePrincipalId
+  servicePrincipalSecret = var.servicePrincipalSecret
   expandC               = var.virtualHostIp == "" ? false : true
   internetAdapterAlias  = var.virtualHostIp == "" ? "" : var.managementAdapters[0]
 }

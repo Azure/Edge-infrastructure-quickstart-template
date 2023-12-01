@@ -2,7 +2,7 @@ param(
     $userName,
     $password,
     $ip, $port,
-    $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret, $expandC, $internetAdapterAlias
+    $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC, $internetAdapterAlias
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -21,7 +21,7 @@ Invoke-Command -Session $session -ScriptBlock {
 Copy-Item -ToSession $session "$PSScriptRoot\arc-installer" -Destination "c:\arc-installer" -Recurse
 
 Invoke-Command -Session $session -ScriptBlock {
-    Param ($subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret)
+    Param ($subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret)
     $script:ErrorActionPreference = 'Stop'
     cd c:\arc-installer
     set-executionpolicy Bypass -force
@@ -58,7 +58,7 @@ Invoke-Command -Session $session -ScriptBlock {
         Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
     }
 
-    $creds = [System.Management.Automation.PSCredential]::new($servicePricipalId, (ConvertTo-SecureString $servicePricipalSecret -AsPlainText -Force))
+    $creds = [System.Management.Automation.PSCredential]::new($servicePrincipalId, (ConvertTo-SecureString $servicePrincipalSecret -AsPlainText -Force))
 
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
 
@@ -81,4 +81,4 @@ Invoke-Command -Session $session -ScriptBlock {
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
     Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
-} -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePricipalId, $servicePricipalSecret
+} -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret

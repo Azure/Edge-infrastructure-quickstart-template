@@ -23,12 +23,12 @@ variable "domainAdminPassword" {
   sensitive   = true
   type        = string
 }
-variable "servicePricipalId" {
+variable "servicePrincipalId" {
   description = "The id of service principal to create hci cluster."
   sensitive   = true
   type        = string
 }
-variable "servicePricipalSecret" {
+variable "servicePrincipalSecret" {
   description = "The secret of service principal to create hci cluster."
   sensitive   = true
   type        = string

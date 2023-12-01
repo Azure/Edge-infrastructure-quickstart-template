@@ -110,13 +110,13 @@ variable "tenant" {
   description = "The tenant ID for the Azure account."
 }
 
-variable "servicePricipalId" {
+variable "servicePrincipalId" {
   type        = string
   sensitive   = true
   description = "The service principal ID for the Azure account."
 }
 
-variable "servicePricipalSecret" {
+variable "servicePrincipalSecret" {
   type        = string
   sensitive   = true
   description = "The service principal secret for the Azure account."
