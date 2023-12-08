@@ -51,9 +51,17 @@ Invoke-Command -Session $session -ScriptBlock {
     }
 
     echo "Validate BITS is working"
-    $job = Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download
-    if ($job.JobState -ne "Transferred") {
-        throw "BITS transfer failed"
+    $job = Start-BitsTransfer -Source https://aka.ms -Destination $env:TEMP -TransferType Download -Asynchronous
+    $count = 0
+    while ($job.JobState -ne "Transferred" -and $count -lt 30) {
+        if ($job.JobState -eq "TransientError"){
+            throw "BITS transfer failed"
+        }
+        sleep 6
+        $count++
+    }
+    if ($count -ge 30) {
+        throw "BITS transfer failed after 3 minutes. Job state: $job.JobState"
     }
 
     $creds = [System.Management.Automation.PSCredential]::new($servicePrincipalId, (ConvertTo-SecureString $servicePrincipalSecret -AsPlainText -Force))
