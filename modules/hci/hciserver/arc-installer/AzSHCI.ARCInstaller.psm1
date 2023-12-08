@@ -184,7 +184,7 @@ function Register-ResourceProviderIfRequired{
 
         #TODO: other validations related to OS Type and Version should happen here.
         # If the agent is already installed and not connected, we will re-install the agent again. This is like upgrade operation
-        & "$PSScriptRoot\Classes\install_aszmagent_hci.ps1";
+        & "$PSScriptRoot\Classes\install_aszmagent_hci.ps1" -AltDownload "https://download.microsoft.com/download/5/e/9/5e9081ed-2ee2-4b3a-afca-a8d81425bcce/AzureConnectedMachineAgent.msi";
         if ($LASTEXITCODE -ne 0) { exit 1; }
 
         # Run connect command
@@ -274,6 +274,12 @@ function Register-ResourceProviderIfRequired{
         New-AzConnectedMachineExtension -Name "AzureEdgeLifecycleManager"  -ResourceGroupName $ResourceGroup -MachineName $env:COMPUTERNAME -Location $Region -Publisher "Microsoft.AzureStack.Orchestration" -ExtensionType "LcmController" -NoWait | out-null 
 
         Log-Info -Message "Successfully triggered  LCMController Extension installation " -ConsoleOut
+        Start-Sleep -Seconds 60
+
+        Log-Info -Message "Installing EdgeRemoteSupport Extension " -ConsoleOut
+        New-AzConnectedMachineExtension -Name "EdgeRemoteSupport"  -ResourceGroupName $ResourceGroup -MachineName $env:COMPUTERNAME -Location $Region -Publisher "Microsoft.AzureStack.Observability" -ExtensionType "EdgeRemoteSupport" -NoWait | out-null
+
+        Log-Info -Message "Successfully triggered  EdgeRemoteSupport Extension installation " -ConsoleOut
 
         Log-Info -Message "Please verify that the extensions are successfully installed before continuing..." -ConsoleOut
      }
@@ -290,7 +296,6 @@ function Register-ResourceProviderIfRequired{
         Disconnect-AzAccount -ErrorAction SilentlyContinue | out-null
         $Script:ErrorActionPreference = 'SilentlyContinue'
         Write-AzStackHciFooter -invocation $MyInvocation -Failed:$cmdletFailed -PassThru:$PassThru
-        $script:ErrorActionPreference = 'Stop'
      }
  }
 
@@ -480,10 +485,10 @@ function PerformRoleAssignmentsOnArcMSI {
             # Temporary assignment till the Observability role removes the extension installation call
             $arcManagerRoleStatus = AssignRoleToAnObjectUsingRetries -ObjectId $objectId -RoleName "Azure Connected Machine Resource Manager" -ResourceGroup $ResourceGroup
             if ($arcManagerRoleStatus -ne [ErrorDetail]::Success) {
-                Log-Info -Message "Failed to assign the Azure Connected Machine Resource Nanager role on the resource group" -ConsoleOut -Type Error
+                Log-Info -Message "Failed to assign the Azure Connected Machine Resource Manager role on the resource group" -ConsoleOut -Type Error
             }
             else{
-                Log-Info -Message "Successfully assigned the Azure Connected Machine Resource Nanager role on the resource group" -ConsoleOut
+                Log-Info -Message "Successfully assigned the Azure Connected Machine Resource Manager role on the resource group" -ConsoleOut
             }
             # Temporary assignment till the "Azure Stack HCI Device Management Role" gets the ResourceGroup Read permission
             $readerRoleStatus = AssignRoleToAnObjectUsingRetries -ObjectId $objectId -RoleName "Reader" -ResourceGroup $ResourceGroup

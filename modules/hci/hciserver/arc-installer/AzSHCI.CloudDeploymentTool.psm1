@@ -15,16 +15,12 @@ function Invoke-AzStackHCIEnvironmentPreparator {
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
- 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
           
         # AzureCloud , AzureUSGovernment , AzureChinaCloud 
         [Parameter(Mandatory = $true, HelpMessage = "Azure Cloud type used for HCI Cluster Deployment. Valid values are : AzureCloud , AzureUSGovernment , AzureChinaCloud")]
         [string] 
         $Cloud,
-         
+        
         [Parameter(Mandatory = $true, HelpMessage = "Azure Region used for HCI Cluster Deployment")]
         [string] 
         $Region,
@@ -134,10 +130,6 @@ function Invoke-AzStackHCIEnvironmentValidator {
         [string]
         $ResourceGroup,
  
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
- 
         [Parameter(Mandatory = $false, HelpMessage = "Azure Stack HCI Cluster Name for Registration")]
         [string] 
         $ClusterName,
@@ -232,9 +224,16 @@ function Invoke-AzStackHCIEnvironmentValidator {
         Log-Info -Message "Triggered Validated the deployment Settings Resource $deploystatusString" -ConsoleOut
 
         Start-Sleep -Seconds 120
-        $deploymentStatus = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup -Name $deploymentSettingsValidationName  | Format-Table ResourceGroupName, DeploymentName, ProvisioningState
+        $entireDeploymentStatus = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup -Name $deploymentSettingsValidationName
+        $deploymentStatus = $entireDeploymentStatus | Format-Table ResourceGroupName, DeploymentName, ProvisioningState
         $deploystatusString = $deploymentStatus | Out-String 
         Log-Info -Message "Triggered Validated the deployment Settings Resource $deploystatusString" -ConsoleOut
+
+        if ($deploymentStatus.ProvisioningState -eq "Failed")
+        {
+            Log-Info -Message "The deployment status is already in a failed state , Entire deployment Status : $entireDeploymentStatus" -ConsoleOut
+            throw "The deployment status is in a failed state, status =  $deploymentStatus"
+        }
     }
     catch {
         Log-Info -Message "" -ConsoleOut
@@ -259,10 +258,6 @@ function Invoke-AzStackHCIDeployment {
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
- 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
  
         [Parameter(Mandatory = $false, HelpMessage = "Azure Stack HCI Cluster Name for Registration")]
         [string] 
@@ -382,10 +377,6 @@ function Invoke-AzStackHCIFullDeployment {
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
- 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
           
         # AzureCloud , AzureUSGovernment , AzureChinaCloud 
         [Parameter(Mandatory = $true, HelpMessage = "Azure Cloud type used for HCI Cluster Deployment. Valid values are : AzureCloud , AzureUSGovernment , AzureChinaCloud")]
@@ -462,7 +453,6 @@ function Invoke-AzStackHCIFullDeployment {
         $environmentPreparationParameters = @{
             SubscriptionID = $SubscriptionID
             ResourceGroup = $ResourceGroup
-            TenantID = $TenantID
             Region = $Region
             ClusterName = $ClusterName
             LocalAdminCredentials = $LocalAdminCredentials
@@ -481,7 +471,6 @@ function Invoke-AzStackHCIFullDeployment {
         $deploymentSettingsParameters = @{
             SubscriptionID = $SubscriptionID
             ResourceGroup = $ResourceGroup
-            TenantID = $TenantID
             Region = $Region
             ClusterName = $ClusterName
             ArcNodeIds = $ArcNodeIds
@@ -495,32 +484,21 @@ function Invoke-AzStackHCIFullDeployment {
         Invoke-AzStackHCIEnvironmentValidator @deploymentSettingsParameters
 
         Log-Info -Message "Started polling on the environment validation status"
-        $status = PollDeploymentSettingsStatus -SubscriptionID $SubscriptionID -ResourceGroup $ResourceGroup -TenantID $TenantID -ClusterName $ClusterName
-        if($status){
-            Log-Info -Message "Environment Validation succeeded , so moving to the deployment stage" -ConsoleOut
-            Invoke-AzStackHCIDeployment @deploymentSettingsParameters
-
-            Log-Info -Message "Starting polling on the deployment action plan"
-            $deployStatus = PollDeploymentSettingsStatus -SubscriptionID $SubscriptionID -ResourceGroup $ResourceGroup -TenantID $TenantID -ClusterName $ClusterName
-            if($deployStatus){
-                Log-Info -Message "Congrats, the Azure Stack HCI cluster has been deployed successfully"
-            }
-            else{
-                Log-Info -Message "Clearing the resource group since deployment failed"
-                Remove-AzResourceGroup -Name $ResourceGroup -Force -Verbose
-                throw "The deployment failed, please reset the parameters and retrigger again"
-            }
-        }
-        else{
-            throw "Deployment Failed at environment validation, please re-check the parameters and try again"
-        }
+        PollDeploymentSettingsStatus -SubscriptionID $SubscriptionID -ResourceGroup $ResourceGroup -ClusterName $ClusterName
+        Log-Info -Message "Environment Validation succeeded , so moving to the deployment stage" -ConsoleOut
         
+        Invoke-AzStackHCIDeployment @deploymentSettingsParameters
+        Log-Info -Message "Starting polling on the deployment action plan"
+        PollDeploymentSettingsStatus -SubscriptionID $SubscriptionID -ResourceGroup $ResourceGroup -ClusterName $ClusterName
+        Log-Info -Message "Congrats, the Azure Stack HCI cluster has been deployed successfully"
     }
     catch {
         Log-Info -Message "" -ConsoleOut
         Log-Info -Message "$($_.Exception.Message)" -ConsoleOut -Type Error
         Log-Info -Message "$($_.ScriptStackTrace)" -ConsoleOut -Type Error
         $cmdletFailed = $true
+        Log-Info -Message "Clearing the resource group since deployment failed"
+        Remove-AzResourceGroup -Name $ResourceGroup -Force -Verbose
         throw $_
     }
     finally {
@@ -541,10 +519,6 @@ function Invoke-validateNodesForDeployment
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
- 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
 
         # AzureCloud , AzureUSGovernment , AzureChinaCloud 
         [Parameter(Mandatory = $true, HelpMessage = "Azure Cloud type used for HCI Cluster Deployment. Valid values are : AzureCloud , AzureUSGovernment , AzureChinaCloud")]
@@ -557,10 +531,17 @@ function Invoke-validateNodesForDeployment
 
         [Parameter(Mandatory = $true, HelpMessage = "Arc Node ids required for cloud based deployment")]
         [string[]] 
-        $ArcNodeIds
+        $ArcNodeIds,
+
+        [Parameter(Mandatory = $false, HelpMessage = "Directory path for log and report output")]
+        [string]$OutputPath
     )
     try
     {
+        $script:ErrorActionPreference = 'Stop'
+        $ProgressPreference = 'SilentlyContinue'
+        $DebugPreference = "Continue"
+        Set-AzStackHciOutputPath -Path $OutputPath
         $contextStatus = CheckIfAzContextIsSetOrNot
         if($contextStatus)
         {
@@ -587,26 +568,26 @@ function Invoke-validateNodesForDeployment
         $response = Invoke-AzRestMethod -Path $edgeDevicesValidateEndpointWithAPI -Method POST -Payload $jsonString
         Log-Info -Message "Validation action response : $($response.StatusCode) " -ConsoleOut
         $asyncURL = $response.Headers.GetValues("Azure-AsyncOperation")
-        $asyncuri =$asyncURL[0].Substring(0,$asyncURL[0].IndexOf('&'))
         $stopLoop = $false
         $status = $false
         do 
         {
-            Log-Info -Message "Querying validation status using : $asyncuri " -ConsoleOut
-            $response = Invoke-AzRestMethod -URI $asyncuri -Method GET
+            Log-Info -Message "Querying validation status using : $asyncURL[0]  " -ConsoleOut
+            $response = Invoke-AzRestMethod -URI $asyncURL[0] -Method GET
             Log-Info -Message "validation Response: $response " -ConsoleOut
             $validationResponse = $response.Content | ConvertFrom-Json
             $prettyResponse = $validationResponse | ConvertTo-Json -Depth 100
             Log-Info -Message "Validation status $prettyResponse" -ConsoleOut
-            if( $validationResponse.status.Equals("Inprogress") )
+            if( $validationResponse.status.Equals("Inprogress") -or $validationResponse.status.Equals("Accepted") )
             {
                 Start-Sleep -Seconds 10
             }
             else
             {
                 $stopLoop = $true
-                Log-Info -Message "Validation has completed"
+                Log-Info -Message "Validation has completed, checking whether validation has succeeded" -ConsoleOut
                 $status = $validationResponse.status.Equals("Succeeded")
+                Log-Info -Message "Validation Response succeeded status $status" -ConsoleOut
             }        
         }
         While (-Not $stopLoop)
@@ -617,6 +598,7 @@ function Invoke-validateNodesForDeployment
         Log-Info -Message "$($_.Exception.Message)" -ConsoleOut -Type Error
         Log-Info -Message "$($_.ScriptStackTrace)" -ConsoleOut -Type Error
         $status = $false
+        throw $_
     }
     finally
     {
@@ -624,7 +606,15 @@ function Invoke-validateNodesForDeployment
         Write-AzStackHciFooter -invocation $MyInvocation -Failed:$cmdletFailed -PassThru:$PassThru
         $DebugPreference = "Stop"
     }
-    return $status
+    if ($status)
+    {
+        Log-Info -Message "The status of node validation is successful" -ConsoleOut
+        return $status
+    }
+    else
+    {
+        throw "Node validation was unsuccessful, check the logs to debug the issue"
+    }
 }
 
 function CheckIfAzContextIsSetOrNot {
@@ -683,10 +673,6 @@ function CreateKeyVaultAndAddSecrets {
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
-
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
 
         [Parameter(Mandatory = $true, HelpMessage = "Azure Region used for HCI Cluster Deployment")]
         [string] 
@@ -751,7 +737,7 @@ function CreateKeyVaultAndAddSecrets {
         Log-Info -Message "Json value of key vault parameters $keyVaultParametersJson" -ConsoleOut
         $updatedKVParametersFilePath = (Join-Path  -Path $env:TEMP -ChildPath "\KeyVaultReportedParameters.json")
         Set-Content -Path $updatedKVParametersFilePath -Value $keyVaultParametersJson | Out-Null
-        New-AzResourceGroupDeployment -Name $KVDeploymentName -ResourceGroupName $ResourceGroup -TemplateFile $kvTemplateFilePath -TemplateParameterFile $updatedKVParametersFilePath -Force -Verbose
+        New-AzResourceGroupDeployment -Name $KVDeploymentName -ResourceGroupName $ResourceGroup -TemplateFile $kvTemplateFilePath -TemplateParameterFile $updatedKVParametersFilePath -Force
         $kvDeploymentStatus = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup -DeploymentName $KVDeploymentName
         if ($kvDeploymentStatus.ProvisioningState -eq "Succeeded"){
             Log-Info -Message "Successfully deployed the KV with name $KVName" -ConsoleOut
@@ -803,7 +789,7 @@ function CreateStorageAccountForCloudDeployment {
             $updatedStorageAccountParametersFilePath = (Join-Path  -Path $env:TEMP -ChildPath "\StorageAccountReportedParameters.json")
             Log-Info -Message "Updated Storage Account Parameters File Path is $updatedStorageAccountParametersFilePath" -ConsoleOut
             Set-Content -Path $updatedStorageAccountParametersFilePath -Value $storageAccountParametersJson | Out-Null
-            New-AzResourceGroupDeployment -Name $storageAccountDeploymentName -ResourceGroupName $ResourceGroup -TemplateFile $storageAccountTemplateFilePath -TemplateParameterFile $updatedStorageAccountParametersFilePath -Force -Verbose
+            New-AzResourceGroupDeployment -Name $storageAccountDeploymentName -ResourceGroupName $ResourceGroup -TemplateFile $storageAccountTemplateFilePath -TemplateParameterFile $updatedStorageAccountParametersFilePath -Force
             $statusOfStorageAccountDeployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroup -DeploymentName $storageAccountDeploymentName
             if ($statusOfStorageAccountDeployment.ProvisioningState -eq "Succeeded"){
                 Log-Info -Message "Storage Account $storageAccountName is created successfully" -ConsoleOut
@@ -845,10 +831,7 @@ function CreateClusterAndAssignRoles {
     )
     try {
         # Checking if cluster is already deployed
-        $resClusCheck = CheckIfAlreadyClusterResourceExists -ClusterName $ClusterName -ResourceGroupName $ResourceGroup
-        if ($resClusCheck -eq [ErrorDetail]::ClusterAlreadyExists) {
-            throw "A cluster with the same name already exists in the same resource group and is in deployed state, so cannot create the cluster again"
-        }
+        DeleteClusterResourceIfAlreadyExists -ClusterName $ClusterName -SubscriptionID $SubscriptionID -ResourceGroupName $ResourceGroup
 
         # Trying to create the cluster object
         $properties = [ResourceProperties]::new($Region, @{})
@@ -892,10 +875,6 @@ function PollDeploymentSettingsStatus {
         [Parameter(Mandatory = $true, HelpMessage = "Azure Resource group used for HCI Cluster Deployment")]
         [string]
         $ResourceGroup,
- 
-        [Parameter(Mandatory = $true, HelpMessage = "Azure Tenant used for HCI Cluster Deployment")]
-        [string]
-        $TenantID,
 
         [Parameter(Mandatory = $true)]
         [string] $ClusterName
@@ -905,12 +884,14 @@ function PollDeploymentSettingsStatus {
     Log-Info -Message "Deployment Settings Resource Uri is $deploymentSettingsResourceUri" -ConsoleOut
     $stopLoop = $false
     $status = $false
+    $currentDeploymentSettingsResource = $null
     do {
         $deploymentSettingsResource = Get-AzResource -ResourceId $deploymentSettingsResourceUri -ApiVersion $RPAPIVersion -Verbose
         Log-Info -Message "Deployment Settings Resource obtained is $deploymentSettingsResource" -ConsoleOut
         $provisioningState = $deploymentSettingsResource.properties.provisioningState
         if (("Succeeded" -eq $provisioningState) -or ("Failed" -eq $provisioningState)){
             $stopLoop = $true
+            $currentDeploymentSettingsResource = $deploymentSettingsResource
             if (("Succeeded" -eq $provisioningState)){
                 $status = $true
             }
@@ -922,7 +903,11 @@ function PollDeploymentSettingsStatus {
         Start-Sleep -Seconds 120
     }
     While (-Not $stopLoop)
-    return $status
+    if (-not $status)
+    {
+        Log-Info -Message "The current deployment settings resource is in failed state, so throwing an exception" -ConsoleOut
+        throw "Deployment Settings resource is in Failed state , current deployment settings resource = $currentDeploymentSettingsResource"
+    }
 }
 
 function RegisterRequiredResourceProviders {
@@ -1118,33 +1103,48 @@ function CheckIfStorageAccountAlreadyExists {
     return [ErrorDetail]::NotFound
 }
 
-function CheckIfAlreadyClusterResourceExists {
+function DeleteClusterResourceIfAlreadyExists {
     param (
         [Parameter(Mandatory = $true)]
         [string] $ClusterName,
 
         [Parameter(Mandatory = $true)]
+        [string] $SubscriptionID,
+
+        [Parameter(Mandatory = $true)]
         [string] $ResourceGroupName
     )
     try {
-        $clusterResource = Get-AzResource -Name $ClusterName -ResourceType "Microsoft.AzureStackHCI/clusters" -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue
-        if (($null -ne $clusterResource) -and ($null -ne $clusterResource.properties.status)){
-            $status = $clusterResource.properties.status
-            if (($status -eq "ConnectedRecently") -or ($status -eq "DeploymentSuccess")){
-                Log-Info -Message "Cluster with the same name $ClusterName exists in the Resource Group $ResourceGroupName and is in state $state" -ConsoleOut
-                return [ErrorDetail]::ClusterAlreadyExists
+        $RPAPIVersion = "2023-08-01-preview"
+        $clusterResourceUri = "/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.AzureStackHCI/clusters/$ClusterName"
+        Log-Info -Message "Cluster Resource Uri obtained is $clusterResourceUri" -ConsoleOut
+        $stopLoop = $false
+        do{
+            $clusterResource = Get-AzResource -ResourceId $clusterResourceUri -ApiVersion $RPAPIVersion -ErrorAction SilentlyContinue
+            Log-Info -Message "Current cluster resource obtained is $clusterResource" -ConsoleOut
+            if ($null -ne $clusterResource)
+            {
+                Log-Info -Message "Current cluster resource is not null, so deleting the cluster resource" -ConsoleOut
+                Remove-AzResource -ResourceId $clusterResourceUri -Force
+                Log-Info -Message "Successfully triggered delete of the cluster resource $clusterResourceUri" -ConsoleOut
             }
-            else{
-                Log-Info -Message "Cluster state obtained is $status" -ConsoleOut
+            else
+            {
+                Log-Info -Message "Current cluster resource is deleted, so returning" -ConsoleOut
+                $stopLoop = true
             }
+            Start-Sleep -Seconds 120
         }
+        While (-Not $stopLoop)
+
+        Log-Info -Message "Triggering a force delete of the cluster even though it is null" -ConsoleOut
+        Remove-AzResource -ResourceId $clusterResourceUri -Force -ErrorAction SilentlyContinue
     }
     catch {
         Log-Info -Message "" -ConsoleOut
         Log-Info -Message "$($_.Exception.Message)" -ConsoleOut -Type Error
         Log-Info -Message "$($_.ScriptStackTrace)" -ConsoleOut -Type Error
     }
-    return [ErrorDetail]::NotFound
 }
 
 function GetStorageWitnessKey {
@@ -1363,12 +1363,12 @@ function AssignPermissionsToArcMachines {
         ForEach ($arcMachineUri in $ArcMachineIds) {
             $objectId = GetArcMachineObjectId -ArcMachineUri $arcMachineUri
             if ($null -ne $objectId) {
-                $setHCIRegistrationRoleResult = PerformObjectRoleAssignmentWithRetries -ObjectId $objectId -RoleName "Azure Stack HCI registration role" -ResourceGroup $ResourceGroup -Verbose
+                $setHCIRegistrationRoleResult = PerformObjectRoleAssignmentWithRetries -ObjectId $objectId -RoleName "Azure Stack HCI Administrator" -ResourceGroup $ResourceGroup -Verbose
                 if ($setHCIRegistrationRoleResult -ne [ErrorDetail]::Success) {
-                    Log-Info -Message "Failed to assign the Azure Stack HCI registration role on the resource group" -ConsoleOut -Type Error
+                    Log-Info -Message "Failed to assign the Azure Stack HCI Administrator role on the resource group" -ConsoleOut -Type Error
                 }
                 else {
-                    Log-Info -Message "Successfully assigned the Azure Stack HCI registration role on the resource group" -ConsoleOut
+                    Log-Info -Message "Successfully assigned the Azure Stack HCI Administrator role on the resource group" -ConsoleOut
                 }
 
                 $keyVaultSecretsUserRoleResult = PerformObjectRoleAssignmentWithRetries -ObjectId $objectId -RoleName "Key Vault Secrets User" -ResourceGroup $ResourceGroup -Verbose
@@ -1468,6 +1468,7 @@ function CreateServicePrincipalForCloudDeployment {
     )
     try {
         $servicePrincipal = New-AzADServicePrincipal -DisplayName $DisplayName
+        Start-Sleep -Seconds 120
         $AADApp = Get-AzADApplication -ApplicationId $servicePrincipal.AppId
         Log-Info -Message "Created a spn with the appId $AADApp" -ConsoleOut
         $PasswordCedentials = @{
