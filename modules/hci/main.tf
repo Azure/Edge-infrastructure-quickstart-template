@@ -1,6 +1,7 @@
 resource "azurerm_resource_group" "rg" {
   name     = "${var.siteId}-rg"
   location = var.location
+  tags     = {}
 }
 
 resource "azapi_resource" "cluster1" {
