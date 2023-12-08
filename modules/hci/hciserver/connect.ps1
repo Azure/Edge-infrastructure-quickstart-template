@@ -83,7 +83,8 @@ Invoke-Command -Session $session -ScriptBlock {
         Uninstall-Module -Name AzStackHci.EnvironmentChecker -Force
     }
     echo "Installed modules"
+    $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
-    Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
+    Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
 } -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
