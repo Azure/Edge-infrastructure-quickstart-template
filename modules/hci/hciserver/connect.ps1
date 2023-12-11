@@ -77,11 +77,6 @@ Invoke-Command -Session $session -ScriptBlock {
     Install-ModuleIfMissing Az.Accounts -Force
     Install-ModuleIfMissing Az.ConnectedMachine -Force
     Install-ModuleIfMissing Az.Resources -Force
-    $module = Get-Module -Name AzStackHci.EnvironmentChecker -ListAvailable
-    if ($module) {
-        Write-Host "Removing module AzStackHci.EnvironmentChecker"
-        Uninstall-Module $module -Force
-    }
     echo "Installed modules"
     $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token
