@@ -80,7 +80,7 @@ Invoke-Command -Session $session -ScriptBlock {
     $module = Get-Module -Name AzStackHci.EnvironmentChecker -ListAvailable
     if ($module) {
         Write-Host "Removing module AzStackHci.EnvironmentChecker"
-        Uninstall-Module -Name AzStackHci.EnvironmentChecker -Force
+        Uninstall-Module $module -Force
     }
     echo "Installed modules"
     $id = (Get-AzContext).Tenant.Id
