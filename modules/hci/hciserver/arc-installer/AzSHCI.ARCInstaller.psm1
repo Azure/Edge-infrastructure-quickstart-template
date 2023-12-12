@@ -296,6 +296,7 @@ function Register-ResourceProviderIfRequired{
         Disconnect-AzAccount -ErrorAction SilentlyContinue | out-null
         $Script:ErrorActionPreference = 'SilentlyContinue'
         Write-AzStackHciFooter -invocation $MyInvocation -Failed:$cmdletFailed -PassThru:$PassThru
+        $Script:ErrorActionPreference = 'Stop'
      }
  }
 
