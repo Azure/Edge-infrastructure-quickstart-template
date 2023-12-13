@@ -5,7 +5,7 @@ module "insights" {
   resourceGroup = var.resourceGroup
   clusterId     = var.clusterId
   serverNames   = var.serverNames
-  arcSettingId  = data.azapi_resource.arcSetting
+  arcSettingId  = data.azapi_resource.arcSetting.id
 }
 
 resource "azapi_resource" "alerts" {
