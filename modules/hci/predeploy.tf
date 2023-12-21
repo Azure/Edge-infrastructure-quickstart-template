@@ -30,7 +30,6 @@ resource "azurerm_key_vault" "DeploymentKeyVault" {
   name                = "${var.siteId}-kv-${random_id.twobyte.hex}"
   location            = var.resourceGroup.location
   resource_group_name = var.resourceGroup.name
-  depends_on          = [terraform_data.ad_creation_provisioner]
 
   enabled_for_deployment          = true
   enabled_for_template_deployment = true
@@ -81,13 +80,38 @@ resource "azurerm_key_vault_secret" "storageWitnessName" {
 //6. Get Arc server & assign roles to its system identity
 # Get resources by type
 
+//Prepare AD and arc server
+module "prepareAD" {
+  depends_on             = [azurerm_key_vault_secret.LocalAdminCredential, azurerm_key_vault_secret.AzureStackLCMUserCredential, azurerm_key_vault_secret.arbDeploymentSpnName]
+  source                 = "../hci-provisioners"
+  resourceGroup          = var.resourceGroup
+  siteId                 = var.siteId
+  domainFqdn             = var.domainFqdn
+  adouPath               = var.adouPath
+  tenant                 = var.tenant
+  domainServerIP         = var.domainServerIP
+  servers                = var.servers
+  subId                  = var.subId
+  domainAdminUser        = var.domainAdminUser
+  domainAdminPassword    = var.domainAdminPassword
+  localAdminUser         = var.localAdminUser
+  localAdminPassword     = var.localAdminPassword
+  servicePrincipalId     = var.servicePrincipalId
+  servicePrincipalSecret = var.servicePrincipalSecret
+  destory_adou           = var.destory_adou
+  virtualHostIp          = var.virtualHostIp
+  dcPort                 = var.dcPort
+  serverPorts            = var.serverPorts
+}
+
 module "serverRoleBindings" {
+  depends_on   = [module.prepareAD]
   for_each = {
     for index, server in var.servers :
     server.name => server.ipv4Address
   }
-  source                 = "./server-rolebindings"
-  resourceGroup          = var.resourceGroup.name
-  serverName             = each.key
-  subId                  = var.subId
+  source        = "./server-rolebindings"
+  resourceGroup = var.resourceGroup
+  serverName    = each.key
+  subId         = var.subId
 }

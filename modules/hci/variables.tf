@@ -131,3 +131,22 @@ variable "storageNetworks" {
     vlanId             = string
   }))
 }
+
+# Virtual host related variables
+variable "virtualHostIp" {
+  type        = string
+  description = "The virtual host IP address."
+  default     = ""
+}
+
+variable "dcPort" {
+  type        = number
+  description = "Domain controller winrm port in virtual host"
+  default     = 5985
+}
+
+variable "serverPorts" {
+  type        = map(number)
+  description = "Server winrm ports in virtual host"
+  default     = {}
+}

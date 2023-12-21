@@ -5,7 +5,7 @@ module "servers" {
   }
   depends_on             = [terraform_data.ad_creation_provisioner]
   source                 = "./hci-server"
-  resourceGroup          = var.resourceGroup.name
+  resourceGroupName      = var.resourceGroup.name
   serverName             = each.key
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
@@ -17,4 +17,8 @@ module "servers" {
   servicePrincipalId     = var.servicePrincipalId
   servicePrincipalSecret = var.servicePrincipalSecret
   expandC                = var.virtualHostIp == "" ? false : true
+}
+
+output "servers" {
+  value = module.servers
 }

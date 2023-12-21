@@ -3,7 +3,7 @@
  */
 
 resource "terraform_data" "waitServersReady" {
-  depends_on = [module.servers]
+  depends_on = [module.prepareAD.servers]
 
   provisioner "local-exec" {
     command = "powershell -command sleep 1200"
@@ -118,7 +118,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   ]
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = flatten([for server in module.servers : server.server.id])
+      arcNodeResourceIds = flatten([for server in module.prepareAD.servers : server.server.id])
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"
@@ -210,7 +210,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   ]
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = flatten([for server in module.servers : server.server.id])
+      arcNodeResourceIds = flatten([for server in module.prepareAD.servers : server.server.id])
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"

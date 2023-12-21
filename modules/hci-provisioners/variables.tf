@@ -2,6 +2,7 @@ variable "resourceGroup" {
   description = "The resource group where the resources will be deployed."
 }
 
+
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."

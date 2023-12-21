@@ -15,6 +15,10 @@ variable "enableProvisioners" {
   description = "Whether to enable provisioners."
 }
 
+locals {
+  ResourceGroupName = "${var.siteId}-rg"
+}
+
 variable "rp_principal_id" {
   default     = "f0e0e122-3f80-44ed-95d2-f56e6fdc514c"
   type        = string
