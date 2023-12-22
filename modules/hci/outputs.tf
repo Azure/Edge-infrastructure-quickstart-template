@@ -31,10 +31,6 @@ output "cluster" {
   description = "HCI Cluster instance"
 }
 
-output "hosts" {
-  value = module.prepareAD.servers
-}
-
 output "arcbridge" {
   value       = data.azapi_resource.arcbridge
   description = "Arc resource bridge instance after HCI connected."

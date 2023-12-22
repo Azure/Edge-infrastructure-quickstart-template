@@ -1,13 +1,10 @@
-/*
- * There is a bug currently with the LCM extension. It needs to wait 10-20 minutes to allow the servers to be ready before it can be deployed.
- */
-
-resource "terraform_data" "waitServersReady" {
-  depends_on = [module.prepareAD.servers]
-
-  provisioner "local-exec" {
-    command = "powershell -command sleep 1200"
+data "azurerm_arc_machine" "arcservers" {
+  for_each = {
+    for index, server in var.servers :
+    server.name => server.ipv4Address
   }
+  name                = each.key
+  resource_group_name = var.resourceGroup.name
 }
 
 locals {
@@ -100,7 +97,6 @@ resource "azapi_resource" "validatedeploymentsetting" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster1.id
   depends_on = [
-    terraform_data.waitServersReady,
     azurerm_key_vault_secret.arbDeploymentSpnName,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
@@ -118,7 +114,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   ]
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = flatten([for server in module.prepareAD.servers : server.server.id])
+      arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"
@@ -192,7 +188,6 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster1.id
   depends_on = [
-    terraform_data.waitServersReady,
     azurerm_key_vault_secret.arbDeploymentSpnName,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
@@ -210,7 +205,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   ]
   body = jsonencode({
     properties = {
-      arcNodeResourceIds = flatten([for server in module.prepareAD.servers : server.server.id])
+      arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy
       deploymentConfiguration = {
         version = "10.0.0.0"

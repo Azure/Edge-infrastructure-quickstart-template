@@ -19,6 +19,17 @@ module "servers" {
   expandC                = var.virtualHostIp == "" ? false : true
 }
 
+/*
+ * There is a bug currently with the LCM extension. It needs to wait 10-20 minutes to allow the servers to be ready before it can be deployed.
+ */
+
+resource "terraform_data" "waitServersReady" {
+  depends_on = [ module.servers ]
+  provisioner "local-exec" {
+    command = "powershell -command sleep 1200"
+  }
+}
+
 output "servers" {
   value = module.servers
 }

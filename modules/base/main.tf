@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.ResourceGroupName}"
+  name     = local.ResourceGroupName
   location = var.location
   tags     = {}
 }
@@ -11,6 +11,7 @@ resource "azurerm_resource_group" "rg" {
 
 
 module "hci" {
+  depends_on             = [module.hci-provisioners]
   source                 = "../hci"
   resourceGroup          = azurerm_resource_group.rg
   siteId                 = var.siteId
@@ -25,6 +26,30 @@ module "hci" {
   servers                = var.servers
   managementAdapters     = var.managementAdapters
   storageNetworks        = var.storageNetworks
+  subId                  = var.subId
+  domainAdminUser        = var.domainAdminUser
+  domainAdminPassword    = var.domainAdminPassword
+  localAdminUser         = var.localAdminUser
+  localAdminPassword     = var.localAdminPassword
+  servicePrincipalId     = var.servicePrincipalId
+  servicePrincipalSecret = var.servicePrincipalSecret
+  destory_adou           = var.destory_adou
+  virtualHostIp          = var.virtualHostIp
+  dcPort                 = var.dcPort
+  serverPorts            = var.serverPorts
+}
+
+//Prepare AD and arc server
+module "hci-provisioners" {
+  count                  = var.enableProvisioners ? 1 : 0
+  source                 = "../hci-provisioners"
+  resourceGroup          = azurerm_resource_group.rg
+  siteId                 = var.siteId
+  domainFqdn             = var.domainFqdn
+  adouPath               = var.adouPath
+  tenant                 = var.tenant
+  domainServerIP         = var.domainServerIP
+  servers                = var.servers
   subId                  = var.subId
   domainAdminUser        = var.domainAdminUser
   domainAdminPassword    = var.domainAdminPassword
