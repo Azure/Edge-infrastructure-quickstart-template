@@ -95,13 +95,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
   schema_validation_enabled = false
-  parent_id                 = azapi_resource.cluster1.id
+  parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.arbDeploymentSpnName,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
     azurerm_key_vault_secret.storageWitnessName,
-    azapi_resource.cluster1
+    azapi_resource.cluster
   ]
   timeouts {
     create = "30m"
@@ -139,7 +139,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 episodicDataUpload  = true
               }
               cluster = {
-                name                 = azapi_resource.cluster1.name
+                name                 = azapi_resource.cluster.name
                 witnessType          = "Cloud"
                 witnessPath          = "Cloud"
                 cloudAccountName     = azurerm_storage_account.witness.name
@@ -186,13 +186,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
   schema_validation_enabled = false
-  parent_id                 = azapi_resource.cluster1.id
+  parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.arbDeploymentSpnName,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
     azurerm_key_vault_secret.storageWitnessName,
-    azapi_resource.cluster1
+    azapi_resource.cluster
   ]
   timeouts {
     create = "30m"
@@ -230,7 +230,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                 episodicDataUpload  = true
               }
               cluster = {
-                name                 = azapi_resource.cluster1.name
+                name                 = azapi_resource.cluster.name
                 witnessType          = "Cloud"
                 witnessPath          = "Cloud"
                 cloudAccountName     = azurerm_storage_account.witness.name

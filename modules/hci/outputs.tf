@@ -27,7 +27,7 @@ data "azapi_resource" "userStorage2" {
 }
 
 output "cluster" {
-  value       = azapi_resource.cluster1
+  value       = azapi_resource.cluster
   description = "HCI Cluster instance"
 }
 

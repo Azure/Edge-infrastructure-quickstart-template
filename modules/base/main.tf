@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = local.ResourceGroupName
+  name     = "${var.siteId}-rg"
   location = var.location
   tags     = {}
 }
