@@ -9,7 +9,7 @@ locals {
 
 resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
   for_each             = toset(local.SPRoleList)
-  scope                = azurerm_resource_group.rg.id
+  scope                = var.resourceGroup.id
   role_definition_name = each.value
   principal_id         = var.rp_principal_id
 }
@@ -20,7 +20,7 @@ data "azurerm_client_config" "current" {}
 resource "random_id" "twobyte" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group = azurerm_resource_group.rg.name
+    resource_group = var.resourceGroup.name
   }
 
   byte_length = 2
@@ -28,9 +28,8 @@ resource "random_id" "twobyte" {
 
 resource "azurerm_key_vault" "DeploymentKeyVault" {
   name                = "${var.siteId}-kv-${random_id.twobyte.hex}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  depends_on          = [terraform_data.ad_creation_provisioner]
+  location            = var.resourceGroup.location
+  resource_group_name = var.resourceGroup.name
 
   enabled_for_deployment          = true
   enabled_for_template_deployment = true
@@ -80,37 +79,13 @@ resource "azurerm_key_vault_secret" "storageWitnessName" {
 
 //6. Get Arc server & assign roles to its system identity
 # Get resources by type
-
-//setup WSManCredSSP
-locals {
-  iplist = join(",", [for server in var.servers : server.ipv4Address])
-}
-resource "terraform_data" "WSManSetting" {
-  depends_on = [terraform_data.ad_creation_provisioner]
-  count      = var.virtualHostIp == "" ? 1 : 0
-  provisioner "local-exec" {
-    command     = "Enable-WSManCredSSP -Role Client -DelegateComputer ${local.iplist} -Force -ErrorAction SilentlyContinue"
-    interpreter = ["PowerShell"]
-  }
-}
-
-module "servers" {
+module "serverRoleBindings" {
   for_each = {
     for index, server in var.servers :
     server.name => server.ipv4Address
   }
-  depends_on            = [azurerm_resource_group.rg, terraform_data.ad_creation_provisioner, terraform_data.WSManSetting]
-  source                = "./hciserver"
-  resourceGroup         = azurerm_resource_group.rg.name
-  serverName            = each.key
-  localAdminUser        = var.localAdminUser
-  localAdminPassword    = var.localAdminPassword
-  serverIP              = var.virtualHostIp == "" ? each.value : var.virtualHostIp
-  winrmPort             = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key]
-  subId                 = var.subId
-  location              = var.location
-  tenant                = var.tenant
-  servicePrincipalId     = var.servicePrincipalId
-  servicePrincipalSecret = var.servicePrincipalSecret
-  expandC               = var.virtualHostIp == "" ? false : true
+  source        = "./server-rolebindings"
+  resourceGroup = var.resourceGroup
+  serverName    = each.key
+  subId         = var.subId
 }

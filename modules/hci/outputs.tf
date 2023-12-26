@@ -2,42 +2,33 @@ data "azapi_resource" "arcbridge" {
   depends_on = [azapi_update_resource.deploymentsetting]
   type       = "Microsoft.ResourceConnector/appliances@2022-10-27"
   name       = "${var.siteId}-cl-arcbridge"
-  parent_id  = azurerm_resource_group.rg.id
+  parent_id  = var.resourceGroup.id
 }
 
 data "azapi_resource" "customlocation" {
   depends_on = [azapi_update_resource.deploymentsetting]
   type       = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
   name       = "${var.siteId}-customlocation"
-  parent_id  = azurerm_resource_group.rg.id
+  parent_id  = var.resourceGroup.id
 }
 
 data "azapi_resource" "userStorage1" {
   depends_on = [azapi_update_resource.deploymentsetting]
   type = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
   name       = "UserStorage1"
-  parent_id  = azurerm_resource_group.rg.id
+  parent_id  = var.resourceGroup.id
 }
 
 data "azapi_resource" "userStorage2" {
   depends_on = [azapi_update_resource.deploymentsetting]
   type = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
   name       = "UserStorage2"
-  parent_id  = azurerm_resource_group.rg.id
-}
-
-output "resourceGroup" {
-  value       = azurerm_resource_group.rg
-  description = "Resource group"
+  parent_id  = var.resourceGroup.id
 }
 
 output "cluster" {
-  value       = azapi_resource.cluster1
+  value       = azapi_resource.cluster
   description = "HCI Cluster instance"
-}
-
-output "hosts" {
-  value = module.servers
 }
 
 output "arcbridge" {

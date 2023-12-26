@@ -7,6 +7,13 @@ param(
 
 $script:ErrorActionPreference = 'Stop'
 echo "Hello!"
+
+try {
+    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+} catch {
+    echo "Enable-WSManCredSSP failed"
+}
+
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
 $session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred

@@ -33,3 +33,7 @@ variable "servicePrincipalSecret" {
   sensitive   = true
   type        = string
 }
+variable "tenant" {
+  description = "The tenant of hci cluster."
+  type        = string
+}

@@ -3,7 +3,7 @@ variable "serverName" {
   description = "The name of the server."
 }
 
-variable "resourceGroup" {
+variable "resourceGroupName" {
   type        = string
   description = "The name of the resource group."
 }
