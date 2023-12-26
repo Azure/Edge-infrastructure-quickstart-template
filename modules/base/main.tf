@@ -22,7 +22,6 @@ module "hci" {
   dnsServers             = var.dnsServers
   adouPath               = var.adouPath
   tenant                 = var.tenant
-  domainServerIP         = var.domainServerIP
   servers                = var.servers
   managementAdapters     = var.managementAdapters
   storageNetworks        = var.storageNetworks
@@ -33,10 +32,6 @@ module "hci" {
   localAdminPassword     = var.localAdminPassword
   servicePrincipalId     = var.servicePrincipalId
   servicePrincipalSecret = var.servicePrincipalSecret
-  destory_adou           = var.destory_adou
-  virtualHostIp          = var.virtualHostIp
-  dcPort                 = var.dcPort
-  serverPorts            = var.serverPorts
 }
 
 //Prepare AD and arc server
