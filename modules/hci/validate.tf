@@ -104,7 +104,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azapi_resource.cluster1
   ]
   timeouts {
-    create = "10m"
+    create = "30m"
     update = "10m"
     delete = "10m"
   }
@@ -195,7 +195,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     azapi_resource.cluster1
   ]
   timeouts {
-    create = "10m"
+    create = "30m"
     update = "10m"
     delete = "10m"
   }

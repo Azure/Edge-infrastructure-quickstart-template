@@ -41,6 +41,7 @@ module "hci" {
 
 //Prepare AD and arc server
 module "hci-provisioners" {
+  depends_on             = [azurerm_resource_group.rg]
   count                  = var.enableProvisioners ? 1 : 0
   source                 = "../hci-provisioners"
   resourceGroup          = azurerm_resource_group.rg
