@@ -11,6 +11,10 @@ resource "azapi_resource" "cluster" {
     properties = {}
   })
 
-  schema_validation_enabled = false
-  ignore_missing_property   = false
+  schema_validation_enabled = true
+  ignore_missing_property   = true
+  ignore_body_changes = [
+    "properties"
+  ]
+  timeouts {}
 }

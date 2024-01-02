@@ -1,10 +1,6 @@
 # Generate random text for a unique storage account name
 resource "random_id" "random_id" {
-  keepers = {
-    # Generate a new ID only when a new resource group is defined
-    resource_group = var.resourceGroup.name
-  }
-
+  keepers = {}
   byte_length = 8
 }
 

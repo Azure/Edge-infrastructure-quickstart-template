@@ -97,10 +97,10 @@ resource "azapi_resource" "validatedeploymentsetting" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
-    azurerm_key_vault_secret.arbDeploymentSpnName,
+    azurerm_key_vault_secret.DefaultARBApplication,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
-    azurerm_key_vault_secret.storageWitnessName,
+    azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
   timeouts {
@@ -151,6 +151,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               namingPrefix = var.siteId
               domainFqdn   = "${var.domainFqdn}"
               infrastructureNetwork = [{
+                useDhcp    = false
                 subnetMask = var.subnetMask
                 gateway    = var.defaultGateway
                 ipPools = [
@@ -163,6 +164,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               }]
               physicalNodes = var.servers
               hostNetwork = {
+                enableStorageAutoIp           = true
                 intents                       = local.combinedIntents
                 storageNetworks               = var.storageNetworks
                 storageConnectivitySwitchless = false
@@ -188,10 +190,10 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
-    azurerm_key_vault_secret.arbDeploymentSpnName,
+    azurerm_key_vault_secret.DefaultARBApplication,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
-    azurerm_key_vault_secret.storageWitnessName,
+    azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
   timeouts {
@@ -242,6 +244,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               namingPrefix = var.siteId
               domainFqdn   = "${var.domainFqdn}"
               infrastructureNetwork = [{
+                useDhcp    = false
                 subnetMask = var.subnetMask
                 gateway    = var.defaultGateway
                 ipPools = [
@@ -254,6 +257,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               }]
               physicalNodes = var.servers
               hostNetwork = {
+                enableStorageAutoIp           = true
                 intents                       = local.seperateIntents
                 storageNetworks               = var.storageNetworks
                 storageConnectivitySwitchless = false
