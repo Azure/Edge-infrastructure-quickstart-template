@@ -115,7 +115,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   body = jsonencode({
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
-      deploymentMode     = "Validate" //Deploy
+      deploymentMode     = var.isExported ? "Deploy" : "Validate"
       deploymentConfiguration = {
         version = "10.0.0.0"
         scaleUnits = [
