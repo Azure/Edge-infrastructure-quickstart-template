@@ -71,11 +71,11 @@ resource "azapi_resource" "monitor_agent" {
   body = jsonencode({
     properties = {
       extensionParameters = {
-        enableAutomaticUpgrade = true
-        publisher              = "Microsoft.Azure.Monitor"
-        type                   = "AzureMonitorWindowsAgent"
-        settings               = {}
-        protectedSettings      = {}
+        autoUpgradeMinorVersion = false
+        enableAutomaticUpgrade  = true
+        publisher               = "Microsoft.Azure.Monitor"
+        type                    = "AzureMonitorWindowsAgent"
+        settings                = {}
       }
     }
   })

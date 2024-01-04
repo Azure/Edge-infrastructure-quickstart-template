@@ -2,12 +2,6 @@ variable "resourceGroup" {
   description = "The resource group where the resources will be deployed."
 }
 
-variable "rp_principal_id" {
-  default     = "f0e0e122-3f80-44ed-95d2-f56e6fdc514c"
-  type        = string
-  description = "The principal ID of the resource provider."
-}
-
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."

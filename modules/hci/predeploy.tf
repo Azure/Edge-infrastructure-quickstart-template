@@ -7,11 +7,15 @@ locals {
   ]
 }
 
+data "azuread_application" "hciRp" {
+  client_id = "1412d89f-b8a8-4111-b4fd-e82905cbd85d"
+}
+
 resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
   for_each             = toset(local.SPRoleList)
   scope                = var.resourceGroup.id
   role_definition_name = each.value
-  principal_id         = var.rp_principal_id
+  principal_id         = data.azuread_application.hciRp.object_id
 }
 
 
