@@ -2,6 +2,12 @@ variable "resourceGroup" {
   description = "The resource group where the resources will be deployed."
 }
 
+variable "rpServicePrincipalObjectId" {
+  default     = ""
+  type        = string
+  description = "The object ID of the HCI resource provider service principal."
+}
+
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
