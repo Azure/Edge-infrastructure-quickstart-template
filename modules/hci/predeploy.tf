@@ -7,8 +7,8 @@ locals {
   ]
 }
 
-data "azuread_application" "hciRp" {
-  count     = var.rpServicePrincipalObjectId == "" ? 1 : 0
+data "azuread_service_principal" "hciRp" {
+  count      = var.rpServicePrincipalObjectId == "" ? 1 : 0
   client_id = "1412d89f-b8a8-4111-b4fd-e82905cbd85d"
 }
 
@@ -16,7 +16,7 @@ resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
   for_each             = toset(local.SPRoleList)
   scope                = var.resourceGroup.id
   role_definition_name = each.value
-  principal_id         = var.rpServicePrincipalObjectId == "" ? data.azuread_application.hciRp[0].object_id : var.rpServicePrincipalObjectId
+  principal_id         = var.rpServicePrincipalObjectId == "" ? data.azuread_service_principal.hciRp[0].object_id : var.rpServicePrincipalObjectId
 }
 
 

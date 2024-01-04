@@ -101,7 +101,9 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
     azurerm_key_vault_secret.WitnessStorageKey,
-    azapi_resource.cluster
+    azapi_resource.cluster,
+    module.serverRoleBindings,
+    azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
   timeouts {
     create = "30m"
