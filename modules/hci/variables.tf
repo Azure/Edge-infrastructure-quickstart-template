@@ -2,17 +2,17 @@ variable "resourceGroup" {
   description = "The resource group where the resources will be deployed."
 }
 
-variable "rp_principal_id" {
-  default     = "f0e0e122-3f80-44ed-95d2-f56e6fdc514c"
+variable "rpServicePrincipalObjectId" {
+  default     = ""
   type        = string
-  description = "The principal ID of the resource provider."
+  description = "The object ID of the HCI resource provider service principal."
 }
 
 variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
   validation {
-    condition = length(var.siteId) < 9 && length(var.siteId) > 0
+    condition     = length(var.siteId) < 9 && length(var.siteId) > 0
     error_message = "value of siteId should be less than 9 characters and greater than 0 characters"
   }
 }
@@ -119,4 +119,9 @@ variable "storageNetworks" {
     networkAdapterName = string
     vlanId             = string
   }))
+}
+
+variable "isExported" {
+  type    = bool
+  default = false
 }

@@ -15,10 +15,10 @@ variable "enableProvisioners" {
   description = "Whether to enable provisioners."
 }
 
-variable "rp_principal_id" {
-  default     = "f0e0e122-3f80-44ed-95d2-f56e6fdc514c"
+variable "rpServicePrincipalObjectId" {
+  default     = ""
   type        = string
-  description = "The principal ID of the resource provider."
+  description = "The object ID of the HCI resource provider service principal."
 }
 
 variable "siteId" {

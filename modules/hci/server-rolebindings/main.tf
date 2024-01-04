@@ -10,7 +10,7 @@ locals {
   ]
 }
 
-resource "azurerm_role_assignment" "MachineRoleAssign-1" {
+resource "azurerm_role_assignment" "MachineRoleAssign" {
   for_each             = toset(local.RoleList)
   scope                = "/subscriptions/${var.subId}/resourceGroups/${var.resourceGroup.name}"
   role_definition_name = each.value

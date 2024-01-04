@@ -1,37 +1,7 @@
-locals {
-  serverNames = [for server in var.servers : server.name]
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = "${var.siteId}-rg"
   location = var.location
   tags     = {}
-}
-
-
-
-module "hci" {
-  depends_on             = [module.hci-provisioners]
-  source                 = "../hci"
-  resourceGroup          = azurerm_resource_group.rg
-  siteId                 = var.siteId
-  domainFqdn             = var.domainFqdn
-  startingAddress        = var.startingAddress
-  endingAddress          = var.endingAddress
-  defaultGateway         = var.defaultGateway
-  dnsServers             = var.dnsServers
-  adouPath               = var.adouPath
-  tenant                 = var.tenant
-  servers                = var.servers
-  managementAdapters     = var.managementAdapters
-  storageNetworks        = var.storageNetworks
-  subId                  = var.subId
-  domainAdminUser        = var.domainAdminUser
-  domainAdminPassword    = var.domainAdminPassword
-  localAdminUser         = var.localAdminUser
-  localAdminPassword     = var.localAdminPassword
-  servicePrincipalId     = var.servicePrincipalId
-  servicePrincipalSecret = var.servicePrincipalSecret
 }
 
 //Prepare AD and arc server
@@ -57,6 +27,35 @@ module "hci-provisioners" {
   virtualHostIp          = var.virtualHostIp
   dcPort                 = var.dcPort
   serverPorts            = var.serverPorts
+}
+
+module "hci" {
+  depends_on                 = [module.hci-provisioners]
+  source                     = "../hci"
+  resourceGroup              = azurerm_resource_group.rg
+  siteId                     = var.siteId
+  domainFqdn                 = var.domainFqdn
+  startingAddress            = var.startingAddress
+  endingAddress              = var.endingAddress
+  defaultGateway             = var.defaultGateway
+  dnsServers                 = var.dnsServers
+  adouPath                   = var.adouPath
+  tenant                     = var.tenant
+  servers                    = var.servers
+  managementAdapters         = var.managementAdapters
+  storageNetworks            = var.storageNetworks
+  subId                      = var.subId
+  domainAdminUser            = var.domainAdminUser
+  domainAdminPassword        = var.domainAdminPassword
+  localAdminUser             = var.localAdminUser
+  localAdminPassword         = var.localAdminPassword
+  servicePrincipalId         = var.servicePrincipalId
+  servicePrincipalSecret     = var.servicePrincipalSecret
+  rpServicePrincipalObjectId = var.rpServicePrincipalObjectId
+}
+
+locals {
+  serverNames = [for server in var.servers : server.name]
 }
 
 module "extension" {

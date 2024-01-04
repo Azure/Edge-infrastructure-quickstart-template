@@ -97,11 +97,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
-    azurerm_key_vault_secret.arbDeploymentSpnName,
+    azurerm_key_vault_secret.DefaultARBApplication,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
-    azurerm_key_vault_secret.storageWitnessName,
-    azapi_resource.cluster
+    azurerm_key_vault_secret.WitnessStorageKey,
+    azapi_resource.cluster,
+    module.serverRoleBindings,
+    azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
   timeouts {
     create = "30m"
@@ -115,7 +117,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
   body = jsonencode({
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
-      deploymentMode     = "Validate" //Deploy
+      deploymentMode     = var.isExported ? "Deploy" : "Validate"
       deploymentConfiguration = {
         version = "10.0.0.0"
         scaleUnits = [
@@ -151,6 +153,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               namingPrefix = var.siteId
               domainFqdn   = "${var.domainFqdn}"
               infrastructureNetwork = [{
+                useDhcp    = false
                 subnetMask = var.subnetMask
                 gateway    = var.defaultGateway
                 ipPools = [
@@ -163,6 +166,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               }]
               physicalNodes = var.servers
               hostNetwork = {
+                enableStorageAutoIp           = true
                 intents                       = local.combinedIntents
                 storageNetworks               = var.storageNetworks
                 storageConnectivitySwitchless = false
@@ -188,10 +192,10 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
-    azurerm_key_vault_secret.arbDeploymentSpnName,
+    azurerm_key_vault_secret.DefaultARBApplication,
     azurerm_key_vault_secret.AzureStackLCMUserCredential,
     azurerm_key_vault_secret.LocalAdminCredential,
-    azurerm_key_vault_secret.storageWitnessName,
+    azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
   timeouts {
@@ -242,6 +246,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               namingPrefix = var.siteId
               domainFqdn   = "${var.domainFqdn}"
               infrastructureNetwork = [{
+                useDhcp    = false
                 subnetMask = var.subnetMask
                 gateway    = var.defaultGateway
                 ipPools = [
@@ -254,6 +259,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               }]
               physicalNodes = var.servers
               hostNetwork = {
+                enableStorageAutoIp           = true
                 intents                       = local.seperateIntents
                 storageNetworks               = var.storageNetworks
                 storageConnectivitySwitchless = false
