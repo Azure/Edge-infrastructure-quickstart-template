@@ -153,6 +153,9 @@ PROJECT_ROOT
     └───qa1
 ```
 
+## Edit Stages
+You may create new folders to represent a stage. Put new sites under the folder. Then, open `.stages` file to add the stage into your deployment workflow. Commit the changes, the deployment pipeline will change accordingly.
+
 ## Customize The Deployment  
   
 You may edit `modules/base` to customize your deployment template for all sites. You may add default values for your sites in `modules/base/variables.tf`. For example, tenant name is likely to be the same for all sites. You can add a default value for `tenant` variable.
