@@ -174,7 +174,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               adouPath        = var.adouPath
               secretsLocation = azurerm_key_vault.DeploymentKeyVault.vault_uri
               optionalServices = {
-                customLocation = "${var.siteId}-customLocation"
+                customLocation = var.customLocationName
               }
 
             }
@@ -267,7 +267,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               adouPath        = var.adouPath
               secretsLocation = azurerm_key_vault.DeploymentKeyVault.vault_uri
               optionalServices = {
-                customLocation = "${var.siteId}-customLocation"
+                customLocation = var.customLocationName
               }
 
             }

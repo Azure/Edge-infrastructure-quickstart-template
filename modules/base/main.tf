@@ -16,6 +16,7 @@ module "hci-provisioners" {
   tenant                 = var.tenant
   domainServerIP         = var.domainServerIP
   servers                = var.servers
+  clusterName            = local.clusterName
   subId                  = var.subId
   domainAdminUser        = var.domainAdminUser
   domainAdminPassword    = var.domainAdminPassword
@@ -44,6 +45,8 @@ module "hci" {
   servers                    = var.servers
   managementAdapters         = var.managementAdapters
   storageNetworks            = var.storageNetworks
+  clusterName                = local.clusterName
+  customLocationName         = local.customLocationName
   witnessStorageAccountName  = local.witnessStorageAccountName
   keyvaultName               = local.keyvaultName
   randomSuffix               = local.randomSuffix
@@ -62,14 +65,17 @@ locals {
 }
 
 module "extension" {
-  source         = "../hci-extensions"
-  depends_on     = [module.hci]
-  resourceGroup  = azurerm_resource_group.rg
-  siteId         = var.siteId
-  clusterId      = module.hci.cluster.id
-  serverNames    = local.serverNames
-  enableInsights = var.enableInsights
-  enableAlerts   = var.enableAlerts
+  source                     = "../hci-extensions"
+  depends_on                 = [module.hci]
+  resourceGroup              = azurerm_resource_group.rg
+  siteId                     = var.siteId
+  clusterId                  = module.hci.cluster.id
+  serverNames                = local.serverNames
+  workspaceName              = local.workspaceName
+  dataCollectionEndpointName = local.dataCollectionEndpointName
+  dataCollectionRuleName     = local.dataCollectionRuleName
+  enableInsights             = var.enableInsights
+  enableAlerts               = var.enableAlerts
 }
 
 module "vm" {

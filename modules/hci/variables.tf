@@ -121,6 +121,16 @@ variable "storageNetworks" {
   }))
 }
 
+variable "clusterName" {
+  type = string
+  description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
+}
+
+variable "customLocationName" {
+  type = string
+  description = "The name of the custom location."
+}
+
 variable "keyvaultName" {
   type        = string
   description = "The name of the key vault."

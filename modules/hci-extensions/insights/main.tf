@@ -1,23 +1,23 @@
 resource "azurerm_log_analytics_workspace" "workspace" {
   resource_group_name = var.resourceGroup.name
   location            = var.resourceGroup.location
-  name                = "${var.siteId}-workspace"
+  name                = var.workspaceName
 }
 
 resource "azurerm_monitor_data_collection_endpoint" "dce" {
   resource_group_name           = var.resourceGroup.name
   location                      = var.resourceGroup.location
-  name                          = "${var.siteId}-dce"
+  name                          = var.dataCollectionEndpointName
   public_network_access_enabled = true
 }
 
 resource "azurerm_monitor_data_collection_rule" "dcr" {
   data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.dce.id
   location                    = var.resourceGroup.location
-  name                        = "AzureStackHCI-${var.siteId}-dcr"
+  name                        = var.dataCollectionRuleName
   resource_group_name         = var.resourceGroup.name
   data_flow {
-    destinations       = ["${var.siteId}-workspace"]
+    destinations       = [var.workspaceName]
     streams            = ["Microsoft-Perf"]
     built_in_transform = null
     transform_kql      = null
@@ -54,7 +54,7 @@ resource "azurerm_monitor_data_collection_rule" "dcr" {
   }
   destinations {
     log_analytics {
-      name                  = "${var.siteId}-workspace"
+      name                  = var.workspaceName
       workspace_resource_id = azurerm_log_analytics_workspace.workspace.id
     }
     log_analytics {

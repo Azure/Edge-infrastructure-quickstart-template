@@ -1,11 +1,14 @@
 module "insights" {
-  count         = var.enableInsights ? 1 : 0
-  source        = "./insights"
-  siteId        = var.siteId
-  resourceGroup = var.resourceGroup
-  clusterId     = var.clusterId
-  serverNames   = var.serverNames
-  arcSettingId  = data.azapi_resource.arcSetting.id
+  count                      = var.enableInsights ? 1 : 0
+  source                     = "./insights"
+  siteId                     = var.siteId
+  resourceGroup              = var.resourceGroup
+  clusterId                  = var.clusterId
+  serverNames                = var.serverNames
+  arcSettingId               = data.azapi_resource.arcSetting.id
+  workspaceName              = var.workspaceName
+  dataCollectionRuleName     = var.dataCollectionRuleName
+  dataCollectionEndpointName = var.dataCollectionEndpointName
 }
 
 resource "azapi_resource" "alerts" {
@@ -16,11 +19,11 @@ resource "azapi_resource" "alerts" {
   body = jsonencode({
     properties = {
       extensionParameters = {
-        enableAutomaticUpgrade = true
+        enableAutomaticUpgrade  = true
         autoUpgradeMinorVersion = false
-        publisher              = "Microsoft.AzureStack.HCI.Alerts"
-        type                   = "AlertsForWindowsHCI"
-        settings = {}
+        publisher               = "Microsoft.AzureStack.HCI.Alerts"
+        type                    = "AlertsForWindowsHCI"
+        settings                = {}
       }
     }
   })

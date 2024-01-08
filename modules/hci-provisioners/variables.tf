@@ -12,6 +12,11 @@ variable "siteId" {
   }
 }
 
+variable "clusterName" {
+  type = string
+  description = "The name of the HCI cluster. Must be the same as the name when creating HCI cluster on Azure."
+}
+
 variable "servers" {
   description = "A list of servers with their names and IPv4 addresses."
   type = list(object({

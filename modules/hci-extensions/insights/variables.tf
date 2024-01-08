@@ -21,3 +21,18 @@ variable "arcSettingId" {
   description = "The resource ID for the Azure Arc setting."
   type        = string
 }
+
+variable "workspaceName" {
+  description = "The name of the Azure Log Analytics workspace."
+  type        = string
+}
+
+variable "dataCollectionRuleName" {
+  description = "The name of the Azure Log Analytics data collection rule."
+  type        = string
+}
+
+variable "dataCollectionEndpointName" {
+  description = "The name of the Azure Log Analytics data collection endpoint."
+  type        = string
+}

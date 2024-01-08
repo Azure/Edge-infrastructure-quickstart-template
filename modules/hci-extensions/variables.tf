@@ -17,6 +17,21 @@ variable "serverNames" {
   type        = list(string)
 }
 
+variable "workspaceName" {
+  description = "The name of the Azure Log Analytics workspace."
+  type        = string
+}
+
+variable "dataCollectionRuleName" {
+  description = "The name of the Azure Log Analytics data collection rule."
+  type        = string
+}
+
+variable "dataCollectionEndpointName" {
+  description = "The name of the Azure Log Analytics data collection endpoint."
+  type        = string
+}
+
 variable "enableInsights" {
   description = "Whether to enable Azure Monitor Insights."
   type        = bool

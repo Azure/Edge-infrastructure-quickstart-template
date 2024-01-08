@@ -2,6 +2,7 @@ param(
     $userName,
     $password,
     $siteID,
+    $clusterName,
     $adouPath,
     $computerNames,
     $ip, $port,
@@ -53,5 +54,5 @@ Invoke-Command -Session $session -ScriptBlock {
     echo "Add KdsRootKey"
     Add-KdsRootKey -EffectiveTime ((Get-Date).addhours(-10))
     echo "New HciAdObjectsPreCreation"    
-    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:domaincred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName "$Using:siteID-cl" -AsHciDeploymentPrefix $Using:siteID
+    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:domaincred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
 }
