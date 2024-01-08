@@ -121,6 +121,21 @@ variable "storageNetworks" {
   }))
 }
 
+variable "keyvaultName" {
+  type        = string
+  description = "The name of the key vault."
+}
+
+variable "witnessStorageAccountName" {
+  type        = string
+  description = "The name of the witness storage account."
+}
+
+variable "randomSuffix" {
+  type    = bool
+  default = true
+}
+
 variable "isExported" {
   type    = bool
   default = false

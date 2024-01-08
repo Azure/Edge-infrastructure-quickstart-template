@@ -1,35 +1,7 @@
-//Authorize RP
-locals {
-  SPRoleList = [
-    # "Azure Connected Machine Resource Manager",
-    "User Access Administrator",
-    "Contributor"
-  ]
-}
-
-data "azuread_service_principal" "hciRp" {
-  count      = var.rpServicePrincipalObjectId == "" ? 1 : 0
-  client_id = "1412d89f-b8a8-4111-b4fd-e82905cbd85d"
-}
-
-resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
-  for_each             = toset(local.SPRoleList)
-  scope                = var.resourceGroup.id
-  role_definition_name = each.value
-  principal_id         = var.rpServicePrincipalObjectId == "" ? data.azuread_service_principal.hciRp[0].object_id : var.rpServicePrincipalObjectId
-}
-
-
-
 data "azurerm_client_config" "current" {}
-resource "random_id" "twobyte" {
-  keepers = {}
-
-  byte_length = 2
-}
 
 resource "azurerm_key_vault" "DeploymentKeyVault" {
-  name                = "${var.siteId}-kv-${random_id.twobyte.hex}"
+  name                = var.randomSuffix ? "${var.keyvaultName}-${random_integer.random_suffix.result}" : var.keyvaultName
   location            = var.resourceGroup.location
   resource_group_name = var.resourceGroup.name
 
@@ -44,8 +16,6 @@ resource "azurerm_key_vault" "DeploymentKeyVault" {
   sku_name                      = "standard"
 
 }
-
-// TODO: Add RBAC to keyvault
 
 resource "azurerm_key_vault_secret" "AzureStackLCMUserCredential" {
   name         = "AzureStackLCMUserCredential"
@@ -81,17 +51,4 @@ resource "azurerm_key_vault_secret" "WitnessStorageKey" {
   key_vault_id = azurerm_key_vault.DeploymentKeyVault.id
   depends_on   = [azurerm_key_vault.DeploymentKeyVault]
   tags         = {}
-}
-
-//6. Get Arc server & assign roles to its system identity
-# Get resources by type
-module "serverRoleBindings" {
-  for_each = {
-    for index, server in var.servers :
-    server.name => server.ipv4Address
-  }
-  source        = "./server-rolebindings"
-  resourceGroup = var.resourceGroup
-  serverName    = each.key
-  subId         = var.subId
 }

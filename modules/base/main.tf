@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.siteId}-rg"
+  name     = local.resourceGroupName
   location = var.location
   tags     = {}
 }
@@ -44,6 +44,8 @@ module "hci" {
   servers                    = var.servers
   managementAdapters         = var.managementAdapters
   storageNetworks            = var.storageNetworks
+  witnessStorageAccountName  = local.witnessStorageAccountName
+  keyvaultName               = local.keyvaultName
   subId                      = var.subId
   domainAdminUser            = var.domainAdminUser
   domainAdminPassword        = var.domainAdminPassword
