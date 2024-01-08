@@ -6,7 +6,7 @@ param(
 )
 
 $script:ErrorActionPreference = 'Stop'
-echo "Hello!"
+echo "Start to connect Arc server!"
 
 try {
     Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
@@ -37,13 +37,14 @@ Invoke-Command -Session $session -ScriptBlock {
             [Parameter(Mandatory = $true)]
             [string]$Name,
             [string]$Repository = 'PSGallery',
-            [switch]$Force
+            [switch]$Force,
+            [switch]$AllowClobber
         )
         $script:ErrorActionPreference = 'Stop'
         $module = Get-Module -Name $Name -ListAvailable
         if (!$module) {
             Write-Host "Installing module $Name"
-            Install-Module -Name $Name -Repository $Repository -Force:$Force
+            Install-Module -Name $Name -Repository $Repository -Force:$Force -AllowClobber:$AllowClobber
         }
     }
 
@@ -81,12 +82,15 @@ Invoke-Command -Session $session -ScriptBlock {
     echo "login to Azure"
 
     Import-Module .\AzSHCI.ARCInstaller.psm1 -Force
-    Install-ModuleIfMissing Az.Accounts -Force
-    Install-ModuleIfMissing Az.ConnectedMachine -Force
-    Install-ModuleIfMissing Az.Resources -Force
+    Install-ModuleIfMissing Az.Accounts -Force -AllowClobber
+    Install-ModuleIfMissing Az.ConnectedMachine -Force -AllowClobber
+    Install-ModuleIfMissing Az.Resources -Force -AllowClobber
+    Install-ModuleIfMissing Az.StackHCI -Force -AllowClobber
     echo "Installed modules"
     $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
     Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
 } -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
+
+echo "Arc server connected!"
