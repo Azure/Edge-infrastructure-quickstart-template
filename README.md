@@ -154,7 +154,26 @@ PROJECT_ROOT
 ```
 
 ## Edit Stages
+
 You may create new folders to represent a stage. Put new sites under the folder. Then, open `.stages` file to add the stage into your deployment workflow. Commit the changes, the deployment pipeline will change accordingly.
+
+## Use your naming conventions for resources
+
+Edit `modules/base/naming.tf` for your naming conventions. The default naming for resources are
+
+| Resource                | Naming        |
+| ----------------------- | ------------- |
+| Resource group          | `{siteId}-rg` |
+| Witness storage account | `{siteId}wit` |
+| KeyVault                | `{siteId}-kv` |
+
+You may toggle whether to append random suffix for storage account and KeyVault by with `randomSuffix` local variable. If `randomSuffix` is set to true, it can avoid conflicts when storage account and KeyVault soft deletion is enabled. `randomSuffix` is a random integer from 10 to 99. The naming will changed to
+
+| Resource                | Naming        |
+| ----------------------- | ------------- |
+| Resource group          | `{siteId}-rg` |
+| Witness storage account | `{siteId}wit{randomSuffix}` |
+| KeyVault                | `{siteId}-kv-{randomSuffix}` |
 
 ## Customize The Deployment  
   
@@ -203,30 +222,30 @@ The above commands will provision an AzureStack HCI cluster in your Azure subscr
 
 ## Parameters
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_adouPath"></a> [adouPath](#input\_adouPath) | The Active Directory OU path. | `string` | n/a | yes |
-| <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway) | The default gateway for the network. | `string` | n/a | yes |
-| <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers) | A list of DNS server IP addresses. | `list(string)` | n/a | yes |
-| <a name="input_domainAdminPassword"></a> [domainAdminPassword](#input\_domainAdminPassword) | The password for the domain administrator account. | `string` | n/a | yes |
-| <a name="input_domainAdminUser"></a> [domainAdminUser](#input\_domainAdminUser) | The username for the domain administrator account. | `string` | n/a | yes |
-| <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn) | The domain FQDN. | `string` | n/a | yes |
-| <a name="input_domainName"></a> [domainName](#input\_domainName) | The domain name for the environment. | `string` | n/a | yes |
-| <a name="input_domainServerIP"></a> [domainServerIP](#input\_domainServerIP) | The ip of the domain server. | `string` | n/a | yes |
-| <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress) | The ending IP address of the IP address range. | `string` | n/a | yes |
-| <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword) | The password for the local administrator account. | `string` | n/a | yes |
-| <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser) | The username for the local administrator account. | `string` | n/a | yes |
-| <a name="input_servers"></a> [servers](#input\_servers) | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a | yes |
-| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId) | The service principal ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account. | `string` | n/a | yes |
-| <a name="input_siteId"></a> [siteId](#input\_siteId) | A unique identifier for the site. | `string` | n/a | yes |
-| <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress) | The starting IP address of the IP address range. | `string` | n/a | yes |
-| <a name="input_subId"></a> [subId](#input\_subId) | The subscription ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_tenant"></a> [tenant](#input\_tenant) | The tenant ID for the Azure account. | `string` | n/a | yes |
-| <a name="input_destory_adou"></a> [destory\_adou](#input\_destory\_adou) | whether destroy previous adou | `bool` | `false` | no |
-| <a name="input_location"></a> [location](#input\_location) | The Azure region where the resources will be deployed. | `string` | `"eastus"` | no |
-| <a name="input_rp_principal_id"></a> [rp\_principal\_id](#input\_rp\_principal\_id) | The principal ID of the resource provider. | `string` | `"f0e0e122-3f80-44ed-95d2-f56e6fdc514c"` | no |
-| <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask) | The subnet mask for the network. | `string` | `"255.255.255.0"` | no |
+| Name                                                                                                 | Description                                            | Type                                                                                      | Default                                  | Required |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------- | :------: |
+| <a name="input_adouPath"></a> [adouPath](#input\_adouPath)                                           | The Active Directory OU path.                          | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway)                         | The default gateway for the network.                   | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers)                                     | A list of DNS server IP addresses.                     | `list(string)`                                                                            | n/a                                      |   yes    |
+| <a name="input_domainAdminPassword"></a> [domainAdminPassword](#input\_domainAdminPassword)          | The password for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_domainAdminUser"></a> [domainAdminUser](#input\_domainAdminUser)                      | The username for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn)                                     | The domain FQDN.                                       | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_domainName"></a> [domainName](#input\_domainName)                                     | The domain name for the environment.                   | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_domainServerIP"></a> [domainServerIP](#input\_domainServerIP)                         | The ip of the domain server.                           | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress)                            | The ending IP address of the IP address range.         | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)             | The password for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)                         | The username for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_servers"></a> [servers](#input\_servers)                                              | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a                                      |   yes    |
+| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)             | The service principal ID for the Azure account.        | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account.    | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_siteId"></a> [siteId](#input\_siteId)                                                 | A unique identifier for the site.                      | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress)                      | The starting IP address of the IP address range.       | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_subId"></a> [subId](#input\_subId)                                                    | The subscription ID for the Azure account.             | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_tenant"></a> [tenant](#input\_tenant)                                                 | The tenant ID for the Azure account.                   | `string`                                                                                  | n/a                                      |   yes    |
+| <a name="input_destory_adou"></a> [destory\_adou](#input\_destory\_adou)                             | whether destroy previous adou                          | `bool`                                                                                    | `false`                                  |    no    |
+| <a name="input_location"></a> [location](#input\_location)                                           | The Azure region where the resources will be deployed. | `string`                                                                                  | `"eastus"`                               |    no    |
+| <a name="input_rp_principal_id"></a> [rp\_principal\_id](#input\_rp\_principal\_id)                  | The principal ID of the resource provider.             | `string`                                                                                  | `"f0e0e122-3f80-44ed-95d2-f56e6fdc514c"` |    no    |
+| <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)                                     | The subnet mask for the network.                       | `string`                                                                                  | `"255.255.255.0"`                        |    no    |
 
 ## License  
   

@@ -46,6 +46,7 @@ module "hci" {
   storageNetworks            = var.storageNetworks
   witnessStorageAccountName  = local.witnessStorageAccountName
   keyvaultName               = local.keyvaultName
+  randomSuffix               = local.randomSuffix
   subId                      = var.subId
   domainAdminUser            = var.domainAdminUser
   domainAdminPassword        = var.domainAdminPassword
