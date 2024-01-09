@@ -21,7 +21,7 @@ data "azapi_resource_list" "userStorages" {
 
 locals {
   decodedUserStorages = jsondecode(data.azapi_resource_list.userStorages.output).value
-  ownedUserStorages   = [for storage in local.decodedUserStorages : storage if storage.extendedLocation.name == data.azapi_resource.customlocation.id]
+  ownedUserStorages   = [for storage in local.decodedUserStorages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
 }
 
 output "cluster" {
