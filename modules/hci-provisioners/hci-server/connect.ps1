@@ -82,10 +82,10 @@ Invoke-Command -Session $session -ScriptBlock {
     echo "login to Azure"
 
     Import-Module .\AzSHCI.ARCInstaller.psm1 -Force
+    Install-Module Az.StackHCI -Force -AllowClobber -RequiredVersion 2.2.1
     Install-ModuleIfMissing Az.Accounts -Force -AllowClobber
     Install-ModuleIfMissing Az.ConnectedMachine -Force -AllowClobber
     Install-ModuleIfMissing Az.Resources -Force -AllowClobber
-    Install-ModuleIfMissing Az.StackHCI -Force -AllowClobber
     echo "Installed modules"
     $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token

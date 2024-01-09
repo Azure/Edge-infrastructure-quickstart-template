@@ -12,18 +12,16 @@ data "azapi_resource" "customlocation" {
   parent_id  = var.resourceGroup.id
 }
 
-data "azapi_resource" "userStorage1" {
-  depends_on = [azapi_update_resource.deploymentsetting]
-  type = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
-  name       = "UserStorage1"
-  parent_id  = var.resourceGroup.id
+data "azapi_resource_list" "userStorages" {
+  depends_on             = [azapi_update_resource.deploymentsetting]
+  type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
+  parent_id              = var.resourceGroup.id
+  response_export_values = ["*"]
 }
 
-data "azapi_resource" "userStorage2" {
-  depends_on = [azapi_update_resource.deploymentsetting]
-  type = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
-  name       = "UserStorage2"
-  parent_id  = var.resourceGroup.id
+locals {
+  decodedUserStorages = jsondecode(data.azapi_resource_list.userStorages.output).value
+  ownedUserStorages   = [for storage in local.decodedUserStorages : storage if storage.extendedLocation.name == data.azapi_resource.customlocation.id]
 }
 
 output "cluster" {
@@ -41,12 +39,7 @@ output "customlocation" {
   description = "Custom location instance after HCI connected."
 }
 
-output "userStorage1" {
-  value       = data.azapi_resource.userStorage1
-  description = "User storage 1 instance after HCI connected."
-}
-
-output "userStorage2" {
-  value       = data.azapi_resource.userStorage2
-  description = "User storage 2 instance after HCI connected."
+output "userStorages" {
+  value       = local.ownedUserStorages
+  description = "User storage instances after HCI connected."
 }

@@ -84,6 +84,6 @@ module "vm" {
   depends_on       = [module.hci]
   customLocationId = module.hci.customlocation.id
   resourceGroupId  = azurerm_resource_group.rg.id
-  userStorageId    = module.hci.userStorage1.id
+  userStorageId    = module.hci.userStorages[0].id
   location         = azurerm_resource_group.rg.location
 }
