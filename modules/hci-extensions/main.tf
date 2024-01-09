@@ -3,9 +3,8 @@ module "insights" {
   source                     = "./insights"
   siteId                     = var.siteId
   resourceGroup              = var.resourceGroup
-  clusterId                  = var.clusterId
   serverNames                = var.serverNames
-  arcSettingId               = data.azapi_resource.arcSetting.id
+  arcSettingId               = var.arcSettingsId
   workspaceName              = var.workspaceName
   dataCollectionRuleName     = var.dataCollectionRuleName
   dataCollectionEndpointName = var.dataCollectionEndpointName
@@ -14,7 +13,7 @@ module "insights" {
 resource "azapi_resource" "alerts" {
   count     = var.enableAlerts && var.enableInsights ? 1 : 0
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings/Extensions@2023-08-01"
-  parent_id = data.azapi_resource.arcSetting.id
+  parent_id = var.arcSettingsId
   name      = "AzureEdgeAlerts"
   body = jsonencode({
     properties = {

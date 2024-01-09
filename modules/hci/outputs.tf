@@ -19,6 +19,12 @@ data "azapi_resource_list" "userStorages" {
   response_export_values = ["*"]
 }
 
+data "azapi_resource" "arcSettings" {
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
+  parent_id = azapi_resource.cluster.id
+  name      = "default"
+}
+
 locals {
   decodedUserStorages = jsondecode(data.azapi_resource_list.userStorages.output).value
   ownedUserStorages   = [for storage in local.decodedUserStorages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
@@ -42,4 +48,9 @@ output "customlocation" {
 output "userStorages" {
   value       = local.ownedUserStorages
   description = "User storage instances after HCI connected."
+}
+
+output "arcSettings" {
+  value       = data.azapi_resource.arcSettings
+  description = "Arc settings instance after HCI connected."
 }

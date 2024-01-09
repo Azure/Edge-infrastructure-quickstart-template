@@ -69,7 +69,7 @@ module "extension" {
   depends_on                 = [module.hci]
   resourceGroup              = azurerm_resource_group.rg
   siteId                     = var.siteId
-  clusterId                  = module.hci.cluster.id
+  arcSettingsId              = module.hci.arcSettings.id
   serverNames                = local.serverNames
   workspaceName              = local.workspaceName
   dataCollectionEndpointName = local.dataCollectionEndpointName
