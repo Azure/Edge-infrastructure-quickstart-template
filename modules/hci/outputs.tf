@@ -20,6 +20,7 @@ data "azapi_resource_list" "userStorages" {
 }
 
 data "azapi_resource" "arcSettings" {
+  depends_on = [ azapi_update_resource.deploymentsetting ]
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
   parent_id = azapi_resource.cluster.id
   name      = "default"
