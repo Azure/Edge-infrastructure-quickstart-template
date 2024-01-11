@@ -40,6 +40,8 @@
 #   domainAdminPassword    = var.domainAdminPassword
 #   localAdminUser         = var.localAdminUser
 #   localAdminPassword     = var.localAdminPassword
+#   deploymentUserName     = var.deploymentUserName
+#   deploymentUserPassword = var.deploymentUserPassword
 #   servicePrincipalId     = var.servicePrincipalId
 #   servicePrincipalSecret = var.servicePrincipalSecret
 # }

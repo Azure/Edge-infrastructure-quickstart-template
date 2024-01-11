@@ -25,13 +25,13 @@ variable "servers" {
   }))
 }
 
-variable "domainAdminUser" {
+variable "deploymentUserName" {
   sensitive   = true
   type        = string
   description = "The username for the domain administrator account."
 }
 
-variable "domainAdminPassword" {
+variable "deploymentUserPassword" {
   sensitive   = true
   type        = string
   description = "The password for the domain administrator account."

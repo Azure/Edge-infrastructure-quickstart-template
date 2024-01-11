@@ -57,6 +57,18 @@ variable "domainAdminPassword" {
   description = "The password for the domain administrator account."
 }
 
+variable "deploymentUserName" {
+  sensitive   = true
+  type        = string
+  description = "The username for deployment user."
+}
+
+variable "deploymentUserPassword" {
+  sensitive   = true
+  type        = string
+  description = "The password for deployment user."
+}
+
 variable "localAdminUser" {
   sensitive   = true
   type        = string

@@ -60,6 +60,18 @@ variable "localAdminPassword" {
   description = "The password for the local administrator account."
 }
 
+variable "deploymentUserName" {
+  sensitive   = true
+  type        = string
+  description = "The username for deployment user."
+}
+
+variable "deploymentUserPassword" {
+  sensitive   = true
+  type        = string
+  description = "The password for deployment user."
+}
+
 variable "authenticationMethod" {
   type        = string
   description = "The authentication method for Enter-PSSession."

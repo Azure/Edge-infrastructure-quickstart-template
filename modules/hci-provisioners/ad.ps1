@@ -9,8 +9,8 @@ param(
     $ip, $port,
     $domainFqdn,
     $ifdeleteadou,
-    $domainAdminUser,
-    $domainAdminPassword
+    $deploymentUserName,
+    $deploymentUserPassword
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -50,8 +50,8 @@ if ($ifdeleteadou) {
     }
     
 }
-$domainsecpasswd = ConvertTo-SecureString $domainAdminPassword -AsPlainText -Force
-$domaincred = New-Object System.Management.Automation.PSCredential -ArgumentList $domainAdminUser, $domainsecpasswd
+$deploymentSecPasswd = ConvertTo-SecureString $deploymentUserPassword -AsPlainText -Force
+$lcmCred = New-Object System.Management.Automation.PSCredential -ArgumentList $deploymentUserName, $deploymentSecPasswd
 Invoke-Command -Session $session -ScriptBlock {
     echo "Install Nuget Provider"
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
@@ -60,5 +60,5 @@ Invoke-Command -Session $session -ScriptBlock {
     echo "Add KdsRootKey"
     Add-KdsRootKey -EffectiveTime ((Get-Date).addhours(-10))
     echo "New HciAdObjectsPreCreation"    
-    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:domaincred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
+    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:lcmCred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
 }
