@@ -33,6 +33,7 @@
 #       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
+#   enableProvisioners     = true      // Change to false when Arc servers are connected by yourself.
 #   authenticationMethod   = "CredSSP" // or "Default"
 #   subId                  = var.subscriptionId
 #   domainAdminUser        = var.domainAdminUser
