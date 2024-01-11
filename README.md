@@ -23,7 +23,7 @@ To get started, follow these steps:
     1. Two storage paths named `UserStorage1`, `UserStorage2`
 1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
   
-## Setup Pipeline
+### Setup Pipeline
 1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment authenticate as the service principle. The detailed steps are described in [Azure documentation](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows). Here's the steps:
    1. Create `terraform` environment in your GitHub repository. [Creating an environment]([https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#creating-an-environment))
    1. Create a service principal in Microsoft Entra ID [Application and service principal objects in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser).
@@ -68,7 +68,7 @@ To get started, follow these steps:
         4. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
         5. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
 
-## Add new sites
+### Add new sites
 After the first HCI deployment succeeds, you may want to scale the deployment to more sites. You can simply copy and paste your first site folder. Edit `main.tf` for each newly copied sites to the site specific values. Commit and create a pull request for the changes. Deployment pipeline and backend settings will be set during the commit. Once the pull request is merged into `main` branch, pipeline will be triggered and deploy new sites accordingly. An example could be
 ```
 ├───dev
@@ -99,19 +99,19 @@ After the first HCI deployment succeeds, you may want to scale the deployment to
             ...
 ```
 
-## Telemetry
+### Telemetry
 Microsoft collects deployment pipeline telemetry. If you do not want to send telemetry, edit `.github/workflows/site-cd-workflow.yml`, remove all steps starts with `Telemetry`.
 
-## Clean Up
+### Clean Up
 Removing one folder will not remove the resources created by this folder previously.
 
 You have 2 ways to cleanup if you do want to remove the resources.
 - Before removing the folder, run `terraform destroy` to destroy the resources created by this Terraform configuration. Then remove this folder.
 - Go to Azure portal or use CLI to remove `${siteId}-rg` resource group and remove this folder.
 
-# Advanced
+## Advanced
 
-## Repo Structure
+### Repo Structure
 ```
 PROJECT_ROOT
 │
@@ -155,11 +155,11 @@ PROJECT_ROOT
     └───qa1
 ```
 
-## Edit Stages
+### Edit Stages
 
 You may create new folders to represent a stage. Put new sites under the folder. Then, open `.stages` file to add the stage into your deployment workflow. Commit the changes, the deployment pipeline will change accordingly.
 
-## Use your naming conventions for resources
+### Use your naming conventions for resources
 
 Edit `modules/base/naming.tf` for your naming conventions. The default naming for resources are
 
@@ -182,7 +182,7 @@ You may toggle whether to append random suffix for storage account and KeyVault 
 | Witness storage account | `{siteId}wit{randomSuffix}`  |
 | KeyVault                | `{siteId}-kv-{randomSuffix}` |
 
-## Customize The Deployment  
+### Customize The Deployment  
   
 You may edit `modules/base` to customize your deployment template for all sites. You may add default values for your sites in `modules/base/variables.tf`. For example, tenant name is likely to be the same for all sites. You can add a default value for `tenant` variable.
 ```hcl
@@ -193,7 +193,7 @@ variable "tenant" {
 }
 ```
 
-## Manual Apply
+### Manual Apply
 
 If you want to deploy locally:
 1. Create a repository base on this template.
@@ -229,35 +229,8 @@ If you want to deploy locally:
   
 The above commands will provision an AzureStack HCI cluster in your Azure subscription.
 
-## Connect Arc servers by yourself
+### Connect Arc servers by yourself
 You can prepare AD and connect Arc servers by yourself according to [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software) step 1 & 4. After connecting servers, go to `<stage>/<your site>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `<stage>/<your site>/main.tf` and change `enableProvisioners = false`.
-
-## Parameters
-
-| Name                                                                                                 | Description                                            | Type                                                                                      | Default                                  | Required |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------- | :------: |
-| <a name="input_adouPath"></a> [adouPath](#input\_adouPath)                                           | The Active Directory OU path.                          | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway)                         | The default gateway for the network.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers)                                     | A list of DNS server IP addresses.                     | `list(string)`                                                                            | n/a                                      |   yes    |
-| <a name="input_domainAdminPassword"></a> [domainAdminPassword](#input\_domainAdminPassword)          | The password for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainAdminUser"></a> [domainAdminUser](#input\_domainAdminUser)                      | The username for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn)                                     | The domain FQDN.                                       | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainName"></a> [domainName](#input\_domainName)                                     | The domain name for the environment.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainServerIP"></a> [domainServerIP](#input\_domainServerIP)                         | The ip of the domain server.                           | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress)                            | The ending IP address of the IP address range.         | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)             | The password for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)                         | The username for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_servers"></a> [servers](#input\_servers)                                              | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a                                      |   yes    |
-| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)             | The service principal ID for the Azure account.        | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account.    | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_siteId"></a> [siteId](#input\_siteId)                                                 | A unique identifier for the site.                      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress)                      | The starting IP address of the IP address range.       | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_subId"></a> [subId](#input\_subId)                                                    | The subscription ID for the Azure account.             | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_tenant"></a> [tenant](#input\_tenant)                                                 | The tenant ID for the Azure account.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_destory_adou"></a> [destory\_adou](#input\_destory\_adou)                             | whether destroy previous adou                          | `bool`                                                                                    | `false`                                  |    no    |
-| <a name="input_location"></a> [location](#input\_location)                                           | The Azure region where the resources will be deployed. | `string`                                                                                  | `"eastus"`                               |    no    |
-| <a name="input_rp_principal_id"></a> [rp\_principal\_id](#input\_rp\_principal\_id)                  | The principal ID of the resource provider.             | `string`                                                                                  | `"f0e0e122-3f80-44ed-95d2-f56e6fdc514c"` |    no    |
-| <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)                                     | The subnet mask for the network.                       | `string`                                                                                  | `"255.255.255.0"`                        |    no    |
 
 ## License  
   
