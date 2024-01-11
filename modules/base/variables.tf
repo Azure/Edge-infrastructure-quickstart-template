@@ -160,6 +160,14 @@ variable "serverPorts" {
   default     = {}
 }
 
+# Hybrid AKS related variables
+variable "addressPrefix" {
+  type    = string
+  description = "The CIDR prefix of the subnet that start from startting address and end with ending address"
+}
+
+# Feature enable flags
+
 variable "enableInsights" {
   description = "Whether to enable Azure Monitor Insights."
   type        = bool
@@ -176,4 +184,10 @@ variable "enableVM" {
   description = "Whether to enable VM."
   type        = bool
   default     = false
+}
+
+variable "enableHybridAKS" {
+  description = "Whether to enable hybrid aks."
+  type    = bool
+  default = false
 }

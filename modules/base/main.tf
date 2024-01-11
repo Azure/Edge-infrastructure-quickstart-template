@@ -87,3 +87,18 @@ module "vm" {
   userStorageId    = module.hci.userStorages[0].id
   location         = azurerm_resource_group.rg.location
 }
+
+module "hybridaks" {
+  source             = "../hybridaks"
+  depends_on         = [module.hci]
+  count              = var.enableHybridAKS ? 1 : 0
+  customLocationId   = module.hci.customlocation.id
+  resourceGroup      = azurerm_resource_group.rg
+  startingAddress    = var.startingAddress
+  endingAddress      = var.endingAddress
+  dnsServers         = var.dnsServers
+  defaultGateway     = var.defaultGateway
+  addressPrefix      = var.addressPrefix
+  logicalNetworkName = local.logicalNetworkName
+  hybridAksName      = local.hybridAksName
+}
