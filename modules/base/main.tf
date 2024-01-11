@@ -22,6 +22,7 @@ module "hci-provisioners" {
   domainAdminPassword    = var.domainAdminPassword
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
+  authenticationMethod   = var.authenticationMethod
   servicePrincipalId     = var.servicePrincipalId
   servicePrincipalSecret = var.servicePrincipalSecret
   destory_adou           = var.destory_adou

@@ -1,6 +1,7 @@
 param(
     $userName,
     $password,
+    $authType,
     $ip, $port,
     $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC
 )
@@ -8,15 +9,17 @@ param(
 $script:ErrorActionPreference = 'Stop'
 echo "Start to connect Arc server!"
 
-try {
-    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
-} catch {
-    echo "Enable-WSManCredSSP failed"
+if ($authType -eq "CredSSP") {
+    try {
+        Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+    } catch {
+        echo "Enable-WSManCredSSP failed"
+    }
 }
 
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
+$cred = New-Object System.Management.Automation.PSCredential -ArgumentList ".\$username", $secpasswd
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
 
 Invoke-Command -Session $session -ScriptBlock {
     Param ($subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret)

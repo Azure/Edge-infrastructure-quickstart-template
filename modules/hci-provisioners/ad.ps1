@@ -1,6 +1,7 @@
 param(
     $userName,
     $password,
+    $authType,
     $siteID,
     $clusterName,
     $adouPath,
@@ -15,13 +16,18 @@ param(
 $script:ErrorActionPreference = 'Stop'
 echo "Enter !"
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-try {
-    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
-} catch {
-    echo "Enable-WSManCredSSP failed"
+$domainShort = $domainFqdn.Split(".")[0]
+$cred = New-Object System.Management.Automation.PSCredential -ArgumentList "$domainShort\$username", $secpasswd
+
+if ($authType -eq "CredSSP") {
+    try {
+        Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+    } catch {
+        echo "Enable-WSManCredSSP failed"
+    }
 }
-$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
+
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
 $computerNameList = $computerNames -split ","
 echo $computerNameList
 if ($ifdeleteadou) {

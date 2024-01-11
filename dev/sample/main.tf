@@ -33,6 +33,7 @@
 #       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
+#   authenticationMethod   = "CredSSP" // or "Default"
 #   subId                  = var.subscriptionId
 #   domainAdminUser        = var.domainAdminUser
 #   domainAdminPassword    = var.domainAdminPassword
