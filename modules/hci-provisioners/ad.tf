@@ -6,7 +6,7 @@ locals{
 resource "terraform_data" "ad_creation_provisioner" {
 
   provisioner "local-exec" {
-    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}/ad.ps1 -userName ${var.localAdminUser} -password \"${var.localAdminPassword}\" -authType ${var.authenticationMethod} -ip ${local.dcIP} -port ${var.dcPort} -adouPath ${var.adouPath} -computerNames ${local.computerNameList} -domainFqdn ${var.domainFqdn} -ifdeleteadou ${var.destory_adou} -siteID ${var.siteId} -clusterName ${var.clusterName} -deploymentUserName ${var.deploymentUserName} -deploymentUserPassword \"${var.deploymentUserPassword}\""
+    command = "powershell.exe -ExecutionPolicy Bypass -File ${path.module}/ad.ps1 -userName ${var.domainAdminUser} -password \"${var.domainAdminPassword}\" -authType ${var.authenticationMethod} -ip ${local.dcIP} -port ${var.dcPort} -adouPath ${var.adouPath} -computerNames ${local.computerNameList} -domainFqdn ${var.domainFqdn} -ifdeleteadou ${var.destory_adou} -siteID ${var.siteId} -clusterName ${var.clusterName} -deploymentUserName ${var.deploymentUserName} -deploymentUserPassword \"${var.deploymentUserPassword}\""
 
     interpreter = ["PowerShell", "-Command"]
   }
