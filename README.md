@@ -43,17 +43,19 @@ To get started, follow these steps:
         * domainAdminPassword
         * localAdminUser
         * localAdminPassword
+        * deploymentUserName
+        * deploymentUserPassword
         * servicePrincipalId
         * servicePrincipalSecret 
-1. Setup Terraform backend:
+2. Setup Terraform backend:
     1. Create a storage account in your Azure subscription (the same subscription as AZURE_SUBSCRIPTION_ID). Create a container in it.
-    1. Open `.azure/backendTemplate.tf` in this repository. Replace `\<ResourceGroupName\>`, `\<StorageAccountName\>`, `\<StorageContainerName\>` to the storage account and container you just created.
-    1. Commit `.azure/backendTemplate.tf` and push.
-1. Setup git hooks:
+    2. Open `.azure/backendTemplate.tf` in this repository. Replace `\<ResourceGroupName\>`, `\<StorageAccountName\>`, `\<StorageContainerName\>` to the storage account and container you just created.
+    3. Commit `.azure/backendTemplate.tf` and push.
+3. Setup git hooks:
  
     Run `git config --local core.hooksPath ./.azure/hooks/`.
     This hook will generate the pipeline definition `deploy-infra.yml` when you commit changes to this repository.
-1. Setup GitHub runners.
+4. Setup GitHub runners.
     - If the remote PowerShell port(5985) of HCI is exposed to the Internet. Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
     ```yml
         runs-on: [ubuntu-latest]
@@ -61,10 +63,10 @@ To get started, follow these steps:
     ```
     - If your HCI nodes can be remote managed inside your CorpNet. You can [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Runner hosts must setup the following tools.
         1. Install [Git](https://git-scm.com/downloads). Add `Git` to path. Run `git --version` to validate.
-        1. Add `<Git installation root>\usr\bin` to path. The default path is `C:\Program Files\Git\usr\bin`. 
-        1. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
-        1. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
-        1. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
+        2. Add `<Git installation root>\usr\bin` to path. The default path is `C:\Program Files\Git\usr\bin`. 
+        3. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
+        4. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
+        5. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
 
 ## Add new sites
 After the first HCI deployment succeeds, you may want to scale the deployment to more sites. You can simply copy and paste your first site folder. Edit `main.tf` for each newly copied sites to the site specific values. Commit and create a pull request for the changes. Deployment pipeline and backend settings will be set during the commit. Once the pull request is merged into `main` branch, pipeline will be triggered and deploy new sites accordingly. An example could be
@@ -137,10 +139,10 @@ PROJECT_ROOT
 │   │       variables.tf
 │   │
 │   ├───hci                             // Module to manage HCI clusters
-│   │   │
-│   │   └───hciserver
 │   │
 │   ├───hci-extensions                  // Module to manage HCI extensions
+│   │
+│   ├───hci-provisioners                // Module to connect servers to Arc
 │   │
 │   └───hci-vm                          // Module to manage HCI VMs
 │
@@ -217,13 +219,18 @@ If you want to deploy locally:
     localAdminPassword     = "<local admin password>"
     domainAdminUser        = "<domain admin user name>"
     domainAdminPassword    = "<domain admin user password>"
+    deploymentUserName     = "<deployment user name>"
+    deploymentUserPassword = "<deployment user password>"
     servicePrincipalId     = "<service principal id created in the first step of setting pipeline>"
     servicePrincipalSecret = "<service principal secret created in the first step of setting pipeline>"
     ```
-1. Initialize the Terraform working directory by running `terraform init`.
-1. Apply the Terraform configuration and create the resources by running `terraform apply -var-file="sample.tfvars"`.
+2. Initialize the Terraform working directory by running `terraform init`.
+3. Apply the Terraform configuration and create the resources by running `terraform apply -var-file="sample.tfvars"`.
   
-The above commands will provision an AzureStack HCI cluster in your Azure subscription.  
+The above commands will provision an AzureStack HCI cluster in your Azure subscription.
+
+## Connect Arc servers by yourself
+You can prepare AD and connect Arc servers by yourself according to [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software) step 1 & 4. After connecting servers, go to `<stage>/<your site>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `<stage>/<your site>/main.tf` and change `enableProvisioners = false`.
 
 ## Parameters
 
