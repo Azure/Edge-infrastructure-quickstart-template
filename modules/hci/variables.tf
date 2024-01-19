@@ -110,7 +110,6 @@ variable "servicePrincipalSecret" {
 
 variable "managementAdapters" {
   type    = list(string)
-  default = ["ethernet", "ethernet 2"]
 }
 
 variable "storageNetworks" {
@@ -119,6 +118,16 @@ variable "storageNetworks" {
     networkAdapterName = string
     vlanId             = string
   }))
+}
+
+variable "rdmaEnabled" {
+  type        = bool
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "storageConnectivitySwitchless" {
+  type        = bool
+  description = "Indicates whether storage connectivity is switchless."
 }
 
 variable "clusterName" {

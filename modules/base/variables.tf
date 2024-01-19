@@ -163,6 +163,16 @@ variable "storageNetworks" {
   }))
 }
 
+variable "rdmaEnabled" {
+  type        = bool
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "storageConnectivitySwitchless" {
+  type        = bool
+  description = "Indicates whether storage connectivity is switchless."
+}
+
 # Virtual host related variables
 variable "virtualHostIp" {
   type        = string

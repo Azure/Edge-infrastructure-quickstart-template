@@ -33,15 +33,17 @@
 #       vlanId             = "<storageAdapter2Vlan>"
 #     }
 #   ]
-#   enableProvisioners     = true      // Change to false when Arc servers are connected by yourself.
-#   authenticationMethod   = "CredSSP" // or "Default"
-#   subId                  = var.subscriptionId
-#   domainAdminUser        = var.domainAdminUser
-#   domainAdminPassword    = var.domainAdminPassword
-#   localAdminUser         = var.localAdminUser
-#   localAdminPassword     = var.localAdminPassword
-#   deploymentUserName     = var.deploymentUserName
-#   deploymentUserPassword = var.deploymentUserPassword
-#   servicePrincipalId     = var.servicePrincipalId
-#   servicePrincipalSecret = var.servicePrincipalSecret
+#   rdmaEnabled                   = false     // Change to true if RDMA is enabled.
+#   storageConnectivitySwitchless = false     // Change to true if storage connectivity is switchless.
+#   enableProvisioners            = true      // Change to false when Arc servers are connected by yourself.
+#   authenticationMethod          = "CredSSP" // or "Default"
+#   subId                         = var.subscriptionId
+#   domainAdminUser               = var.domainAdminUser
+#   domainAdminPassword           = var.domainAdminPassword
+#   localAdminUser                = var.localAdminUser
+#   localAdminPassword            = var.localAdminPassword
+#   deploymentUserName            = var.deploymentUserName
+#   deploymentUserPassword        = var.deploymentUserPassword
+#   servicePrincipalId            = var.servicePrincipalId
+#   servicePrincipalSecret        = var.servicePrincipalSecret
 # }

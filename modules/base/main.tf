@@ -34,33 +34,35 @@ module "hci-provisioners" {
 }
 
 module "hci" {
-  depends_on                 = [module.hci-provisioners]
-  source                     = "../hci"
-  resourceGroup              = azurerm_resource_group.rg
-  siteId                     = var.siteId
-  domainFqdn                 = var.domainFqdn
-  startingAddress            = var.startingAddress
-  endingAddress              = var.endingAddress
-  defaultGateway             = var.defaultGateway
-  dnsServers                 = var.dnsServers
-  adouPath                   = var.adouPath
-  tenant                     = var.tenant
-  servers                    = var.servers
-  managementAdapters         = var.managementAdapters
-  storageNetworks            = var.storageNetworks
-  clusterName                = local.clusterName
-  customLocationName         = local.customLocationName
-  witnessStorageAccountName  = local.witnessStorageAccountName
-  keyvaultName               = local.keyvaultName
-  randomSuffix               = local.randomSuffix
-  subId                      = var.subId
-  deploymentUserName         = var.deploymentUserName
-  deploymentUserPassword     = var.deploymentUserPassword
-  localAdminUser             = var.localAdminUser
-  localAdminPassword         = var.localAdminPassword
-  servicePrincipalId         = var.servicePrincipalId
-  servicePrincipalSecret     = var.servicePrincipalSecret
-  rpServicePrincipalObjectId = var.rpServicePrincipalObjectId
+  depends_on                    = [module.hci-provisioners]
+  source                        = "../hci"
+  resourceGroup                 = azurerm_resource_group.rg
+  siteId                        = var.siteId
+  domainFqdn                    = var.domainFqdn
+  startingAddress               = var.startingAddress
+  endingAddress                 = var.endingAddress
+  defaultGateway                = var.defaultGateway
+  dnsServers                    = var.dnsServers
+  adouPath                      = var.adouPath
+  tenant                        = var.tenant
+  servers                       = var.servers
+  managementAdapters            = var.managementAdapters
+  storageNetworks               = var.storageNetworks
+  rdmaEnabled                   = var.rdmaEnabled
+  storageConnectivitySwitchless = var.storageConnectivitySwitchless
+  clusterName                   = local.clusterName
+  customLocationName            = local.customLocationName
+  witnessStorageAccountName     = local.witnessStorageAccountName
+  keyvaultName                  = local.keyvaultName
+  randomSuffix                  = local.randomSuffix
+  subId                         = var.subId
+  deploymentUserName            = var.deploymentUserName
+  deploymentUserPassword        = var.deploymentUserPassword
+  localAdminUser                = var.localAdminUser
+  localAdminPassword            = var.localAdminPassword
+  servicePrincipalId            = var.servicePrincipalId
+  servicePrincipalSecret        = var.servicePrincipalSecret
+  rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 }
 
 locals {

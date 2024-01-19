@@ -10,8 +10,26 @@ data "azurerm_arc_machine" "arcservers" {
 locals {
   storageAdapters  = flatten([for storageNetwork in var.storageNetworks : storageNetwork.networkAdapterName])
   combinedAdapters = setintersection(toset(var.managementAdapters), toset(local.storageAdapters))
-  combined         = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
-  combinedIntents = [{
+  converged         = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
+
+  adapterProperties = {
+    jumboPacket             = ""
+    networkDirect           = "Disabled"
+    networkDirectTechnology = ""
+  }
+  rdmaAdapterProperties = {
+    jumboPacket             = "9014"
+    networkDirect           = "Enabled"
+    networkDirectTechnology = "RoCEv2"
+  }
+
+  switchlessAdapterProperties = {
+    jumboPacket             = "9014"
+    networkDirect           = "Enabled"
+    networkDirectTechnology = "iWARP"
+  }
+
+  convergedIntents = [{
     name = "ManagementComputeStorage",
     trafficType = [
       "Management",
@@ -31,11 +49,7 @@ locals {
       bandwidthPercentage_SMB         = ""
     },
     overrideAdapterProperty = false,
-    adapterPropertyOverrides = {
-      jumboPacket             = "",
-      networkDirectTechnology = "",
-      networkDirect           = "Disabled"
-    }
+    adapterPropertyOverrides = var.rdmaEnabled ? local.rdmaAdapterProperties : local.adapterProperties
   }]
 
   seperateIntents = [{
@@ -81,17 +95,13 @@ locals {
         priorityValue8021Action_SMB     = "",
         bandwidthPercentage_SMB         = ""
       },
-      adapterPropertyOverrides = {
-        jumboPacket             = "",
-        networkDirect           = "Disabled",
-        networkDirectTechnology = ""
-      }
+      adapterPropertyOverrides = var.rdmaEnabled ? (var.storageConnectivitySwitchless ? local.switchlessAdapterProperties : local.rdmaAdapterProperties)  : local.adapterProperties
   }]
 }
 
 
 resource "azapi_resource" "validatedeploymentsetting" {
-  count                     = local.combined ? 1 : 0
+  count                     = local.converged ? 1 : 0
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
   schema_validation_enabled = false
@@ -167,7 +177,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               physicalNodes = var.servers
               hostNetwork = {
                 enableStorageAutoIp           = true
-                intents                       = local.combinedIntents
+                intents                       = local.convergedIntents
                 storageNetworks               = var.storageNetworks
                 storageConnectivitySwitchless = false
               }
@@ -186,7 +196,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
 }
 
 resource "azapi_resource" "validatedeploymentsetting_seperate" {
-  count                     = local.combined ? 0 : 1
+  count                     = local.converged ? 0 : 1
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
   schema_validation_enabled = false
@@ -269,7 +279,6 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               optionalServices = {
                 customLocation = var.customLocationName
               }
-
             }
           }
         ]
