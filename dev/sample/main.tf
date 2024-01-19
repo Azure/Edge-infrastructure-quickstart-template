@@ -46,4 +46,5 @@
 #   deploymentUserPassword        = var.deploymentUserPassword
 #   servicePrincipalId            = var.servicePrincipalId
 #   servicePrincipalSecret        = var.servicePrincipalSecret
+#   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 # }

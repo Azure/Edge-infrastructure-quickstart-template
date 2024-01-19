@@ -50,3 +50,9 @@ variable "servicePrincipalSecret" {
   sensitive   = true
   type        = string
 }
+
+variable "rpServicePrincipalObjectId" {
+  default     = ""
+  type        = string
+  description = "The object ID of the HCI resource provider service principal."
+}
