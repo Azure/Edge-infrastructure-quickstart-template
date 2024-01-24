@@ -26,6 +26,11 @@ variable "siteId" {
   description = "A unique identifier for the site."
 }
 
+variable "siteName" {
+  type        = string
+  description = "The name of the site."
+}
+
 variable "servers" {
   description = "A list of servers with their names and IPv4 addresses."
   type = list(object({
