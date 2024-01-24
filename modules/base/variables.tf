@@ -29,6 +29,7 @@ variable "siteId" {
 variable "siteName" {
   type        = string
   description = "The name of the site."
+  default     = ""
 }
 
 variable "servers" {
@@ -90,7 +91,7 @@ variable "authenticationMethod" {
   type        = string
   description = "The authentication method for Enter-PSSession."
   validation {
-    condition = can(regex("^(Default|Basic|Negotiate|NegotiateWithImplicitCredential|Credssp|Digest|Kerberos)$", var.authenticationMethod))
+    condition     = can(regex("^(Default|Basic|Negotiate|NegotiateWithImplicitCredential|Credssp|Digest|Kerberos)$", var.authenticationMethod))
     error_message = "Value of authenticationMethod should be {Default | Basic | Negotiate | NegotiateWithImplicitCredential | Credssp | Digest | Kerberos}"
   }
   default = "Default"
