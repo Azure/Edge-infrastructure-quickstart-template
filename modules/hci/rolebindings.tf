@@ -1,9 +1,7 @@
 //Authorize RP
 locals {
   SPRoleList = [
-    # "Azure Connected Machine Resource Manager",
-    "User Access Administrator",
-    "Contributor"
+    "Azure Connected Machine Resource Manager",
   ]
 }
 

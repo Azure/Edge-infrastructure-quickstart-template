@@ -5,7 +5,8 @@ data "azurerm_arc_machine" "server" {
 
 locals {
   RoleList = [
-    "Azure Stack HCI Edge Devices role",
+    "Azure Connected Machine Resource Manager",
+    # "Azure Stack HCI Device Management Role", # This role is added by Arc installer
     "Key Vault Secrets User",
   ]
 }
