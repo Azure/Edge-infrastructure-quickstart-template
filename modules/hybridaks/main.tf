@@ -4,10 +4,10 @@ resource "tls_private_key" "example" {
 }
 
 resource "azapi_resource" "connectedCluster" {
-  type      = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
-  depends_on = [ azapi_resource.logicalNetwork ]
-  name      = var.hybridAksName
-  parent_id = var.resourceGroup.id
+  type       = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
+  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork]
+  name       = var.hybridAksName
+  parent_id  = var.resourceGroup.id
 
   body = jsonencode({
     kind = "ProvisionedCluster"
@@ -17,7 +17,10 @@ resource "azapi_resource" "connectedCluster" {
     location = var.resourceGroup.location
     properties = {
       aadProfile = {
-        adminGroupObjectIDs = []
+        adminGroupObjectIDs = var.rbacAdminGroupObjectId
+        enableAzureRBAC     = var.enableAzureRBAC
+        tenantID            = var.azureRBACTenantId
+
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
     }
@@ -27,10 +30,10 @@ resource "azapi_resource" "connectedCluster" {
 
 
 resource "azapi_resource" "provisionedClusterInstance" {
-  type      = "Microsoft.HybridContainerService/provisionedClusterInstances@2023-11-15-preview"//2024-01-01"
-  depends_on = [ azapi_resource.connectedCluster ]
-  parent_id = azapi_resource.connectedCluster.id
-  name      = "default"
+  type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2023-11-15-preview" //2024-01-01"
+  depends_on = [azapi_resource.connectedCluster]
+  parent_id  = azapi_resource.connectedCluster.id
+  name       = "default"
   body = jsonencode({
     extendedLocation = {
       name = var.customLocationId
@@ -39,23 +42,24 @@ resource "azapi_resource" "provisionedClusterInstance" {
     properties = {
       agentPoolProfiles = [
         {
-          count             = 1
-          //enableAutoScaling = false
+          count = var.workerCount
+          enableAutoScaling = false
         },
       ]
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
-            azapi_resource.logicalNetwork.id,
+            local.logicalNetworkId,
           ]
         }
       } //"controlPlaneEndpoint": {"hostIP": "192.168.1.150"}
       controlPlane = {
+        count = var.controlPlaneCount
         controlPlaneEndpoint = {
-          hostIP = var.endingAddress
+          hostIP = var.controlPlaneIp
         }
       }
-      kubernetesVersion = "v1.26.6"
+      kubernetesVersion = var.kubernetesVersion
       linuxProfile = {
         ssh = {
           publicKeys = [
@@ -68,18 +72,18 @@ resource "azapi_resource" "provisionedClusterInstance" {
       networkProfile = {
         networkPolicy = "calico"
         loadBalancerProfile = {
-          # count  = 1 // acctest0002 network only supports a LoadBalancer count of 0
+          // acctest0002 network only supports a LoadBalancer count of 0
         }
       }
-      # storageProfile = {
-      #   smbCsiDriver = {
-      #     enabled = true
-      #   }
-      #   nfsCsiDriver = {
-      #     enabled = true
-      #   }
-      # }
-      //clusterVMAccessProfile = {}
+      storageProfile = {
+        smbCsiDriver = {
+          enabled = true
+        }
+        nfsCsiDriver = {
+          enabled = true
+        }
+      }
+      clusterVMAccessProfile = {}
       licenseProfile         = { azureHybridBenefit = "False" }
     }
   })

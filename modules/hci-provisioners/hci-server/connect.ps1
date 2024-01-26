@@ -1,6 +1,7 @@
 param(
     $userName,
     $password,
+    $authType,
     $ip, $port,
     $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC
 )
@@ -8,30 +9,22 @@ param(
 $script:ErrorActionPreference = 'Stop'
 echo "Start to connect Arc server!"
 
-try {
-    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
-} catch {
-    echo "Enable-WSManCredSSP failed"
-}
-
-$secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
-
-
-Invoke-Command -Session $session -ScriptBlock {
-    if (Test-Path c:\arc-installer) {
-        rm c:\arc-installer -r
+if ($authType -eq "CredSSP") {
+    try {
+        Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+    } catch {
+        echo "Enable-WSManCredSSP failed"
     }
 }
 
-Copy-Item -ToSession $session "$PSScriptRoot\arc-installer" -Destination "c:\arc-installer" -Recurse
+$secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential -ArgumentList ".\$username", $secpasswd
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
 
 Invoke-Command -Session $session -ScriptBlock {
     Param ($subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret)
     $script:ErrorActionPreference = 'Stop'
-    cd c:\arc-installer
-    set-executionpolicy Bypass -force
+
     function Install-ModuleIfMissing {
         param(
             [Parameter(Mandatory = $true)]
@@ -81,8 +74,9 @@ Invoke-Command -Session $session -ScriptBlock {
     Connect-AzAccount -Subscription $subId -Tenant $tenant -Credential $creds -ServicePrincipal
     echo "login to Azure"
 
-    Import-Module .\AzSHCI.ARCInstaller.psm1 -Force
+    Install-Module AzSHCI.ARCInstaller -Force -AllowClobber
     Install-Module Az.StackHCI -Force -AllowClobber -RequiredVersion 2.2.1
+    Install-Module AzStackHci.EnvironmentChecker -Repository PSGallery -Force -AllowClobber
     Install-ModuleIfMissing Az.Accounts -Force -AllowClobber
     Install-ModuleIfMissing Az.ConnectedMachine -Force -AllowClobber
     Install-ModuleIfMissing Az.Resources -Force -AllowClobber
@@ -91,6 +85,11 @@ Invoke-Command -Session $session -ScriptBlock {
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
     Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
+    $exitCode = $LASTEXITCODE
+    $script:ErrorActionPreference = 'Stop'
+    if ($exitCode -eq 0) {
+        echo "Arc server connected!"
+    } else {
+        throw "Arc server connection failed"
+    }
 } -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
-
-echo "Arc server connected!"

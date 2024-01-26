@@ -57,6 +57,18 @@ variable "domainAdminPassword" {
   description = "The password for the domain administrator account."
 }
 
+variable "deploymentUserName" {
+  sensitive   = true
+  type        = string
+  description = "The username for deployment user."
+}
+
+variable "deploymentUserPassword" {
+  sensitive   = true
+  type        = string
+  description = "The password for deployment user."
+}
+
 variable "localAdminUser" {
   sensitive   = true
   type        = string
@@ -67,6 +79,16 @@ variable "localAdminPassword" {
   sensitive   = true
   type        = string
   description = "The password for the local administrator account."
+}
+
+variable "authenticationMethod" {
+  type        = string
+  description = "The authentication method for Enter-PSSession."
+  validation {
+    condition     = can(regex("^(Default|Basic|Negotiate|NegotiateWithImplicitCredential|Credssp|Digest|Kerberos)$", var.authenticationMethod))
+    error_message = "Value of authenticationMethod should be {Default | Basic | Negotiate | NegotiateWithImplicitCredential | Credssp | Digest | Kerberos}"
+  }
+  default = "Default"
 }
 
 //deploymentSettings related variables  
@@ -141,6 +163,16 @@ variable "storageNetworks" {
   }))
 }
 
+variable "rdmaEnabled" {
+  type        = bool
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "storageConnectivitySwitchless" {
+  type        = bool
+  description = "Indicates whether storage connectivity is switchless."
+}
+
 # Virtual host related variables
 variable "virtualHostIp" {
   type        = string
@@ -161,9 +193,34 @@ variable "serverPorts" {
 }
 
 # Hybrid AKS related variables
-variable "addressPrefix" {
-  type    = string
-  description = "The CIDR prefix of the subnet that start from startting address and end with ending address"
+variable "hybridAks-lnet-addressPrefix" {
+  type        = string
+  description = "The CIDR prefix of the subnet that start from startting address and end with ending address, this can be omit if using existing logical network"
+  default     = ""
+}
+
+variable "hybridAks-lnet-startingAddress" {
+  type        = string
+  description = "The starting IP address of the IP address range of the logical network, this can be omit if using existing logical network"
+  default     = ""
+}
+
+variable "hybridAks-lnet-endingAddress" {
+  type        = string
+  description = "The ending IP address of the IP address range of the logical network, this can be omit if using existing logical network"
+  default     = ""
+}
+
+variable "hybridaks-lnet-vlanId" {
+  type        = string
+  description = "The vlan id of the logical network, default is not set vlan id, this can be omit if using existing logical network"
+  default     = null
+}
+
+variable "hybridaks-lnet-usingExistingLogicalNetwork" {
+  type        = bool
+  description = "Whether using existing logical network"
+  default     = false
 }
 
 # Feature enable flags
@@ -188,6 +245,6 @@ variable "enableVM" {
 
 variable "enableHybridAKS" {
   description = "Whether to enable hybrid aks."
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
 }

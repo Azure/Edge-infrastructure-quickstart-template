@@ -9,6 +9,7 @@ module "servers" {
   serverName             = each.key
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
+  authenticationMethod   = var.authenticationMethod
   serverIP               = var.virtualHostIp == "" ? each.value : var.virtualHostIp
   winrmPort              = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key]
   subId                  = var.subId

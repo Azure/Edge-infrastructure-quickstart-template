@@ -1,6 +1,7 @@
 param(
     $userName,
     $password,
+    $authType,
     $siteID,
     $clusterName,
     $adouPath,
@@ -8,20 +9,25 @@ param(
     $ip, $port,
     $domainFqdn,
     $ifdeleteadou,
-    $domainAdminUser,
-    $domainAdminPassword
+    $deploymentUserName,
+    $deploymentUserPassword
 )
 
 $script:ErrorActionPreference = 'Stop'
 echo "Enter !"
 $secpasswd = ConvertTo-SecureString $password -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secpasswd
-try {
-    Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
-} catch {
-    echo "Enable-WSManCredSSP failed"
+$domainShort = $domainFqdn.Split(".")[0]
+$cred = New-Object System.Management.Automation.PSCredential -ArgumentList "$domainShort\$username", $secpasswd
+
+if ($authType -eq "CredSSP") {
+    try {
+        Enable-WSManCredSSP -Role Client -DelegateComputer $ip -Force
+    } catch {
+        echo "Enable-WSManCredSSP failed"
+    }
 }
-$session = New-PSSession -ComputerName $ip -Port $port -Authentication Credssp -Credential $cred
+
+$session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
 $computerNameList = $computerNames -split ","
 echo $computerNameList
 if ($ifdeleteadou) {
@@ -44,8 +50,8 @@ if ($ifdeleteadou) {
     }
     
 }
-$domainsecpasswd = ConvertTo-SecureString $domainAdminPassword -AsPlainText -Force
-$domaincred = New-Object System.Management.Automation.PSCredential -ArgumentList $domainAdminUser, $domainsecpasswd
+$deploymentSecPasswd = ConvertTo-SecureString $deploymentUserPassword -AsPlainText -Force
+$lcmCred = New-Object System.Management.Automation.PSCredential -ArgumentList $deploymentUserName, $deploymentSecPasswd
 Invoke-Command -Session $session -ScriptBlock {
     echo "Install Nuget Provider"
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
@@ -54,5 +60,5 @@ Invoke-Command -Session $session -ScriptBlock {
     echo "Add KdsRootKey"
     Add-KdsRootKey -EffectiveTime ((Get-Date).addhours(-10))
     echo "New HciAdObjectsPreCreation"    
-    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:domaincred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
+    New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:lcmCred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
 }

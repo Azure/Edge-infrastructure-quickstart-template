@@ -16,10 +16,20 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_USE_OIDC: true
+  TF_VAR_subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TF_VAR_localAdminUser: ${{ secrets.localAdminUser }}
+  TF_VAR_localAdminPassword: ${{ secrets.localAdminPassword }}
+  TF_VAR_domainAdminUser: ${{ secrets.domainAdminUser }}
+  TF_VAR_domainAdminPassword: ${{ secrets.domainAdminPassword }}
+  TF_VAR_deploymentUserName: ${{ secrets.deploymentUserName }}
+  TF_VAR_deploymentUserPassword: ${{ secrets.deploymentUserPassword }}
+  TF_VAR_servicePrincipalId: ${{ secrets.servicePrincipalId }}
+  TF_VAR_servicePrincipalSecret: ${{ secrets.servicePrincipalSecret }}
+  TF_VAR_rpServicePrincipalObjectId: ${{ secrets.rpServicePrincipalObjectId }}
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: "Terraform"
     # runs-on: [ubuntu-latest]
     runs-on: [self-hosted]
     environment: terraform
@@ -31,77 +41,77 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
-    
-    - name: Log in to Azure using OIDC
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    
-    # Install node
-    - uses: actions/setup-node@v4
-      with:
-        node-version: latest
-    - run: node --version
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # Install the latest version of Terraform CLI
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      - name: Log in to Azure using OIDC
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
-    
-    - run: mkdir -p "${{ runner.temp }}/${{ inputs.working-directory }}"
+      # Install node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+      - run: node --version
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false -var "localAdminUser=${{ secrets.localAdminUser }}" -var "localAdminPassword=${{ secrets.localAdminPassword }}" -var "domainAdminUser=${{ secrets.domainAdminUser }}" -var "domainAdminPassword=${{ secrets.domainAdminPassword }}" -var "servicePrincipalId=${{ secrets.servicePrincipalId }}" -var "servicePrincipalSecret=${{ secrets.servicePrincipalSecret }}" -var "subscriptionId=${{ secrets.AZURE_SUBSCRIPTION_ID }}" -out="${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
-    
-    - name: Upload the plan
-      uses: actions/upload-artifact@v3
-      with:
-        name: tf-plan 
-        path: "${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
-    
-    # Telemetry: Plan Successful
-    - name: "Telemetry: Plan Successful"
-      if: success()
-      uses: duzitong/IaC-Telemetry@main
-      with:
-        event-name: "plan-success"
-        directory: ${{ inputs.working-directory }}
-    
-    # Telemetry: Plan Failed
-    - name: "Telemetry: Plan Failed"
-      if: failure()
-      uses: duzitong/IaC-Telemetry@main
-      with:
-        event-name: "plan-failure"
-        directory: ${{ inputs.working-directory }}
+      # Install the latest version of Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-    # On push to $default-branch, build or change infrastructure according to Terraform configuration files
-    # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false "${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
-    
-    # Telemetry: Apply Successful
-    - name: "Telemetry: Apply Successful"
-      if: success()
-      uses: duzitong/IaC-Telemetry@main
-      with:
-        event-name: "apply-success"
-        directory: ${{ inputs.working-directory }}
-    
-    # Telemetry: Apply Failed
-    - name: "Telemetry: Apply Failed"
-      if: failure()
-      uses: duzitong/IaC-Telemetry@main
-      with:
-        event-name: "apply-failure"
-        directory: ${{ inputs.working-directory }}
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init
+
+      - run: mkdir -p "${{ runner.temp }}/${{ inputs.working-directory }}"
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -input=false -out="${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
+
+      - name: Upload the plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: tf-plan
+          path: "${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
+
+      # Telemetry: Plan Successful
+      - name: "Telemetry: Plan Successful"
+        if: success()
+        uses: duzitong/IaC-Telemetry@main
+        with:
+          event-name: "plan-success"
+          directory: ${{ inputs.working-directory }}
+
+      # Telemetry: Plan Failed
+      - name: "Telemetry: Plan Failed"
+        if: failure()
+        uses: duzitong/IaC-Telemetry@main
+        with:
+          event-name: "plan-failure"
+          directory: ${{ inputs.working-directory }}
+
+      # On push to $default-branch, build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false "${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
+
+      # Telemetry: Apply Successful
+      - name: "Telemetry: Apply Successful"
+        if: success()
+        uses: duzitong/IaC-Telemetry@main
+        with:
+          event-name: "apply-success"
+          directory: ${{ inputs.working-directory }}
+
+      # Telemetry: Apply Failed
+      - name: "Telemetry: Apply Failed"
+        if: failure()
+        uses: duzitong/IaC-Telemetry@main
+        with:
+          event-name: "apply-failure"
+          directory: ${{ inputs.working-directory }}
