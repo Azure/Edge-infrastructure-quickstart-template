@@ -2,18 +2,18 @@ data "azapi_resource" "logicalNetwork" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
   parent_id = var.resourceGroup.id
   name      = var.logicalNetworkName
-  count     = usingExistingLogicalNetwork ? 1 : 0
+  count     = var.usingExistingLogicalNetwork ? 1 : 0
 }
 
 resource "azapi_resource" "logicalNetwork" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
   parent_id = var.resourceGroup.id
   name      = var.logicalNetworkName
-  count     = usingExistingLogicalNetwork ? 0 : 1
+  count     = var.usingExistingLogicalNetwork ? 0 : 1
   location  = var.resourceGroup.location
   lifecycle {
     precondition {
-      condition = length(var.startingAddress)<=0 || length(var.endingAddress)<=0 || length(var.defaultGateway)<=0 || length(var.dnsServers)<=0 || length(var.addressPrefix)<=0
+      condition = length(var.startingAddress)>0 && length(var.endingAddress)>0 && length(var.defaultGateway)>0 && length(var.dnsServers)>0 && length(var.addressPrefix)>0
       error_message = "When not using existing logical network, startingAddress, endingAddress, defaultGateway, dnsServers, addressPrefix are required"
     }
   }
@@ -60,5 +60,5 @@ resource "azapi_resource" "logicalNetwork" {
 }
 
 locals{
-  logicalNetworkId = usingExistingLogicalNetwork ? data.azapi_resource.logicalNetwork[0].id : azapi_resource.logicalNetwork[0].id
+  logicalNetworkId = var.usingExistingLogicalNetwork ? data.azapi_resource.logicalNetwork[0].id : azapi_resource.logicalNetwork[0].id
 }

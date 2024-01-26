@@ -50,8 +50,15 @@
 
 
 ## Region Hybrid AKS related parameters
-  
-
+#   hybridAks-controlPlaneIp = "<hybridAks-controlPlaneIp>"
+# 
+#   hybridAks-lnet-usingExistingLogicalNetwork = false
+#   // the following value only need to provide if you want to create a new logical network, if not, set hybridAks-lnet-usingExistingLogicalNetwork to true and specify the existing logical network name in logicalNetworkName
+#   hybridAks-lnet-startingAddress = "<hybridAks-lnet-startingAddress>"
+#   hybridAks-lnet-endingAddress = "<hybridAks-lnet-endingAddress>"
+#   hybridAks-lnet-addressPrefix = "<hybridAks-lnet-addressPrefix>"
+#   hybridaks-lnet-defaultGateway = "<hybridaks-lnet-defaultGateway>"
+#   hybridaks-lnet-dnsServers = ["<hybridaks-lnet-dnsServer>"]
 
 ## end region of hybrid aks related parameters
 # }

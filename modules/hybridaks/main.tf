@@ -5,7 +5,7 @@ resource "tls_private_key" "example" {
 
 resource "azapi_resource" "connectedCluster" {
   type       = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
-  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork]
+  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork, azapi_update_resource.k8sextension]
   name       = var.hybridAksName
   parent_id  = var.resourceGroup.id
 
@@ -30,7 +30,7 @@ resource "azapi_resource" "connectedCluster" {
 
 
 resource "azapi_resource" "provisionedClusterInstance" {
-  type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2023-11-15-preview" //2024-01-01"
+  type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2024-01-01" 
   depends_on = [azapi_resource.connectedCluster]
   parent_id  = azapi_resource.connectedCluster.id
   name       = "default"

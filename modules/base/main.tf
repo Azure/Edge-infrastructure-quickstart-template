@@ -101,11 +101,12 @@ module "hybridaks" {
   resourceGroup               = azurerm_resource_group.rg
   startingAddress             = var.hybridAks-lnet-startingAddress
   endingAddress               = var.hybridAks-lnet-endingAddress
-  dnsServers                  = var.dnsServers
-  defaultGateway              = var.defaultGateway
+  dnsServers                  = var.hybridaks-lnet-dnsServers
+  defaultGateway              = var.hybridaks-lnet-defaultGateway
   addressPrefix               = var.hybridAks-lnet-addressPrefix
   logicalNetworkName          = local.logicalNetworkName
   hybridAksName               = local.hybridAksName
   usingExistingLogicalNetwork = var.hybridaks-lnet-usingExistingLogicalNetwork
   vlanId                      = var.hybridaks-lnet-vlanId
+  controlPlaneIp              = var.hybridAks-controlPlaneIp
 }
