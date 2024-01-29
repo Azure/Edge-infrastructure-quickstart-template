@@ -22,5 +22,5 @@ variable "siteName" {
 
 variable "subscriptionId" {
   type        = string
-  description = "The subscription ID for the Azure account."
+  description = "The subscription ID for resources."
 }

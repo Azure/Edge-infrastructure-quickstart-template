@@ -79,19 +79,19 @@ variable "adouPath" {
 
 variable "tenant" {
   type        = string
-  description = "The tenant name for the Azure account."
+  description = "The tenant name."
 }
 
 variable "servicePrincipalId" {
   type        = string
   sensitive   = true
-  description = "The service principal ID for the Azure account."
+  description = "The service principal ID for ARB."
 }
 
 variable "servicePrincipalSecret" {
   type        = string
   sensitive   = true
-  description = "The service principal secret for the Azure account."
+  description = "The service principal secret."
 }
 
 variable "managementAdapters" {
