@@ -12,7 +12,7 @@ locals {
 
 resource "azurerm_role_assignment" "MachineRoleAssign" {
   for_each             = local.Roles
-  scope                = "/subscriptions/${var.subId}/resourceGroups/${var.resourceGroup.name}"
+  scope                = "/subscriptions/${var.subscriptionId}/resourceGroups/${var.resourceGroup.name}"
   role_definition_name = each.value
   principal_id         = data.azurerm_arc_machine.server.identity[0].principal_id
 }

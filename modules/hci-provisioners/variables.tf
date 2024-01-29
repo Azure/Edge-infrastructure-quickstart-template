@@ -92,7 +92,7 @@ variable "adouPath" {
   description = "The Active Directory OU path."
 }
 
-variable "subId" {
+variable "subscriptionId" {
   type        = string
   description = "The subscription ID for the Azure account."
 }

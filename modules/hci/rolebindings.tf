@@ -25,5 +25,5 @@ module "serverRoleBindings" {
   source        = "./server-rolebindings"
   resourceGroup = var.resourceGroup
   serverName    = each.key
-  subId         = var.subId
+  subscriptionId         = var.subscriptionId
 }

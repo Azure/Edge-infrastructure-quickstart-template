@@ -12,7 +12,7 @@ module "servers" {
   authenticationMethod   = var.authenticationMethod
   serverIP               = var.virtualHostIp == "" ? each.value : var.virtualHostIp
   winrmPort              = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key]
-  subId                  = var.subId
+  subscriptionId                  = var.subscriptionId
   location               = var.resourceGroup.location
   tenant                 = var.tenant
   servicePrincipalId     = var.servicePrincipalId

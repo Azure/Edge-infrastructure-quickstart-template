@@ -20,7 +20,7 @@ module "hci-provisioners" {
   authenticationMethod   = var.authenticationMethod
   servers                = var.servers
   clusterName            = local.clusterName
-  subId                  = var.subId
+  subscriptionId         = var.subscriptionId
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
   deploymentUserName     = var.deploymentUserName
@@ -55,7 +55,7 @@ module "hci" {
   witnessStorageAccountName     = local.witnessStorageAccountName
   keyvaultName                  = local.keyvaultName
   randomSuffix                  = local.randomSuffix
-  subId                         = var.subId
+  subscriptionId                = var.subscriptionId
   deploymentUserName            = var.deploymentUserName
   deploymentUserPassword        = var.deploymentUserPassword
   localAdminUser                = var.localAdminUser
