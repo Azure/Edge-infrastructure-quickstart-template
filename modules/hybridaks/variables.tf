@@ -22,6 +22,11 @@ variable "controlPlaneIp" {
   description = "the ip address of the control plane"
 }
 
+variable "arbId" {
+  type        = string
+  description = "the id of the arc bridge resource, this is used to update hybrid aks extension"
+}
+
 variable "usingExistingLogicalNetwork" {
   type        = bool
   description = "Whether using existing logical network"

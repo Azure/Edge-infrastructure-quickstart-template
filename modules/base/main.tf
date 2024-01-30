@@ -109,4 +109,5 @@ module "hybridaks" {
   usingExistingLogicalNetwork = var.hybridaks-lnet-usingExistingLogicalNetwork
   vlanId                      = var.hybridaks-lnet-vlanId
   controlPlaneIp              = var.hybridAks-controlPlaneIp
+  arbId                       = module.hci.arcbridge.id
 }
