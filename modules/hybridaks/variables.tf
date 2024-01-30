@@ -91,7 +91,7 @@ variable "rbacAdminGroupObjectId" {
 variable "kubernetesVersion" {
   type        = string
   description = "the kubernetes version"
-  default     = "v1.26.6"
+  default     = "1.25.11"
 }
 
 variable "controlPlaneCount" {

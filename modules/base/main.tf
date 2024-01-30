@@ -110,4 +110,10 @@ module "hybridaks" {
   vlanId                      = var.hybridaks-lnet-vlanId
   controlPlaneIp              = var.hybridAks-controlPlaneIp
   arbId                       = module.hci.arcbridge.id
+  kubernetesVersion           = "1.25.11"
+  workerCount                 = 1
+  controlPlaneCount           = 1
+  enableAzureRBAC             = false
+  azureRBACTenantId           = var.tenant
+  rbacAdminGroupObjectId      = []
 }

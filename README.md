@@ -50,9 +50,9 @@ Add a **secret** into the service principal, then, save it to `servicePrincipalS
 2. **Grant permissions for the service principal**
 
 &nbsp; &nbsp; &nbsp; &nbsp;  grant the following permissions
-      - Contributor (to create resource group / KeyVault / HCI cluster...)
-      - Key Vault Secrets Officer (to create secret in azure KeyVault)
-      - User Access Administrator (to grant role for arc-enabled servers)
+- Contributor (to create resource group / KeyVault / HCI cluster...)
+- Key Vault Secrets Officer (to create secret in azure KeyVault)
+- User Access Administrator (to grant role for arc-enabled servers)
 
 &nbsp; &nbsp; &nbsp; &nbsp; Go back to your Azure subscription page in Azure portal, select **IAM** -> **Add Role Assignment**, then grant the permissions as follows
 
