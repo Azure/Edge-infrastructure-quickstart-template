@@ -35,7 +35,7 @@ variable "serverIP" {
   description = "The IP address of the server."
 }
 
-variable "subId" {
+variable "subscriptionId" {
   type        = string
   description = "The subscription ID for the Azure account."
 }
