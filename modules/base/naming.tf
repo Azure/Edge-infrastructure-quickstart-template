@@ -14,7 +14,7 @@ locals {
   workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
   dataCollectionRuleName     = "AzureStackHCI-${var.siteId}-dcr"
-  hybridAksName              = "${var.siteId}-hybridaks"
+  aksArcName              = "${var.siteId}-aksArc"
   logicalNetworkName         = "${var.siteId}-logicalnetwork"
   randomSuffix               = true
 }

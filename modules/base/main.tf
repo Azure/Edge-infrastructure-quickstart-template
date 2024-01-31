@@ -93,22 +93,43 @@ module "vm" {
   location         = azurerm_resource_group.rg.location
 }
 
-module "hybridaks" {
-  source                      = "../hybridaks"
-  depends_on                  = [module.hci]
-  count                       = var.enableHybridAKS ? 1 : 0
+resource "azapi_update_resource" "k8sExtension" {
+  type      = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
+  parent_id = module.hci.arcbridge.id
+  count = var.enableAksArc ? 1 : 0
+  name      = "aksArcextension"
+  body = jsonencode({
+    properties = {
+      autoUpgradeMinorVersion = false
+      releaseTrain            = "stable"
+      version                 = "1.0.36"
+    }
+  })
+}
+// this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
+resource "terraform_data" "waitAksVhdReady" {
+  depends_on = [ azapi_update_resource.k8sExtension ]
+  provisioner "local-exec" {
+    command = "powershell -command sleep 600"
+  }
+}
+
+module "aks-arc" {
+  source                      = "../aks-arc"
+  depends_on                  = [module.hci, terraform_data.waitAksVhdReady]
+  count                       = var.enableAksArc ? 1 : 0
   customLocationId            = module.hci.customlocation.id
   resourceGroup               = azurerm_resource_group.rg
-  startingAddress             = var.hybridAks-lnet-startingAddress
-  endingAddress               = var.hybridAks-lnet-endingAddress
-  dnsServers                  = var.hybridaks-lnet-dnsServers
-  defaultGateway              = var.hybridaks-lnet-defaultGateway
-  addressPrefix               = var.hybridAks-lnet-addressPrefix
+  startingAddress             = var.aksArc-lnet-startingAddress
+  endingAddress               = var.aksArc-lnet-endingAddress
+  dnsServers                  = var.aksArc-lnet-dnsServers
+  defaultGateway              = var.aksArc-lnet-defaultGateway
+  addressPrefix               = var.aksArc-lnet-addressPrefix
   logicalNetworkName          = local.logicalNetworkName
-  hybridAksName               = local.hybridAksName
-  usingExistingLogicalNetwork = var.hybridaks-lnet-usingExistingLogicalNetwork
-  vlanId                      = var.hybridaks-lnet-vlanId
-  controlPlaneIp              = var.hybridAks-controlPlaneIp
+  aksArcName               = local.aksArcName
+  usingExistingLogicalNetwork = var.aksArc-lnet-usingExistingLogicalNetwork
+  vlanId                      = var.aksArc-lnet-vlanId
+  controlPlaneIp              = var.aksArc-controlPlaneIp
   arbId                       = module.hci.arcbridge.id
   kubernetesVersion           = "1.25.11"
   workerCount                 = 1

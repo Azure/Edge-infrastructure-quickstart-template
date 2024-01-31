@@ -7,7 +7,7 @@ variable "customLocationId" {
   type        = string
 }
 
-variable "hybridAksName" {
+variable "aksArcName" {
   type        = string
   description = "The name of the hybrid aks"
 }

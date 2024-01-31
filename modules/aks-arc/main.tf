@@ -1,12 +1,12 @@
-resource "tls_private_key" "example" {
+resource "tls_private_key" "rsaKey" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 resource "azapi_resource" "connectedCluster" {
   type       = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
-  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork, azapi_update_resource.k8sextension]
-  name       = var.hybridAksName
+  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork,tls_private_key.rsaKey]
+  name       = var.aksArcName
   parent_id  = var.resourceGroup.id
 
   body = jsonencode({
@@ -64,7 +64,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
         ssh = {
           publicKeys = [
             {
-              keyData = tls_private_key.example.public_key_openssh
+              keyData = tls_private_key.rsaKey.public_key_openssh
             },
           ]
         }
