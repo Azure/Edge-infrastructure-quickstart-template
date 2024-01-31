@@ -1,24 +1,17 @@
-# Getting Started
+# Getting Started for Self Connected Servers
 ## Prerequisites
 
-Before you get started, here are the steps you need to perform for prerequisites:
+Finish 1-4 steps in [Azure Stack HCI, version 23H2 deployment](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-introduction). This repository is an alternative way to deploy HCI. This repository can also provision more products like AKS on HCI.
 
-- Check deployment checklist and install AzureStack HCI OS on your servers to be deployed as AzureStack HCI clusters
-- Complete the step 2 (Download the software) & 3 (Install the OS) in this [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software).
-
-<mark>Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project.</mark>
-
-## Getting Started
-
-### Create a repository based on this template
+## Create a repository based on this template
 
 <img src="img/Create Repo.png" alt="repo" width="800"/>
 
-### Connect GitHub Actions and Azure
+## Connect GitHub Actions and Azure
 
-1.**Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure)**
+### Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure)
 
-&nbsp; &nbsp; &nbsp; &nbsp; Create `terraform` environment in your GitHub repository
+Create `terraform` environment in your GitHub repository
 
 <img src="img/CreateRepoEnv.png" alt="createRepoEnv" width="800"/>
 
@@ -38,14 +31,15 @@ Add a **secret** into the service principal, then, save it to `servicePrincipalS
 
 <img src="img/AddSecretes.png" alt="AddSecretes" width="800"/>
 
-2.**Grant permissions for the service principal**
+### Grant permissions for the service principal
 
-&nbsp; &nbsp; &nbsp; &nbsp;  grant the following permissions
-      - Contributor (to create resource group / KeyVault / HCI cluster...)
-      - Key Vault Secrets Officer (to create secret in azure KeyVault)
-      - User Access Administrator (to grant role for arc-enabled servers)
+Grant the following permissions
 
-&nbsp; &nbsp; &nbsp; &nbsp; Go back to your Azure subscription page in Azure portal, select **IAM** -> **Add Role Assignment**, then grant the permissions as follows
+- Contributor (to create resource group / KeyVault / HCI cluster...)
+- Key Vault Secrets Officer (to create secret in Azure KeyVault)
+- User Access Administrator (to grant role for Arc-enabled servers)
+
+Go back to your Azure subscription page in Azure portal, select **IAM** -> **Add Role Assignment**, then grant the permissions as follows
 
 <img src="img/roleAssignment1.png" alt="assignRole1" width="800"/>
 
@@ -53,7 +47,7 @@ Add a **secret** into the service principal, then, save it to `servicePrincipalS
 
 <img src="img/SelectMembers.png" alt="assignRole3" width="800"/>
 
-3.**Setup GitHub repo secrets**
+### Setup GitHub repo secrets
 
 &nbsp; &nbsp; &nbsp; &nbsp; Go to your GitHub repository, click repository **Settings** , then go to **Secrets and variables**, select **Actions** to create **New repository secret**
 
@@ -78,7 +72,7 @@ Set up the following secrets：
     - servicePrincipalId
     - servicePrincipalSecret
 
-### Setup Terraform backend
+## Setup Terraform backend
 
 Create a storage account in your Azure subscription (the same subscription as AZURE_SUBSCRIPTION_ID). Create a container in it.
 
@@ -88,29 +82,24 @@ Open `.azure/backendTemplate.tf` in this repository. Replace `\<ResourceGroupNam
 
 Commit `.azure/backendTemplate.tf` by running `git commit` and the run `git push` to push the changes to the remote branch.
 
-### Setup git hooks
+## Setup git hooks
 
-    Run `git config --local core.hooksPath ./.azure/hooks/`.
-    This hook will generate the pipeline definition `deploy-infra.yml` when you commit changes to this repository.
+Run `git config --local core.hooksPath ./.azure/hooks/`.
+This hook will generate the pipeline definition `deploy-infra.yml` when you commit changes to this repository.
 
-### Setup GitHub runners
+## Setup GitHub runners
+Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
 
-    - If the remote PowerShell port(5985) of HCI is exposed to the Internet. Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
-    ```yml
-        runs-on: [ubuntu-latest]
-        # runs-on: [self-hosted]
-    ```
-    - If your HCI nodes can be remote managed inside your CorpNet. You can [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Runner hosts must setup the following tools.
-        1. Install [Git](https://git-scm.com/downloads). Add `Git` to path. Run `git --version` to validate.
-        2. Add `<Git installation root>\usr\bin` to path. The default path is `C:\Program Files\Git\usr\bin`. 
-        3. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
-        4. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
-        5. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
+```yml
+    runs-on: [ubuntu-latest]
+    # runs-on: [self-hosted]
+```
 
-### Setup Repository
+## Setup Repository
 
 1. Create a branch from `main`.
 1. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
+1. Go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
 1. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
     1. A resource group name `<site>-rg`
     1. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
@@ -121,35 +110,3 @@ Commit `.azure/backendTemplate.tf` by running `git commit` and the run `git push
     1. Custom location of ARB named `<site>-customLocation`
     1. Two storage paths named `UserStorage1`, `UserStorage2`
 1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
-
-## Sample scenario: Add new sites
-
-After the first HCI deployment succeeds, you may want to scale the deployment to more sites. You can simply copy and paste your first site folder. Edit `main.tf` for each newly copied sites to the site specific values. Commit and create a pull request for the changes. Deployment pipeline and backend settings will be set during the commit. Once the pull request is merged into `main` branch, pipeline will be triggered and deploy new sites accordingly. An example could be
-
-```├───dev
-│   └───firstsite
-│           main.tf
-│           ...
-│
-├───prod
-│   ├───prod1
-│   │       main.tf
-│   │       ...
-│   │
-│   ├───prod2
-│   │       main.tf
-│   │       ...
-│   │
-│   └───prod3
-│           main.tf
-│           ...
-│
-└───qa
-    ├───qa1
-    │       main.tf
-    │       ...
-    │
-    └───qa2
-            main.tf
-            ...
-```

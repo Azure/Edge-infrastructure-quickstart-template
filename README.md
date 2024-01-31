@@ -10,15 +10,24 @@ This repository offers a simple solution for the initial setup of your edge site
 
 ## Getting started
 
+Getting started tutorials help you to configure a Github repository to create your first site.
+
 This repository implements AD preparation and Arc connection. If you want to take advantage of this you may refer:
   - If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
   - If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
-## Advanced
+## Next Steps
 
 - [Concepts](./doc/Concepts.md)
+- 
+- [Edit Global Parameters](./doc/Edit-Global-Parameters.md)
+- [Customize Stages](./doc/Edit-Stages.md)
+- [Edit Resource Naming Conventions](./doc/Naming-Conventions.md)
+- [Manual Apply without Github Action](./doc/Manual-Apply.md)
+- [Disable Telemetry](./doc/Disable-Telemetry.md)
+- [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
 
 ## License  
   
