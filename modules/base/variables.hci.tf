@@ -1,118 +1,121 @@
-# variable "location"       "ref/main/location"
-# variable "siteId"         "ref/main/siteId"
-# variable "siteName"       "ref/main/siteName"
-# variable "subscriptionId" "ref/main/subscriptionId"
+# Potential global variables
+  variable "domainFqdn" {
+    description = "The domain FQDN."
+    type        = string
+  }
 
-variable "rpServicePrincipalObjectId" {
-  default     = ""
-  type        = string
-  description = "The object ID of the HCI resource provider service principal."
-}
+  variable "subnetMask" {
+    default     = "255.255.255.0"
+    type        = string
+    description = "The subnet mask for the network."
+  }
 
-variable "servers" {
-  description = "A list of servers with their names and IPv4 addresses."
-  type = list(object({
-    name        = string
-    ipv4Address = string
-  }))
-}
+  variable "defaultGateway" {
+    description = "The default gateway for the network."
+    type        = string
+  }
 
-variable "deploymentUserName" {
-  sensitive   = true
-  type        = string
-  description = "The username for deployment user."
-}
+  variable "dnsServers" {
+    type        = list(string)
+    description = "A list of DNS server IP addresses."
+  }
 
-variable "deploymentUserPassword" {
-  sensitive   = true
-  type        = string
-  description = "The password for deployment user."
-}
+  variable "tenant" {
+    type        = string
+    description = "The tenant name."
+  }
 
-variable "localAdminUser" {
-  sensitive   = true
-  type        = string
-  description = "The username for the local administrator account."
-}
+  variable "managementAdapters" {
+    type    = list(string)
+    default = ["ethernet", "ethernet 2"]
+  }
 
-variable "localAdminPassword" {
-  sensitive   = true
-  type        = string
-  description = "The password for the local administrator account."
-}
+  variable "storageNetworks" {
+    type = list(object({
+      name               = string
+      networkAdapterName = string
+      vlanId             = string
+    }))
+  }
 
-variable "domainFqdn" {
-  description = "The domain FQDN."
-  type        = string
-}
+  variable "rdmaEnabled" {
+    type        = bool
+    description = "Indicates whether RDMA is enabled."
+  }
 
-variable "subnetMask" {
-  default     = "255.255.255.0"
-  type        = string
-  description = "The subnet mask for the network."
-}
+  variable "storageConnectivitySwitchless" {
+    type        = bool
+    description = "Indicates whether storage connectivity is switchless."
+  }
 
-variable "startingAddress" {
-  description = "The starting IP address of the IP address range."
-  type        = string
-}
+# Site specific variables
+  variable "servers" {
+    description = "A list of servers with their names and IPv4 addresses."
+    type = list(object({
+      name        = string
+      ipv4Address = string
+    }))
+  }
 
-variable "endingAddress" {
-  description = "The ending IP address of the IP address range."
-  type        = string
-}
+  variable "deploymentUserName" {
+    sensitive   = true
+    type        = string
+    description = "The username for deployment user."
+  }
 
-variable "defaultGateway" {
-  description = "The default gateway for the network."
-  type        = string
-}
+  variable "startingAddress" {
+    description = "The starting IP address of the IP address range."
+    type        = string
+  }
 
-variable "dnsServers" {
-  type        = list(string)
-  description = "A list of DNS server IP addresses."
-}
+  variable "endingAddress" {
+    description = "The ending IP address of the IP address range."
+    type        = string
+  }
 
-variable "adouPath" {
-  type        = string
-  description = "The Active Directory OU path."
-}
+  variable "adouPath" {
+    type        = string
+    description = "The Active Directory OU path."
+  }
 
-variable "tenant" {
-  type        = string
-  description = "The tenant name."
-}
+# Pass through variables
+  variable "rpServicePrincipalObjectId" {
+    default     = ""
+    type        = string
+    description = "The object ID of the HCI resource provider service principal."
+  }
 
-variable "servicePrincipalId" {
-  type        = string
-  sensitive   = true
-  description = "The service principal ID for ARB."
-}
+  variable "deploymentUserPassword" {
+    sensitive   = true
+    type        = string
+    description = "The password for deployment user."
+  }
 
-variable "servicePrincipalSecret" {
-  type        = string
-  sensitive   = true
-  description = "The service principal secret."
-}
+  variable "localAdminUser" {
+    sensitive   = true
+    type        = string
+    description = "The username for the local administrator account."
+  }
 
-variable "managementAdapters" {
-  type    = list(string)
-  default = ["ethernet", "ethernet 2"]
-}
+  variable "localAdminPassword" {
+    sensitive   = true
+    type        = string
+    description = "The password for the local administrator account."
+  }
 
-variable "storageNetworks" {
-  type = list(object({
-    name               = string
-    networkAdapterName = string
-    vlanId             = string
-  }))
-}
+  variable "servicePrincipalId" {
+    type        = string
+    sensitive   = true
+    description = "The service principal ID for ARB."
+  }
 
-variable "rdmaEnabled" {
-  type        = bool
-  description = "Indicates whether RDMA is enabled."
-}
-
-variable "storageConnectivitySwitchless" {
-  type        = bool
-  description = "Indicates whether storage connectivity is switchless."
-}
+  variable "servicePrincipalSecret" {
+    type        = string
+    sensitive   = true
+    description = "The service principal secret."
+  }
+# Reference variables
+  # variable "location"       "ref/main/location"
+  # variable "siteId"         "ref/main/siteId"
+  # variable "siteName"       "ref/main/siteName"
+  # variable "subscriptionId" "ref/main/subscriptionId"
