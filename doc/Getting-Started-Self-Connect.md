@@ -7,14 +7,14 @@ Finish 1-4 steps in [Azure Stack HCI, version 23H2 deployment](https://learn.mic
 
 1. [Create a repository based on this template](./Create-Repository.md)
 2. [Connect GitHub Actions and Azure](./Connect-Azure.md)
-3. [Clone Repo & Setup Git Hooks](./Setup-Git-Hooks.md)
+3. [Configure Local Git](./Configure-Local-Git.md)
 4. [Setup Terraform Backend](./Setup-Terraform-Backend.md)
 5. [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
 
 ## Add your first site
 
 1. Create a branch from `main`.
-2. [Edit Resource Naming Conventions](./doc/Naming-Conventions.md).
+2. [Edit Resource Naming Conventions](./Naming-Conventions.md).
 3. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
 4. Go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
 5. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:

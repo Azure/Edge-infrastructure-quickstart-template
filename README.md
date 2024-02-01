@@ -10,7 +10,7 @@ This repository offers a simple solution for the initial setup of your edge site
 
 ## Getting started
 
-Getting started tutorials help you to configure a Github repository to create your first site.
+Getting started tutorials help you to configure a GitHub repository to create your first site.
 
 This repository implements AD preparation and Arc connection. If you want to take advantage of this you may refer:
   - If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
@@ -18,13 +18,21 @@ This repository implements AD preparation and Arc connection. If you want to tak
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
-## Next Steps
+## Scale to more sites
 
-1. [Concepts](./doc/Concepts.md)
-2. [Edit Global Parameters](./doc/Edit-Global-Parameters.md)
-3. [Add New Sites](./doc/Add-New-Sites.md)
+1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made. [Repo Structure](./doc/Repo-Structure.md)
+2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
+3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
 
-## Advanced Topics
+## Manage updates
+
+Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
+
+Following tutorials help you to turn on opt-in features:
+- [Add HCI Insights](./doc/Add-HCI-Insights.md)
+- [Add AKS Arc](./doc/Add-AKS-Arc.md)
+
+## Advanced topics
 
 - [Customize Stages](./doc/Edit-Stages.md)
 - [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
