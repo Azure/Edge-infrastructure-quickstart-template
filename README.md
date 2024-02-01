@@ -20,12 +20,14 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Next Steps
 
-- [Concepts](./doc/Concepts.md)
-- [Add New Sites](./doc/Add-New-Sites.md)
-- [Edit Global Parameters](./doc/Edit-Global-Parameters.md)
+1. [Concepts](./doc/Concepts.md)
+2. [Edit Global Parameters](./doc/Edit-Global-Parameters.md)
+3. [Add New Sites](./doc/Add-New-Sites.md)
+
+## Advanced Topics
+
 - [Customize Stages](./doc/Edit-Stages.md)
-- [Edit Resource Naming Conventions](./doc/Naming-Conventions.md)
-- [Manual Apply without Github Action](./doc/Manual-Apply.md)
+- [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
 
