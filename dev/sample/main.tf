@@ -47,4 +47,19 @@
 #   servicePrincipalId            = var.servicePrincipalId
 #   servicePrincipalSecret        = var.servicePrincipalSecret
 #   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
+
+
+## Region Hybrid AKS related parameters
+#   enableAksArc                            = true
+#   aksArc-controlPlaneIp                   = "<aksArc-controlPlaneIp>"
+# 
+#   aksArc-lnet-usingExistingLogicalNetwork = false
+#   // the following value only need to provide if you want to create a new logical network, if not, set aksArc-lnet-usingExistingLogicalNetwork to true and specify the existing logical network name in logicalNetworkName
+#   aksArc-lnet-startingAddress             = "<aksArc-lnet-startingAddress>"
+#   aksArc-lnet-endingAddress               = "<aksArc-lnet-endingAddress>"
+#   aksArc-lnet-addressPrefix               = "<aksArc-lnet-addressPrefix>"
+#   aksArc-lnet-defaultGateway              = "<aksArc-lnet-defaultGateway>"
+#   aksArc-lnet-dnsServers                  = ["<aksArc-lnet-dnsServer>"]
+
+## end region of hybrid aks related parameters
 # }

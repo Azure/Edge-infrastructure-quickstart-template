@@ -20,7 +20,7 @@ module "hci-provisioners" {
   authenticationMethod   = var.authenticationMethod
   servers                = var.servers
   clusterName            = local.clusterName
-  subId                  = var.subId
+  subscriptionId         = var.subscriptionId
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
   deploymentUserName     = var.deploymentUserName
@@ -55,7 +55,7 @@ module "hci" {
   witnessStorageAccountName     = local.witnessStorageAccountName
   keyvaultName                  = local.keyvaultName
   randomSuffix                  = local.randomSuffix
-  subId                         = var.subId
+  subscriptionId                = var.subscriptionId
   deploymentUserName            = var.deploymentUserName
   deploymentUserPassword        = var.deploymentUserPassword
   localAdminUser                = var.localAdminUser
@@ -91,4 +91,50 @@ module "vm" {
   resourceGroupId  = azurerm_resource_group.rg.id
   userStorageId    = module.hci.userStorages[0].id
   location         = azurerm_resource_group.rg.location
+}
+
+resource "azapi_update_resource" "k8sExtension" {
+  type      = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
+  parent_id = module.hci.arcbridge.id
+  count     = var.enableAksArc ? 1 : 0
+  name      = "hybridaksextension"
+  body = jsonencode({
+    properties = {
+      autoUpgradeMinorVersion = false
+      releaseTrain            = "stable"
+      version                 = "1.0.36"
+    }
+  })
+}
+// this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
+resource "terraform_data" "waitAksVhdReady" {
+  depends_on = [azapi_update_resource.k8sExtension]
+  provisioner "local-exec" {
+    command = "powershell -command sleep 600"
+  }
+}
+
+module "aks-arc" {
+  source                      = "../aks-arc"
+  depends_on                  = [module.hci, terraform_data.waitAksVhdReady]
+  count                       = var.enableAksArc ? 1 : 0
+  customLocationId            = module.hci.customlocation.id
+  resourceGroup               = azurerm_resource_group.rg
+  startingAddress             = var.aksArc-lnet-startingAddress
+  endingAddress               = var.aksArc-lnet-endingAddress
+  dnsServers                  = var.aksArc-lnet-dnsServers
+  defaultGateway              = var.aksArc-lnet-defaultGateway
+  addressPrefix               = var.aksArc-lnet-addressPrefix
+  logicalNetworkName          = local.logicalNetworkName
+  aksArcName                  = local.aksArcName
+  usingExistingLogicalNetwork = var.aksArc-lnet-usingExistingLogicalNetwork
+  vlanId                      = var.aksArc-lnet-vlanId
+  controlPlaneIp              = var.aksArc-controlPlaneIp
+  arbId                       = module.hci.arcbridge.id
+  kubernetesVersion           = "1.25.11"
+  workerCount                 = 1
+  controlPlaneCount           = 1
+  enableAzureRBAC             = false
+  azureRBACTenantId           = var.tenant
+  rbacAdminGroupObjectId      = []
 }

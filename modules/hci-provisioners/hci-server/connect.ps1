@@ -3,7 +3,7 @@ param(
     $password,
     $authType,
     $ip, $port,
-    $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC
+    $subscriptionId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret, $expandC
 )
 
 $script:ErrorActionPreference = 'Stop'
@@ -22,7 +22,7 @@ $cred = New-Object System.Management.Automation.PSCredential -ArgumentList ".\$u
 $session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
 
 Invoke-Command -Session $session -ScriptBlock {
-    Param ($subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret)
+    Param ($subscriptionId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret)
     $script:ErrorActionPreference = 'Stop'
 
     function Install-ModuleIfMissing {
@@ -71,7 +71,7 @@ Invoke-Command -Session $session -ScriptBlock {
 
     Install-ModuleIfMissing -Name Az -Repository PSGallery -Force
 
-    Connect-AzAccount -Subscription $subId -Tenant $tenant -Credential $creds -ServicePrincipal
+    Connect-AzAccount -Subscription $subscriptionId -Tenant $tenant -Credential $creds -ServicePrincipal
     echo "login to Azure"
 
     Install-Module AzSHCI.ARCInstaller -Force -AllowClobber
@@ -84,7 +84,7 @@ Invoke-Command -Session $session -ScriptBlock {
     $id = (Get-AzContext).Tenant.Id
     $token = (Get-AzAccessToken).Token
     $accountid = (Get-AzContext).Account.Id
-    Invoke-AzStackHciArcInitialization -SubscriptionID $subId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
+    Invoke-AzStackHciArcInitialization -SubscriptionID $subscriptionId -ResourceGroup $resourceGroupName -TenantID $id -Region $region -Cloud "AzureCloud" -ArmAccessToken $token -AccountID  $accountid
     $exitCode = $LASTEXITCODE
     $script:ErrorActionPreference = 'Stop'
     if ($exitCode -eq 0) {
@@ -92,4 +92,4 @@ Invoke-Command -Session $session -ScriptBlock {
     } else {
         throw "Arc server connection failed"
     }
-} -ArgumentList $subId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
+} -ArgumentList $subscriptionId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
