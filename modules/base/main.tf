@@ -94,10 +94,11 @@ module "vm" {
 }
 
 resource "azapi_update_resource" "k8sExtension" {
-  type      = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
-  parent_id = module.hci.arcbridge.id
-  count     = var.enableAksArc ? 1 : 0
-  name      = "hybridaksextension"
+  type       = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
+  parent_id  = module.hci.arcbridge.id
+  count      = var.enableAksArc ? 1 : 0
+  depends_on = [module.hci]
+  name       = "hybridaksextension"
   body = jsonencode({
     properties = {
       autoUpgradeMinorVersion = false
