@@ -93,32 +93,9 @@ module "vm" {
   location         = azurerm_resource_group.rg.location
 }
 
-resource "azapi_update_resource" "k8sExtension" {
-  type       = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
-  parent_id  = module.hci.arcbridge.id
-  count      = var.enableAksArc ? 1 : 0
-  depends_on = [module.hci]
-  name       = "hybridaksextension"
-  body = jsonencode({
-    properties = {
-      autoUpgradeMinorVersion = false
-      releaseTrain            = "stable"
-      version                 = "1.0.36"
-    }
-  })
-}
-// this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
-resource "terraform_data" "waitAksVhdReady" {
-  depends_on = [azapi_update_resource.k8sExtension]
-  count      = var.enableAksArc ? 1 : 0
-  provisioner "local-exec" {
-    command = "powershell -command sleep 600"
-  }
-}
-
 module "aks-arc" {
   source                      = "../aks-arc"
-  depends_on                  = [module.hci, terraform_data.waitAksVhdReady]
+  depends_on                  = [module.hci]
   count                       = var.enableAksArc ? 1 : 0
   customLocationId            = module.hci.customlocation.id
   resourceGroup               = azurerm_resource_group.rg
