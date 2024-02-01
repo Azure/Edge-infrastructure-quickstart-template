@@ -21,7 +21,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 ## Next Steps
 
 - [Concepts](./doc/Concepts.md)
-- 
+- [Add New Sites](./doc/Add-New-Sites.md)
 - [Edit Global Parameters](./doc/Edit-Global-Parameters.md)
 - [Customize Stages](./doc/Edit-Stages.md)
 - [Edit Resource Naming Conventions](./doc/Naming-Conventions.md)
