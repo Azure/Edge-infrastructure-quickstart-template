@@ -96,7 +96,7 @@ module "vm" {
 resource "azapi_update_resource" "k8sExtension" {
   type      = "Microsoft.KubernetesConfiguration/extensions@2023-05-01"
   parent_id = module.hci.arcbridge.id
-  count = var.enableAksArc ? 1 : 0
+  count     = var.enableAksArc ? 1 : 0
   name      = "hybridaksextension"
   body = jsonencode({
     properties = {
@@ -108,7 +108,7 @@ resource "azapi_update_resource" "k8sExtension" {
 }
 // this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
 resource "terraform_data" "waitAksVhdReady" {
-  depends_on = [ azapi_update_resource.k8sExtension ]
+  depends_on = [azapi_update_resource.k8sExtension]
   provisioner "local-exec" {
     command = "powershell -command sleep 600"
   }
@@ -126,7 +126,7 @@ module "aks-arc" {
   defaultGateway              = var.aksArc-lnet-defaultGateway
   addressPrefix               = var.aksArc-lnet-addressPrefix
   logicalNetworkName          = local.logicalNetworkName
-  aksArcName               = local.aksArcName
+  aksArcName                  = local.aksArcName
   usingExistingLogicalNetwork = var.aksArc-lnet-usingExistingLogicalNetwork
   vlanId                      = var.aksArc-lnet-vlanId
   controlPlaneIp              = var.aksArc-controlPlaneIp
