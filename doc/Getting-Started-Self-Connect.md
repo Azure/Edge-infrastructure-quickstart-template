@@ -14,7 +14,7 @@ Finish 1-4 steps in [Azure Stack HCI, version 23H2 deployment](https://learn.mic
 ## Add your first site
 
 1. Create a branch from `main`.
-2. [Edit Resource Naming Conventions](./Naming-Conventions.md).
+2. (**Important**) This template predefined resource names. You need to change them following [Edit Resource Naming Conventions](./Naming-Conventions.md). Especially the resource group name must be same as the resource group when you connect servers to Azure Arc.
 3. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
 4. Go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
 5. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:

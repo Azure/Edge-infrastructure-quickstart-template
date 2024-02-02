@@ -19,7 +19,7 @@ Before you get started, here are the steps you need to perform for prerequisites
 ## Add your first site
 
 1. Create a branch from `main`.
-2. [Edit Resource Naming Conventions](./Naming-Conventions.md).
+2. (Optional) This template predefined resource names. You can change them following [Edit Resource Naming Conventions](./Naming-Conventions.md).
 3. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
 4. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
     1. A resource group name `<site>-rg`
