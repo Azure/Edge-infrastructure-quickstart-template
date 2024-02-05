@@ -11,6 +11,7 @@ data "azuread_service_principal" "hciRp" {
 }
 
 resource "azurerm_role_assignment" "ServicePrincipalRoleAssign" {
+  depends_on           = [data.azuread_service_principal.hciRp]
   for_each             = local.RPRoles
   scope                = var.resourceGroup.id
   role_definition_name = each.value
@@ -22,8 +23,8 @@ module "serverRoleBindings" {
     for index, server in var.servers :
     server.name => server.ipv4Address
   }
-  source        = "./server-rolebindings"
-  resourceGroup = var.resourceGroup
-  serverName    = each.key
-  subscriptionId         = var.subscriptionId
+  source         = "./server-rolebindings"
+  resourceGroup  = var.resourceGroup
+  serverName     = each.key
+  subscriptionId = var.subscriptionId
 }
