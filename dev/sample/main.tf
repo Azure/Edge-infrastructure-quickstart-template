@@ -37,7 +37,7 @@
 #   storageConnectivitySwitchless = false     // Change to true if storage connectivity is switchless.
 #   enableProvisioners            = true      // Change to false when Arc servers are connected by yourself.
 #   authenticationMethod          = "CredSSP" // or "Default"
-#   subId                         = var.subscriptionId
+#   subscriptionId                = var.subscriptionId
 #   domainAdminUser               = var.domainAdminUser
 #   domainAdminPassword           = var.domainAdminPassword
 #   localAdminUser                = var.localAdminUser
