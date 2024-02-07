@@ -10,10 +10,18 @@ resource "azapi_update_resource" "k8sExtension" {
     }
   })
 }
+
+resource "terraform_data" "replacement" {
+  input = var.resourceGroup.name
+}
 // this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
 resource "terraform_data" "waitAksVhdReady" {
   depends_on = [azapi_update_resource.k8sExtension]
   provisioner "local-exec" {
     command = "powershell -command sleep 1200"
+  }
+
+  lifecycle {
+    replace_triggered_by = [ terraform_data.replacement ]
   }
 }
