@@ -39,6 +39,7 @@ module "hci" {
   resourceGroup                 = azurerm_resource_group.rg
   siteId                        = var.siteId
   domainFqdn                    = var.domainFqdn
+  subnetMask                    = var.subnetMask
   startingAddress               = var.startingAddress
   endingAddress                 = var.endingAddress
   defaultGateway                = var.defaultGateway
@@ -96,7 +97,6 @@ module "vm" {
 module "aks-arc" {
   source                      = "../aks-arc"
   depends_on                  = [module.hci]
-  count                       = var.enableAksArc ? 1 : 0
   customLocationId            = module.hci.customlocation.id
   resourceGroup               = azurerm_resource_group.rg
   startingAddress             = var.aksArc-lnet-startingAddress
@@ -106,14 +106,13 @@ module "aks-arc" {
   addressPrefix               = var.aksArc-lnet-addressPrefix
   logicalNetworkName          = local.logicalNetworkName
   aksArcName                  = local.aksArcName
-  usingExistingLogicalNetwork = var.aksArc-lnet-usingExistingLogicalNetwork
   vlanId                      = var.aksArc-lnet-vlanId
   controlPlaneIp              = var.aksArc-controlPlaneIp
   arbId                       = module.hci.arcbridge.id
-  kubernetesVersion           = "1.25.11"
-  workerCount                 = 1
-  controlPlaneCount           = 1
-  enableAzureRBAC             = false
+  kubernetesVersion           = var.kubernetesVersion
+  workerCount                 = var.workerCount
+  controlPlaneCount           = var.controlPlaneCount
+  enableAzureRBAC             = var.enableAzureRBAC
   azureRBACTenantId           = var.tenant
-  rbacAdminGroupObjectId      = []
+  rbacAdminGroupObjectId      = var.rbacAdminGroupObjectId
 }

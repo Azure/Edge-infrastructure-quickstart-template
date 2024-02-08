@@ -20,7 +20,6 @@ resource "azapi_resource" "connectedCluster" {
         adminGroupObjectIDs = var.rbacAdminGroupObjectId
         enableAzureRBAC     = var.enableAzureRBAC
         tenantID            = var.azureRBACTenantId
-
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
     }
@@ -40,19 +39,14 @@ resource "azapi_resource" "provisionedClusterInstance" {
       type = "CustomLocation"
     }
     properties = {
-      agentPoolProfiles = [
-        {
-          count = var.workerCount
-          enableAutoScaling = false
-        },
-      ]
+      agentPoolProfiles = var.agentPoolProfiles
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
             local.logicalNetworkId,
           ]
         }
-      } //"controlPlaneEndpoint": {"hostIP": "192.168.1.150"}
+      }
       controlPlane = {
         count = var.controlPlaneCount
         controlPlaneEndpoint = {

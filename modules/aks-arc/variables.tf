@@ -19,12 +19,12 @@ variable "logicalNetworkName" {
 
 variable "controlPlaneIp" {
   type        = string
-  description = "the ip address of the control plane"
+  description = "The ip address of the control plane"
 }
 
 variable "arbId" {
   type        = string
-  description = "the id of the arc bridge resource, this is used to update hybrid aks extension"
+  description = "The id of the arc bridge resource, this is used to update hybrid aks extension"
 }
 
 variable "usingExistingLogicalNetwork" {
@@ -66,7 +66,7 @@ variable "addressPrefix" {
 
 variable "vlanId" {
   type        = string
-  description = "the vlan id of the logical network, default means no vlan id is specified"
+  description = "The vlan id of the logical network, default means no vlan id is specified"
   default     = null
 }
 
@@ -78,30 +78,88 @@ variable "enableAzureRBAC" {
 
 variable "azureRBACTenantId" {
   type        = string
-  description = "the tenant id of the azure rbac"
+  description = "The tenant id of the azure rbac"
   default     = ""
 }
 
 variable "rbacAdminGroupObjectId" {
   type        = list(string)
-  description = "the object id of the admin group of the azure rbac"
+  description = "The object id of the admin group of the azure rbac"
   default     = []
 }
 
 variable "kubernetesVersion" {
   type        = string
-  description = "the kubernetes version"
+  description = "The kubernetes version"
   default     = "1.25.11"
 }
 
 variable "controlPlaneCount" {
   type        = number
-  description = "the count of the control plane"
+  description = "The count of the control plane"
   default     = 1
 }
 
-variable "workerCount" {
-  type        = number
-  description = "the count of the worker"
-  default     = 1
+variable "agentPoolProfiles" {
+  type = list(object({
+    count             = number
+    enableAutoScaling = bool
+    nodeTaints        = list(string)
+    nodeLabels        = map(string)
+    maxPods           = number
+    name              = string
+    osSKU             = string
+    osType            = string
+    vmSize            = string
+  }))
+  description = "The agent pool profiles"
+  
+  validation {
+    condition = length(var.agentPoolProfiles) > 0
+    error_message = "At least one agent pool profile must be specified"
+  }
+
+  validation {
+    condition = length([
+      for profile in var.agentPoolProfiles : true
+      if profile.enableAutoScaling == false
+    ]) == length(var.agentPoolProfiles)
+    error_message = "Agent pool profiles enableAutoScaling is not supported yet."
+  }
+
+  validation {
+    condition = length([
+      for profile in var.agentPoolProfiles : true
+      if profile.osType == null
+      || contains(["Linux", "Windows"], profile.osType)
+    ]) == length(var.agentPoolProfiles)
+    error_message = "Agent pool profiles osType must be either 'Linux' or 'Windows'"
+  }
+
+  validation {
+    condition = length([
+      for profile in var.agentPoolProfiles : true
+      if profile.osSKU == null
+      || contains(["CBLMariner", "Windows2019", "Windows2022"], profile.osSKU)
+    ]) == length(var.agentPoolProfiles)
+    error_message = "Agent pool profiles osSKU must be either 'CBLMariner', 'Windows2019' or 'Windows2022'"
+  }
+
+  validation {
+    condition = length([
+      for profile in var.agentPoolProfiles : true
+      if profile.osType == null || profile.osSKU == null 
+      || !contains(["Linux"], profile.osType) || contains(["CBLMariner"], profile.osSKU)
+    ]) == length(var.agentPoolProfiles)
+    error_message = "Agent pool profiles osSKU must be 'CBLMariner' if osType is 'Linux'"
+  }
+
+  validation {
+    condition = length([
+      for profile in var.agentPoolProfiles : true
+      if profile.osType == null || profile.osSKU == null
+      || !contains(["Windows"], profile.osType) || contains(["Windows2019", "Windows2022"], profile.osSKU)
+    ]) == length(var.agentPoolProfiles)
+    error_message = "Agent pool profiles osSKU must be 'Windows2019' or 'Windows2022' if osType is 'Windows'"
+  }
 }
