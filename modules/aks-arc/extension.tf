@@ -18,7 +18,7 @@ resource "terraform_data" "replacement" {
 resource "terraform_data" "waitAksVhdReady" {
   depends_on = [azapi_update_resource.k8sExtension]
   provisioner "local-exec" {
-    command = "powershell -command sleep 3600"
+    command = "powershell -command sleep 7200"
   }
 
   lifecycle {
