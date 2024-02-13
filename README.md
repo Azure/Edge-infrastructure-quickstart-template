@@ -13,8 +13,9 @@ This repository offers a simple solution for the initial setup of your edge site
 Getting started tutorials help you to configure a GitHub repository to create your first site.
 
 This repository implements AD preparation and Arc connection. If you want to take advantage of this you may refer:
-  - If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
-  - If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
+
+- If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
+- If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
@@ -29,6 +30,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
 
 Following tutorials help you to turn on opt-in features:
+
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
 - [Add AKS Arc](./doc/Add-AKS-Arc.md)
 
@@ -51,7 +53,7 @@ This repository is provided "as-is" without any warranties or support. Use at yo
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+the rights to use your contribution. For details, visit [Microsoft opensource](https://cla.opensource.microsoft.com).
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide
 a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
@@ -63,8 +65,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
+trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.

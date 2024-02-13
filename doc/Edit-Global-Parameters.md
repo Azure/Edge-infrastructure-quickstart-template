@@ -20,4 +20,5 @@ The third section is `Pass through variables`. These variables are typically def
 The forth section is `Reference variables`. These variables are shared by 2 or more products. They will have a reference link in one product. Its definition can be found in `variables.<product>.tf` if its link is `ref/<production>/<variable_name>`.
 
 ## Folding sections in VS Code
+
 Press `F1`, open `Preferences: Open User Settings`. Search `folding`, change `Folding Strategy` from `auto` to `indentation`.
