@@ -26,6 +26,18 @@
     default = "Default"
   }
 
+  variable "dcPort" {
+    type        = number
+    description = "Domain controller winrm port in virtual host"
+    default     = 5985
+  }
+
+  variable "serverPorts" {
+    type        = map(number)
+    description = "Server winrm ports in virtual host"
+    default     = {}
+  }
+
 # Pass through variables
   variable "domainAdminUser" {
     sensitive   = true
@@ -47,19 +59,6 @@
     default     = ""
   }
 
-  # Potential global
-  variable "dcPort" {
-    type        = number
-    description = "Domain controller winrm port in virtual host"
-    default     = 5985
-  }
-
-  # Potential global
-  variable "serverPorts" {
-    type        = map(number)
-    description = "Server winrm ports in virtual host"
-    default     = {}
-  }
 # Reference variables
   # variable "location"               "ref/main/location"
   # variable "siteId"                 "ref/main/siteId"
