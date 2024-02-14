@@ -1,6 +1,74 @@
 # Edge Infrastructure QuickStart Template
 
-This repository offers a simple solution for the initial setup of your edge site, designed for ease of use. Scale effortlessly to multiple sites with a comprehensive stage-by-stage management pipeline.
+## Introduction
+
+This repository offers a simple solution with static infrastructure templates to set up your multiple edge locations, designed for ease of use. Scale effortlessly to multiple sites with a comprehensive stage-by-stage management pipeline.
+
+By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized varaibles with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations
+
+<details>
+
+<summary><b>Repo Structure</b></summary>
+
+<img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
+
+```PROJECT_ROOT
+│
+├───.azure
+│   │   backendTemplate.tf              // Backend storage account config file
+│   │
+│   └───hooks
+│           pre-commit                  // Git hook to generate deployment workflow and set backend
+│
+├───.github
+│   └───workflows
+│           site-cd-workflow.yml        // Set up CD pipeline
+│
+├───dev                                 // The first stage to deploy
+│   └───sample
+│           backend.tf
+│           main.tf                     // Main configuration file for the site
+│           provider.tf
+│           terraform.tf
+│           variables.tf
+│
+├───modules
+│   ├───base                            // Base module of all sites
+│   │       main.tf
+│   │       variables.tf
+│   │
+│   ├───hci                             // Module to manage HCI clusters
+│   │
+│   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
+│   ├───hci-provisioners                // Module to connect servers to Arc
+│   │
+│   └───hci-vm                          // Module to manage HCI VMs
+│
+├───prod                                // prod stage sites are deployed after qa stage
+│   │
+│   └───prod1
+│
+└───qa                                  // qa stage sites are deployed after dev stage
+    │
+    └───qa1
+```
+
+Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
+
+</details>
+
+<details>
+
+<summary><b>Varaibles Structure</b></summary>
+
+| Variable Type      | Description | Example | Where to define | Override Priority |
+| ----------- | ----------- | ----------- | ----------- |  :----:  |
+| Global Varaibles      | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | `modules/base/<product>.hci.tf` | low |
+| Pass through varaibles   | The values of these varaibles are inherited from Github sercrets | `subscriptionId` | defined under each variables files | |
+| Reference variables      | These variables are shared by 2 or more products       | `location` | Its definition can be found in `variables.<product>.tf` if its link is `ref/<production>/<variable_name>` | |
+| Site specific variables   | The values of these variables are unique in each site        | `siteId` | These variables must be defined in the site `main.tf` file under each site folder | high |
+
+</details>
 
 ## Supported edge resources** (By March 2024)
 
@@ -21,7 +89,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Scale to more sites
 
-1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made. [Repo Structure](./doc/Repo-Structure.md)
+1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
 
@@ -46,7 +114,11 @@ Following tutorials help you to turn on opt-in features:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.  
   
 ## Disclaimer  
-  
+
+'Preview Terms'. This repository (the "Preview") is subject to the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/). Unless otherwise noted, Customer should not use the Preview to process Personal Data or other Data that is subject to legal or regulatory compliance requirements.
+
+'Confidentiality'.The Preview and any associated materials or documentation are confidential information and subject to obligations in your Non-Disclosure Agreement with Microsoft.
+
 This repository is provided "as-is" without any warranties or support. Use at your own risk. Always test in a non-production environment before deploying to production.  
 
 ## Contributing
