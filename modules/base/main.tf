@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "rg" {
   name     = local.resourceGroupName
   location = var.location
-  tags     = {
+  tags = {
     siteId = var.siteId
   }
 
@@ -101,24 +101,24 @@ module "vm" {
 }
 
 module "aks-arc" {
-  source                      = "../aks-arc"
-  depends_on                  = [module.hci]
-  customLocationId            = module.hci.customlocation.id
-  resourceGroup               = azurerm_resource_group.rg
-  startingAddress             = var.aksArc-lnet-startingAddress
-  endingAddress               = var.aksArc-lnet-endingAddress
-  dnsServers                  = var.aksArc-lnet-dnsServers
-  defaultGateway              = var.aksArc-lnet-defaultGateway
-  addressPrefix               = var.aksArc-lnet-addressPrefix
-  logicalNetworkName          = local.logicalNetworkName
-  aksArcName                  = local.aksArcName
-  vlanId                      = var.aksArc-lnet-vlanId
-  controlPlaneIp              = var.aksArc-controlPlaneIp
-  arbId                       = module.hci.arcbridge.id
-  kubernetesVersion           = var.kubernetesVersion
-  workerCount                 = var.workerCount
-  controlPlaneCount           = var.controlPlaneCount
-  enableAzureRBAC             = var.enableAzureRBAC
-  azureRBACTenantId           = var.tenant
-  rbacAdminGroupObjectId      = var.rbacAdminGroupObjectId
+  source                 = "../aks-arc"
+  depends_on             = [module.hci]
+  customLocationId       = module.hci.customlocation.id
+  resourceGroup          = azurerm_resource_group.rg
+  agentPoolProfiles      = var.agentPoolProfiles
+  startingAddress        = var.aksArc-lnet-startingAddress
+  endingAddress          = var.aksArc-lnet-endingAddress
+  dnsServers             = var.aksArc-lnet-dnsServers
+  defaultGateway         = var.aksArc-lnet-defaultGateway
+  addressPrefix          = var.aksArc-lnet-addressPrefix
+  logicalNetworkName     = local.logicalNetworkName
+  aksArcName             = local.aksArcName
+  vlanId                 = var.aksArc-lnet-vlanId
+  controlPlaneIp         = var.aksArc-controlPlaneIp
+  arbId                  = module.hci.arcbridge.id
+  kubernetesVersion      = var.kubernetesVersion
+  controlPlaneCount      = var.controlPlaneCount
+  enableAzureRBAC        = var.enableAzureRBAC
+  azureRBACTenantId      = var.tenant
+  rbacAdminGroupObjectId = var.rbacAdminGroupObjectId
 }
