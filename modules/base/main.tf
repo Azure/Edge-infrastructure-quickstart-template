@@ -106,6 +106,7 @@ module "aks-arc" {
   customLocationId       = module.hci.customlocation.id
   resourceGroup          = azurerm_resource_group.rg
   agentPoolProfiles      = var.agentPoolProfiles
+  sshKeyVaultId          = module.hci.keyvault.id
   startingAddress        = var.aksArc-lnet-startingAddress
   endingAddress          = var.aksArc-lnet-endingAddress
   dnsServers             = var.aksArc-lnet-dnsServers

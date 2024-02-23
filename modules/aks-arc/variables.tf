@@ -83,15 +83,16 @@ variable "sshKeyVaultId" {
 variable "sshPublicKeySecretName" {
   type        = string
   description = "The name of the secret in the key vault that contains the SSH public key."
+  default     = "AksArcAgentSshPublicKey"
 }
 
 variable "sshPrivateKeyPemSecretName" {
   type        = string
   description = "The name of the secret in the key vault that contains the SSH private key PEM."
-  default     = ""
+  default     = "AksArcAgentSshPrivateKeyPem"
 
   validation {
-    condition = var.generateSshKey == true && var.sshPrivateKeySecretName == ""
+    condition     = var.generateSshKey == true && var.sshPrivateKeySecretName == ""
     error_message = "sshPrivateKeySecretName must be specified if generateSshKey is true"
   }
 }
@@ -139,9 +140,9 @@ variable "agentPoolProfiles" {
     vmSize            = string
   }))
   description = "The agent pool profiles"
-  
+
   validation {
-    condition = length(var.agentPoolProfiles) > 0
+    condition     = length(var.agentPoolProfiles) > 0
     error_message = "At least one agent pool profile must be specified"
   }
 
@@ -174,7 +175,7 @@ variable "agentPoolProfiles" {
   validation {
     condition = length([
       for profile in var.agentPoolProfiles : true
-      if profile.osType == null || profile.osSKU == null 
+      if profile.osType == null || profile.osSKU == null
       || !contains(["Linux"], profile.osType) || contains(["CBLMariner"], profile.osSKU)
     ]) == length(var.agentPoolProfiles)
     error_message = "Agent pool profiles osSKU must be 'CBLMariner' if osType is 'Linux'"
