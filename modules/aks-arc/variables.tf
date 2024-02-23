@@ -33,7 +33,6 @@ variable "usingExistingLogicalNetwork" {
   default     = false
 }
 
-
 variable "startingAddress" {
   description = "The starting IP address of the IP address range."
   type        = string
@@ -68,6 +67,33 @@ variable "vlanId" {
   type        = string
   description = "The vlan id of the logical network, default means no vlan id is specified"
   default     = null
+}
+
+variable "generateSshKey" {
+  type        = bool
+  description = "Whether to generate a new SSH key for the cluster agent pools."
+  default     = true
+}
+
+variable "sshKeyVaultId" {
+  type        = string
+  description = "The id of the key vault that contains the SSH public and private keys."
+}
+
+variable "sshPublicKeySecretName" {
+  type        = string
+  description = "The name of the secret in the key vault that contains the SSH public key."
+}
+
+variable "sshPrivateKeyPemSecretName" {
+  type        = string
+  description = "The name of the secret in the key vault that contains the SSH private key PEM."
+  default     = ""
+
+  validation {
+    condition = var.generateSshKey == true && var.sshPrivateKeySecretName == ""
+    error_message = "sshPrivateKeySecretName must be specified if generateSshKey is true"
+  }
 }
 
 variable "enableAzureRBAC" {
