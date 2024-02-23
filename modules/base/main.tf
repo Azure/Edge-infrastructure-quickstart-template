@@ -1,7 +1,13 @@
 resource "azurerm_resource_group" "rg" {
   name     = local.resourceGroupName
   location = var.location
-  tags     = {}
+  tags     = {
+    siteId = var.siteId
+  }
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 //Prepare AD and arc server
