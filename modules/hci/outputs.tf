@@ -36,6 +36,11 @@ output "cluster" {
   description = "HCI Cluster instance"
 }
 
+output "keyvault" {
+  value       = azurerm_key_vault.DeploymentKeyVault
+  description = "Keyvault instance that stores deployment secrets."
+}
+
 output "arcbridge" {
   value       = data.azapi_resource.arcbridge
   description = "Arc resource bridge instance after HCI connected."

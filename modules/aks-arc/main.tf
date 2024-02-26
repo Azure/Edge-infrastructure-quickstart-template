@@ -1,13 +1,13 @@
-resource "tls_private_key" "rsaKey" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
 resource "azapi_resource" "connectedCluster" {
-  type       = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
-  depends_on = [azapi_resource.logicalNetwork, data.azapi_resource.logicalNetwork,tls_private_key.rsaKey]
-  name       = var.aksArcName
-  parent_id  = var.resourceGroup.id
+  type = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
+  depends_on = [
+    azapi_resource.logicalNetwork,
+    data.azapi_resource.logicalNetwork,
+    azurerm_key_vault_secret.sshPublicKey,
+    azurerm_key_vault_secret.sshPrivateKeyPem,
+  ]
+  name      = var.aksArcName
+  parent_id = var.resourceGroup.id
 
   body = jsonencode({
     kind = "ProvisionedCluster"
@@ -20,7 +20,6 @@ resource "azapi_resource" "connectedCluster" {
         adminGroupObjectIDs = var.rbacAdminGroupObjectId
         enableAzureRBAC     = var.enableAzureRBAC
         tenantID            = var.azureRBACTenantId
-
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
     }
@@ -30,7 +29,7 @@ resource "azapi_resource" "connectedCluster" {
 
 
 resource "azapi_resource" "provisionedClusterInstance" {
-  type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2024-01-01" 
+  type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2024-01-01"
   depends_on = [azapi_resource.connectedCluster]
   parent_id  = azapi_resource.connectedCluster.id
   name       = "default"
@@ -40,19 +39,14 @@ resource "azapi_resource" "provisionedClusterInstance" {
       type = "CustomLocation"
     }
     properties = {
-      agentPoolProfiles = [
-        {
-          count = var.workerCount
-          enableAutoScaling = false
-        },
-      ]
+      agentPoolProfiles = var.agentPoolProfiles
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
             local.logicalNetworkId,
           ]
         }
-      } //"controlPlaneEndpoint": {"hostIP": "192.168.1.150"}
+      }
       controlPlane = {
         count = var.controlPlaneCount
         controlPlaneEndpoint = {
@@ -64,7 +58,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
         ssh = {
           publicKeys = [
             {
-              keyData = tls_private_key.rsaKey.public_key_openssh
+              keyData = local.sshPublicKey
             },
           ]
         }

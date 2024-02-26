@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "rg" {
   name     = local.resourceGroupName
   location = var.location
-  tags     = {
+  tags = {
     siteId = var.siteId
   }
 
@@ -45,6 +45,7 @@ module "hci" {
   resourceGroup                 = azurerm_resource_group.rg
   siteId                        = var.siteId
   domainFqdn                    = var.domainFqdn
+  subnetMask                    = var.subnetMask
   startingAddress               = var.startingAddress
   endingAddress                 = var.endingAddress
   defaultGateway                = var.defaultGateway
@@ -100,26 +101,25 @@ module "vm" {
 }
 
 module "aks-arc" {
-  source                      = "../aks-arc"
-  depends_on                  = [module.hci]
-  count                       = var.enableAksArc ? 1 : 0
-  customLocationId            = module.hci.customlocation.id
-  resourceGroup               = azurerm_resource_group.rg
-  startingAddress             = var.aksArc-lnet-startingAddress
-  endingAddress               = var.aksArc-lnet-endingAddress
-  dnsServers                  = var.aksArc-lnet-dnsServers
-  defaultGateway              = var.aksArc-lnet-defaultGateway
-  addressPrefix               = var.aksArc-lnet-addressPrefix
-  logicalNetworkName          = local.logicalNetworkName
-  aksArcName                  = local.aksArcName
-  usingExistingLogicalNetwork = var.aksArc-lnet-usingExistingLogicalNetwork
-  vlanId                      = var.aksArc-lnet-vlanId
-  controlPlaneIp              = var.aksArc-controlPlaneIp
-  arbId                       = module.hci.arcbridge.id
-  kubernetesVersion           = "1.25.11"
-  workerCount                 = 1
-  controlPlaneCount           = 1
-  enableAzureRBAC             = false
-  azureRBACTenantId           = var.tenant
-  rbacAdminGroupObjectId      = []
+  source                 = "../aks-arc"
+  depends_on             = [module.hci]
+  customLocationId       = module.hci.customlocation.id
+  resourceGroup          = azurerm_resource_group.rg
+  agentPoolProfiles      = var.agentPoolProfiles
+  sshKeyVaultId          = module.hci.keyvault.id
+  startingAddress        = var.aksArc-lnet-startingAddress
+  endingAddress          = var.aksArc-lnet-endingAddress
+  dnsServers             = var.aksArc-lnet-dnsServers
+  defaultGateway         = var.aksArc-lnet-defaultGateway
+  addressPrefix          = var.aksArc-lnet-addressPrefix
+  logicalNetworkName     = local.logicalNetworkName
+  aksArcName             = local.aksArcName
+  vlanId                 = var.aksArc-lnet-vlanId
+  controlPlaneIp         = var.aksArc-controlPlaneIp
+  arbId                  = module.hci.arcbridge.id
+  kubernetesVersion      = var.kubernetesVersion
+  controlPlaneCount      = var.controlPlaneCount
+  enableAzureRBAC        = var.enableAzureRBAC
+  azureRBACTenantId      = var.tenant
+  rbacAdminGroupObjectId = var.rbacAdminGroupObjectId
 }
