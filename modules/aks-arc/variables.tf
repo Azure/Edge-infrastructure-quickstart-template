@@ -90,11 +90,12 @@ variable "sshPrivateKeyPemSecretName" {
   type        = string
   description = "The name of the secret in the key vault that contains the SSH private key PEM."
   default     = "AksArcAgentSshPrivateKeyPem"
+}
 
-  validation {
-    condition     = var.generateSshKey == true && var.sshPrivateKeySecretName == ""
-    error_message = "sshPrivateKeySecretName must be specified if generateSshKey is true"
-  }
+// putting validation here is because the condition of a variable can only refer to the variable itself in terraform.
+locals {
+  # tflint-ignore: terraform_unused_declarations
+  validateSshKey = (var.generateSshKey == true && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if generateSshKey is true") : true
 }
 
 variable "enableAzureRBAC" {
@@ -130,14 +131,14 @@ variable "controlPlaneCount" {
 variable "agentPoolProfiles" {
   type = list(object({
     count             = number
-    enableAutoScaling = bool
-    nodeTaints        = list(string)
-    nodeLabels        = map(string)
-    maxPods           = number
-    name              = string
-    osSKU             = string
-    osType            = string
-    vmSize            = string
+    enableAutoScaling = optional(bool, false)
+    nodeTaints        = optional(list(string))
+    nodeLabels        = optional(map(string))
+    maxPods           = optional(number)
+    name              = optional(string)
+    osSKU             = optional(string, "CBLMariner")
+    osType            = optional(string, "Linux")
+    vmSize            = optional(string)
   }))
   description = "The agent pool profiles"
 
