@@ -120,6 +120,11 @@ variable "kubernetesVersion" {
   type        = string
   description = "The kubernetes version"
   default     = "1.25.11"
+
+  validation {
+    condition     = can(regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", var.kubernetesVersion))
+    error_message = "kubernetesVersion must be in the format of 'x.y.z'"
+  }
 }
 
 variable "controlPlaneCount" {
