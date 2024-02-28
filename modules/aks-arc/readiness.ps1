@@ -8,11 +8,11 @@ $ErrorActionPreference = "Stop"
 az config set extension.use_dynamic_install=yes_without_prompt
 
 while ($true) {
-    $state = az aksarc get-versions --custom-location $customLocationResourceId | ConvertFrom-Json
+    $state = az aksarc get-versions --custom-location $customLocationResourceId
     echo $state
     $ready = $true
 
-    foreach ($version in $state.properties.values) {
+    foreach ($version in (echo $state  | ConvertFrom-Json).properties.values) {
         if (!$kubernetesVersion.StartsWith($version.version)) {
             continue
         }

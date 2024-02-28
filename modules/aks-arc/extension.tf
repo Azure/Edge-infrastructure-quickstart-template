@@ -18,7 +18,7 @@ resource "terraform_data" "replacement" {
 resource "terraform_data" "waitAksVhdReady" {
   depends_on = [azapi_update_resource.k8sExtension]
   provisioner "local-exec" {
-    command     = "powershell.exe -ExecutionPolicy Bypass -NoProfile -File ${path.module}/readiness.ps1 -customLocationId ${var.customLocationId} -kubernetesVersion ${var.kubernetesVersion}"
+    command     = "powershell.exe -ExecutionPolicy Bypass -NoProfile -File ${path.module}/readiness.ps1 -customLocationResourceId ${var.customLocationId} -kubernetesVersion ${var.kubernetesVersion}"
     interpreter = ["PowerShell", "-Command"]
   }
 
