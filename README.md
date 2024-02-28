@@ -4,7 +4,7 @@
 
 This repository offers a simple solution with static infrastructure templates to set up your multiple edge locations, designed for ease of use. Scale effortlessly to multiple sites with a comprehensive stage-by-stage management pipeline.
 
-By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized varaibles with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations
+By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations
 
 <details>
 
@@ -59,14 +59,14 @@ Base module contains the global variables across all sites. Each stage and each 
 
 <details>
 
-<summary><b>Varaibles Structure</b></summary>
+<summary><b>Variables Structure</b></summary>
 
-| Variable Type      | Description | Example | Where to define | Override Priority |
-| ----------- | ----------- | ----------- | ----------- |  :----:  |
-| Global Varaibles      | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | `modules/base/<product>.hci.tf` | low |
-| Pass through varaibles   | The values of these varaibles are inherited from Github sercrets | `subscriptionId` | defined under each variables files | |
-| Reference variables      | These variables are shared by 2 or more products       | `location` | Its definition can be found in `variables.<product>.tf` if its link is `ref/<production>/<variable_name>` | |
-| Site specific variables   | The values of these variables are unique in each site        | `siteId` | These variables must be defined in the site `main.tf` file under each site folder | high |
+| Variable Type           | Description                                                                                                     | Example             | Where to define                                                                                           | Override Priority |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------- | :---------------: |
+| Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | `modules/base/<product>.hci.tf`                                                                           |        low        |
+| Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | defined under each variables files                                                                        |                   |
+| Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.tf` if its link is `ref/<production>/<variable_name>` |                   |
+| Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be defined in the site `main.tf` file under each site folder                         |       high        |
 
 </details>
 
