@@ -9,6 +9,8 @@ az config set extension.use_dynamic_install=yes_without_prompt
 
 while ($true) {
     $state = az aksarc get-versions --custom-location $customLocationResourceId
+    $pos = $state.IndexOf("{")
+    $state = $state.Substring($pos)
     echo $state
     $ready = $true
 
@@ -18,11 +20,8 @@ while ($true) {
         }
 
         if ($version.patchVersions.PSobject.Properties.name -notcontains $kubernetesVersion) {
-            throw "Kubernetes version $kubernetesVersion is not available in the custom location $customLocationResourceId."
-        }
-
-        if (!$version.patchVersions.$kubernetesVersion.readiness) {
-            throw "Kubernetes version $kubernetesVersion readiness is not available in the custom location $customLocationResourceId."
+            $ready = $false
+            break
         }
 
         foreach ($readiness in $version.patchVersions.$kubernetesVersion.readiness) {
@@ -37,5 +36,7 @@ while ($true) {
         echo "Kubernetes version $kubernetesVersion is ready."
         break
     }
+
+    echo "Kubernetes version $kubernetesVersion is not ready yet. Retrying in 10 seconds."
     sleep 10
 }
