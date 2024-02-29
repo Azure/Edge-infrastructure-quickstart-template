@@ -41,7 +41,7 @@ By using this template, you can get 1) a scalable and extendible repository stru
 │   │
 │   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
 │   ├───hci-provisioners                // Module to connect servers to Arc
-│   │
+│   │───aks-arc                         // Module to manage AKS Arc clusters
 │   └───hci-vm                          // Module to manage HCI VMs
 │
 ├───prod                                // prod stage sites are deployed after qa stage
