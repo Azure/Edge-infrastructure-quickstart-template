@@ -5,6 +5,7 @@ resource "azapi_resource" "connectedCluster" {
     data.azapi_resource.logicalNetwork,
     azurerm_key_vault_secret.sshPublicKey,
     azurerm_key_vault_secret.sshPrivateKeyPem,
+    terraform_data.waitAksVhdReady,
   ]
   name      = var.aksArcName
   parent_id = var.resourceGroup.id
