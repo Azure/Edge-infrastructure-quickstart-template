@@ -25,7 +25,7 @@ while ($true) {
         }
 
         foreach ($readiness in $version.patchVersions.$kubernetesVersion.readiness) {
-            if ($readiness.osSku == $osSku) {
+            if ($readiness.osSku -eq $osSku) {
                 $ready = $readiness.ready
             }
         }
