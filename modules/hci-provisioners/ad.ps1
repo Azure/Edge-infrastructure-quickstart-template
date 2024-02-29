@@ -2,10 +2,7 @@ param(
     $userName,
     $password,
     $authType,
-    $siteID,
-    $clusterName,
     $adouPath,
-    $computerNames,
     $ip, $port,
     $domainFqdn,
     $ifdeleteadou,
@@ -32,8 +29,6 @@ for ($count = 0; $count -lt 3; $count++) {
         }
         
         $session = New-PSSession -ComputerName $ip -Port $port -Authentication $authType -Credential $cred
-        $computerNameList = $computerNames -split ","
-        echo $computerNameList
         if ($ifdeleteadou) {
             Invoke-Command -Session $session -ScriptBlock {
                 $OUPrefixList = @("OU=Computers,", "OU=Users,", "")
@@ -65,7 +60,7 @@ for ($count = 0; $count -lt 3; $count++) {
             echo "Add KdsRootKey"
             Add-KdsRootKey -EffectiveTime ((Get-Date).addhours(-10))
             echo "New HciAdObjectsPreCreation"
-            New-HciAdObjectsPreCreation -Deploy -AzureStackLCMUserCredential $Using:lcmCred -AsHciOUName $Using:adouPath -AsHciPhysicalNodeList $Using:computerNameList -DomainFQDN $Using:domainFqdn -AsHciClusterName $Using:clusterName -AsHciDeploymentPrefix $Using:siteID
+            New-HciAdObjectsPreCreation -AzureStackLCMUserCredential $Using:lcmCred -AsHciOUName $Using:adouPath
         }
         break
     }
