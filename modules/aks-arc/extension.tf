@@ -16,7 +16,7 @@ resource "terraform_data" "replacement" {
 }
 
 locals {
-  osSku = var.agentPoolProfiles[0].osSku
+  osSku = var.agentPoolProfiles[0].osSKU
 }
 
 // this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
