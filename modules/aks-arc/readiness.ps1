@@ -1,6 +1,7 @@
 param (
     [string] $customLocationResourceId,
-    [string] $kubernetesVersion
+    [string] $kubernetesVersion,
+    [string] $osSku
 )
 
 $ErrorActionPreference = "Stop"
@@ -12,7 +13,7 @@ while ($true) {
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
     echo $state
-    $ready = $true
+    $ready = $false
 
     foreach ($version in (echo $state  | ConvertFrom-Json).properties.values) {
         if (!$kubernetesVersion.StartsWith($version.version)) {
@@ -20,23 +21,21 @@ while ($true) {
         }
 
         if ($version.patchVersions.PSobject.Properties.name -notcontains $kubernetesVersion) {
-            $ready = $false
             break
         }
 
         foreach ($readiness in $version.patchVersions.$kubernetesVersion.readiness) {
-            if (!$readiness.ready) {
-                $ready = $false
-                echo "Kubernetes version $kubernetesVersion is not ready yet."
+            if ($readiness.osSku == $osSku) {
+                $ready = $readiness.ready
             }
         }
     }
 
     if ($ready) {
-        echo "Kubernetes version $kubernetesVersion is ready."
+        echo "Kubernetes version $kubernetesVersion is ready for osSku $osSku."
         break
     }
 
-    echo "Kubernetes version $kubernetesVersion is not ready yet. Retrying in 10 seconds."
+    echo "Kubernetes version $kubernetesVersion is not ready yet for osSku $osSku. Retrying in 10 seconds."
     sleep 10
 }

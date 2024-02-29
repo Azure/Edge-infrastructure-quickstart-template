@@ -14,11 +14,16 @@ resource "azapi_update_resource" "k8sExtension" {
 resource "terraform_data" "replacement" {
   input = var.resourceGroup.name
 }
+
+locals {
+  osSku = var.agentPoolProfiles[0].osSku
+}
+
 // this is a known issue for arc aks, it need to wait for the kubernate vhd ready to deploy aks
 resource "terraform_data" "waitAksVhdReady" {
   depends_on = [azapi_update_resource.k8sExtension]
   provisioner "local-exec" {
-    command     = "powershell.exe -ExecutionPolicy Bypass -NoProfile -File ${path.module}/readiness.ps1 -customLocationResourceId ${var.customLocationId} -kubernetesVersion ${var.kubernetesVersion}"
+    command     = "powershell.exe -ExecutionPolicy Bypass -NoProfile -File ${path.module}/readiness.ps1 -customLocationResourceId ${var.customLocationId} -kubernetesVersion ${var.kubernetesVersion} -osSku ${local.osSku}"
     interpreter = ["PowerShell", "-Command"]
   }
 
