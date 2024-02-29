@@ -78,7 +78,7 @@ for ($count = 0; $count -lt 3; $count++) {
             echo "login to Azure"
 
             Install-Module AzSHCI.ARCInstaller -Force -AllowClobber
-            Install-Module Az.StackHCI -Force -AllowClobber -RequiredVersion 2.2.1
+            Install-Module Az.StackHCI -Force -AllowClobber -RequiredVersion 2.2.3
             Install-Module AzStackHci.EnvironmentChecker -Repository PSGallery -Force -AllowClobber
             Install-ModuleIfMissing Az.Accounts -Force -AllowClobber
             Install-ModuleIfMissing Az.ConnectedMachine -Force -AllowClobber
