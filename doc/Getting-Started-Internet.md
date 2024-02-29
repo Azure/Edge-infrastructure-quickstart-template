@@ -5,6 +5,8 @@ Before you get started, here are the steps you need to perform for prerequisites
 
 - Check deployment checklist and install AzureStack HCI OS on your servers to be deployed as AzureStack HCI clusters
 - Complete the step 2 (Download the software) & 3 (Install the OS) in this [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software).
+- **Make sure `Remote management` section is `Enabled`.**
+![Remote management](./img/remoteManagement.png)
 
 <mark>Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project.</mark>
 
