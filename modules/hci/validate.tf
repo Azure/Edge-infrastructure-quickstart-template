@@ -208,11 +208,6 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
-  timeouts {
-    create = "30m"
-    update = "10m"
-    delete = "10m"
-  }
   // ignore the deployment mode change after the first deployment
   ignore_body_changes = [
     "properties.deploymentMode"
