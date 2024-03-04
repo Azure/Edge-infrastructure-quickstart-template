@@ -14,20 +14,16 @@ resource "time_sleep" "wait_10_seconds" {
   create_duration = "10s"
 }
 
-resource "azapi_resource_action" "kubeconfigs" {
+resource "azapi_resource_action" "kubeconfig" {
   depends_on             = [time_sleep.wait_10_seconds]
-  type                   = "Microsoft.Kubernetes/connectedClusters@2024-01-01"
-  resource_id            = azapi_resource.connectedCluster.id
-  action                 = "listClusterUserCredential"
+  type                   = "Microsoft.HybridContainerService/provisionedClusterInstances@2024-01-01"
+  resource_id            = azapi_resource.provisionedClusterInstance.id
+  action                 = "listAdminKubeconfig"
   method                 = "POST"
   response_export_values = ["kubeconfigs"]
-  body = jsonencode({
-    authenticationMethod = var.enableAzureRBAC ? "AAD" : "Token"
-    clientProxy          = false // TODO: Add client proxy support
-  })
 }
 
-output "kubeconfigs" {
-  value     = resource.azapi_resource_action.kubeconfigs.output
+output "adminKubeConfig" {
+  value     = resource.azapi_resource_action.kubeconfig.output
   sensitive = true
 }
