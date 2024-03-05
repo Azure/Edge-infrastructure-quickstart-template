@@ -5,7 +5,10 @@ data "azurerm_arc_machine" "server" {
 
 locals {
   Roles = {
-    KVSU  = "Key Vault Secrets User",
+    KVSU   = "Key Vault Secrets User",
+    ACMRM  = "Azure Connected Machine Resource Manager",
+    ASHDMR = "Azure Stack HCI Device Management Role",
+    Reader = "Reader"
   }
 }
 
