@@ -61,12 +61,12 @@ Base module contains the global variables across all sites. Each stage and each 
 
 <summary><b>Variables Structure</b></summary>
 
-| Variable Type           | Description                                                                                                     | Example             | Where to define                                                                                           | Override Priority |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------- | :---------------: |
-| Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | `modules/base/<product>.hci.tf`                                                                           |        low        |
-| Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | defined under each variables files                                                                        |                   |
-| Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.tf` if its link is `ref/<production>/<variable_name>` |                   |
-| Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be defined in the site `main.tf` file under each site folder                         |       high        |
+| Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                          | Override Priority |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------- | :---------------: |
+| Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                             |        low        |
+| Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                               |       high        |
+| Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                        |                   |
+| Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<production>/<variable_name>` |                   |
 
 </details>
 
