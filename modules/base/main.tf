@@ -109,8 +109,8 @@ module "aks-arc" {
   sshKeyVaultId          = module.hci.keyvault.id
   startingAddress        = var.aksArc-lnet-startingAddress
   endingAddress          = var.aksArc-lnet-endingAddress
-  dnsServers             = var.aksArc-lnet-dnsServers
-  defaultGateway         = var.aksArc-lnet-defaultGateway
+  dnsServers             = var.aksArc-lnet-dnsServers == [] ? var.dnsServers : var.aksArc-lnet-dnsServers
+  defaultGateway         = var.aksArc-lnet-defaultGateway == "" ? var.defaultGateway : var.aksArc-lnet-defaultGateway
   addressPrefix          = var.aksArc-lnet-addressPrefix
   logicalNetworkName     = local.logicalNetworkName
   aksArcName             = local.aksArcName

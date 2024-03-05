@@ -23,13 +23,3 @@ variable "aksArc-lnet-vlanId" {
   description = "The vlan id of the logical network, default is not set vlan id, this can be omit if using existing logical network"
   default     = null
 }
-
-variable "aksArc-lnet-dnsServers" {
-  type        = list(string)
-  description = "A list of DNS server IP addresses."
-}
-
-variable "aksArc-lnet-defaultGateway" {
-  type        = string
-  description = "The default gateway for the network."
-}
