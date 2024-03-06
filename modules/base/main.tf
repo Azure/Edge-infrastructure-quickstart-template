@@ -121,5 +121,5 @@ module "aks-arc" {
   controlPlaneCount      = var.controlPlaneCount
   enableAzureRBAC        = var.enableAzureRBAC
   azureRBACTenantId      = var.tenant
-  rbacAdminGroupObjectId = var.rbacAdminGroupObjectId
+  rbacAdminGroupObjectIds = var.rbacAdminGroupObjectIds
 }

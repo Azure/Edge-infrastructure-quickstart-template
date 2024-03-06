@@ -110,7 +110,7 @@ variable "azureRBACTenantId" {
   default     = ""
 }
 
-variable "rbacAdminGroupObjectId" {
+variable "rbacAdminGroupObjectIds" {
   type        = list(string)
   description = "The object id of the admin group of the azure rbac"
   default     = []

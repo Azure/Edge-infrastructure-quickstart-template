@@ -18,7 +18,7 @@ resource "azapi_resource" "connectedCluster" {
     location = var.resourceGroup.location
     properties = {
       aadProfile = {
-        adminGroupObjectIDs = var.rbacAdminGroupObjectId
+        adminGroupObjectIDs = var.rbacAdminGroupObjectIds
         enableAzureRBAC     = var.enableAzureRBAC
         tenantID            = var.azureRBACTenantId
       }

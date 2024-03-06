@@ -35,7 +35,7 @@ variable "enableAzureRBAC" {
   default     = false
 }
 
-variable "rbacAdminGroupObjectId" {
+variable "rbacAdminGroupObjectIds" {
   description = "The object id of the Azure AD group that will be assigned the 'cluster-admin' role in the Kubernetes cluster."
   type        = list(string)
   default     = []
