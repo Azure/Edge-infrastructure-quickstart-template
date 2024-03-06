@@ -21,6 +21,7 @@ resource "azapi_resource_action" "kubeconfig" {
   action                 = "listAdminKubeconfig"
   method                 = "POST"
   response_export_values = ["kubeconfigs"]
+  timeouts {}
 }
 
 output "adminKubeConfig" {

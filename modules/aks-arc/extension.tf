@@ -9,6 +9,7 @@ resource "azapi_update_resource" "k8sExtension" {
       version                 = "1.0.36"
     }
   })
+  timeouts {}
 }
 
 resource "terraform_data" "replacement" {

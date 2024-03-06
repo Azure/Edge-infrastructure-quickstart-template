@@ -57,6 +57,7 @@ resource "azapi_resource" "logicalNetwork" {
   schema_validation_enabled = false
   ignore_casing             = false
   ignore_missing_property   = false
+  timeouts {}
 }
 
 locals{

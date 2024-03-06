@@ -10,7 +10,7 @@ data "azurerm_arc_machine" "arcservers" {
 locals {
   storageAdapters  = flatten([for storageNetwork in var.storageNetworks : storageNetwork.networkAdapterName])
   combinedAdapters = setintersection(toset(var.managementAdapters), toset(local.storageAdapters))
-  converged         = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
+  converged        = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
 
   adapterProperties = {
     jumboPacket             = ""
@@ -48,7 +48,7 @@ locals {
       priorityValue8021Action_Cluster = "",
       bandwidthPercentage_SMB         = ""
     },
-    overrideAdapterProperty = false,
+    overrideAdapterProperty  = false,
     adapterPropertyOverrides = var.rdmaEnabled ? local.rdmaAdapterProperties : local.adapterProperties
   }]
 
@@ -95,7 +95,7 @@ locals {
         priorityValue8021Action_SMB     = "",
         bandwidthPercentage_SMB         = ""
       },
-      adapterPropertyOverrides = var.rdmaEnabled ? (var.storageConnectivitySwitchless ? local.switchlessAdapterProperties : local.rdmaAdapterProperties)  : local.adapterProperties
+      adapterPropertyOverrides = var.rdmaEnabled ? (var.storageConnectivitySwitchless ? local.switchlessAdapterProperties : local.rdmaAdapterProperties) : local.adapterProperties
   }]
 }
 
@@ -115,11 +115,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
     module.serverRoleBindings,
     azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
-  timeouts {
-    create = "30m"
-    update = "10m"
-    delete = "10m"
-  }
+  timeouts {}
   // ignore the deployment mode change after the first deployment
   ignore_body_changes = [
     "properties.deploymentMode"
@@ -208,6 +204,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
+  timeouts {}
   // ignore the deployment mode change after the first deployment
   ignore_body_changes = [
     "properties.deploymentMode"

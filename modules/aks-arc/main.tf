@@ -26,6 +26,7 @@ resource "azapi_resource" "connectedCluster" {
     }
   })
 
+  timeouts {}
 }
 
 
@@ -85,4 +86,5 @@ resource "azapi_resource" "provisionedClusterInstance" {
   schema_validation_enabled = false
   ignore_casing             = false
   ignore_missing_property   = false
+  timeouts {}
 }
