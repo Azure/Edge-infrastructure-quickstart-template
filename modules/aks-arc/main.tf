@@ -83,8 +83,5 @@ resource "azapi_resource" "provisionedClusterInstance" {
       licenseProfile         = { azureHybridBenefit = "False" }
     }
   })
-  schema_validation_enabled = false
-  ignore_casing             = false
-  ignore_missing_property   = false
   timeouts {}
 }

@@ -104,7 +104,6 @@ resource "azapi_resource" "validatedeploymentsetting" {
   count                     = local.converged ? 1 : 0
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
-  schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.DefaultARBApplication,
@@ -195,7 +194,6 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   count                     = local.converged ? 0 : 1
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
-  schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.DefaultARBApplication,

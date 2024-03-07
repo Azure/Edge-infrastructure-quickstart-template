@@ -54,9 +54,6 @@ resource "azapi_resource" "logicalNetwork" {
       vmSwitchName = "ConvergedSwitch(managementcompute)" // This is hardcoded for all cloud deployment hci cluster
     }
   })
-  schema_validation_enabled = false
-  ignore_casing             = false
-  ignore_missing_property   = false
   timeouts {}
 }
 
