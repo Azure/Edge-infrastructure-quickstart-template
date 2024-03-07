@@ -8,10 +8,12 @@ resource "azapi_resource" "winServerImage" {
     update = "24h"
     delete = "60m"
   }
-  ignore_body_changes = [
-    "properties.version.properties.storageProfile.osDiskImage"
-  ]
-  body = jsonencode({
+  lifecycle {
+    ignore_changes = [
+      payload.properties.version.properties.storageProfile.osDiskImage
+    ]
+  }
+  payload = {
     properties = {
       osType           = "Windows"
       hyperVGeneration = "V2"
@@ -34,5 +36,5 @@ resource "azapi_resource" "winServerImage" {
       name = var.customLocationId
       type = "CustomLocation"
     }
-  })
+  }
 }

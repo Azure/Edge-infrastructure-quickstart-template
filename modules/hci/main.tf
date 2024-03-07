@@ -3,17 +3,19 @@ resource "azapi_resource" "cluster" {
   parent_id = var.resourceGroup.id
   name      = var.clusterName
 
-  body = jsonencode({
+  payload = {
     identity = {
       type = "SystemAssigned"
     }
     location   = var.resourceGroup.location
     properties = {}
-  })
+  }
 
-  ignore_body_changes = [
-    "properties"
-  ]
+  lifecycle {
+    ignore_changes = [
+      payload.properties
+    ]
+  }
   timeouts {}
 }
 

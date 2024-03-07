@@ -115,11 +115,14 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
   timeouts {}
-  // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+
+  lifecycle {
+    ignore_changes = [
+      payload.properties.deploymentMode
+    ]
+  }
+
+  payload = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = var.isExported ? "Deploy" : "Validate"
@@ -187,7 +190,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
         ]
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "validatedeploymentsetting_seperate" {
@@ -204,10 +207,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   ]
   timeouts {}
   // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+  lifecycle {
+    ignore_changes = [
+      payload.properties.deploymentMode
+    ]
+  }
+  
+  payload = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy
@@ -274,5 +280,5 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
         ]
       }
     }
-  })
+  }
 }

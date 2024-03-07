@@ -15,7 +15,7 @@ resource "azapi_resource" "alerts" {
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings/Extensions@2023-08-01"
   parent_id = var.arcSettingsId
   name      = "AzureEdgeAlerts"
-  body = jsonencode({
+  payload = {
     properties = {
       extensionParameters = {
         enableAutomaticUpgrade  = true
@@ -25,6 +25,6 @@ resource "azapi_resource" "alerts" {
         settings                = {}
       }
     }
-  })
+  }
   timeouts {}
 }

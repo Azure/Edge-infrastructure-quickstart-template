@@ -17,7 +17,7 @@ resource "azapi_resource" "logicalNetwork" {
       error_message = "When not using existing logical network, startingAddress, endingAddress, defaultGateway, dnsServers, addressPrefix are required"
     }
   }
-  body = jsonencode({
+  payload = {
     extendedLocation = {
       name = var.customLocationId
       type = "CustomLocation"
@@ -53,7 +53,7 @@ resource "azapi_resource" "logicalNetwork" {
       }]
       vmSwitchName = "ConvergedSwitch(managementcompute)" // This is hardcoded for all cloud deployment hci cluster
     }
-  })
+  }
   timeouts {}
 }
 

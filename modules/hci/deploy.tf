@@ -9,9 +9,9 @@ resource "azapi_update_resource" "deploymentsetting" {
     update = "24h"
     delete = "60m"
   }
-  body = jsonencode({
+  payload = {
     properties = {
       deploymentMode = "Deploy"
     }
-  })
+  }
 }

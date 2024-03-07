@@ -10,7 +10,7 @@ resource "azapi_resource" "connectedCluster" {
   name      = var.aksArcName
   parent_id = var.resourceGroup.id
 
-  body = jsonencode({
+  payload = {
     kind = "ProvisionedCluster"
     identity = {
       type = "SystemAssigned"
@@ -24,7 +24,7 @@ resource "azapi_resource" "connectedCluster" {
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
     }
-  })
+  }
 
   timeouts {}
 }
@@ -35,7 +35,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
   depends_on = [azapi_resource.connectedCluster]
   parent_id  = azapi_resource.connectedCluster.id
   name       = "default"
-  body = jsonencode({
+  payload = {
     extendedLocation = {
       name = var.customLocationId
       type = "CustomLocation"
@@ -82,6 +82,6 @@ resource "azapi_resource" "provisionedClusterInstance" {
       clusterVMAccessProfile = {}
       licenseProfile         = { azureHybridBenefit = "False" }
     }
-  })
+  }
   timeouts {}
 }
