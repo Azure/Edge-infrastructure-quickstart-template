@@ -196,3 +196,8 @@ variable "agentPoolProfiles" {
     error_message = "Agent pool profiles osSKU must be 'Windows2019' or 'Windows2022' if osType is 'Windows'"
   }
 }
+
+variable "isExported" {
+  type    = bool
+  default = false
+}
