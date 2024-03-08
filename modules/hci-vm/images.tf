@@ -3,11 +3,11 @@ resource "azapi_resource" "winServerImage" {
   name      = "winServer2022-01"
   parent_id = var.resourceGroupId
   location  = var.location
-  timeouts {
-    create = "24h"
-    update = "24h"
-    delete = "60m"
-  }
+  # timeouts {
+  #   create = "24h"
+  #   update = "24h"
+  #   delete = "60m"
+  # }
   lifecycle {
     ignore_changes = [
       payload.properties.version.properties.storageProfile.osDiskImage

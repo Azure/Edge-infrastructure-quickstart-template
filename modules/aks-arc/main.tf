@@ -26,7 +26,7 @@ resource "azapi_resource" "connectedCluster" {
     }
   }
 
-  timeouts {}
+  # timeouts {}
 }
 
 
@@ -83,5 +83,5 @@ resource "azapi_resource" "provisionedClusterInstance" {
       licenseProfile         = { azureHybridBenefit = "False" }
     }
   }
-  timeouts {}
+  # timeouts {}
 }

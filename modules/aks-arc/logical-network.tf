@@ -54,7 +54,7 @@ resource "azapi_resource" "logicalNetwork" {
       vmSwitchName = "ConvergedSwitch(managementcompute)" // This is hardcoded for all cloud deployment hci cluster
     }
   }
-  timeouts {}
+  # timeouts {}
 }
 
 locals{
