@@ -69,15 +69,16 @@ variable "vlanId" {
   default     = null
 }
 
-variable "generateSshKey" {
-  type        = bool
-  description = "Whether to generate a new SSH key for the cluster agent pools."
-  default     = true
+variable "sshPublicKey" {
+  type        = string
+  description = "The SSH public key that will be used to access the kubernetes cluster nodes. If not specified, a new SSH key pair will be generated."
+  default     = null
 }
 
 variable "sshKeyVaultId" {
   type        = string
   description = "The id of the key vault that contains the SSH public and private keys."
+  default     = null
 }
 
 variable "sshPublicKeySecretName" {
@@ -95,7 +96,8 @@ variable "sshPrivateKeyPemSecretName" {
 // putting validation here is because the condition of a variable can only refer to the variable itself in terraform.
 locals {
   # tflint-ignore: terraform_unused_declarations
-  validateSshKey = (var.generateSshKey == true && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if generateSshKey is true") : true
+  validateSshKeyVault = (var.sshPublicKey == null && var.sshKeyVaultId == null) ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
+  validateSshKey = (var.sshPublicKey == null && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
 }
 
 variable "enableAzureRBAC" {
@@ -133,17 +135,29 @@ variable "controlPlaneCount" {
   default     = 1
 }
 
+variable "controlPlaneVmSize" {
+  type        = string
+  description = "The size of the control plane VM"
+  default     = "Standard_A4_v2"
+}
+
+variable "podCidr" {
+  type        = string
+  description = "The CIDR range for the pods in the kubernetes cluster"
+  default     = "10.244.0.0/16"
+}
+
 variable "agentPoolProfiles" {
   type = list(object({
     count             = number
-    enableAutoScaling = optional(bool, false)
+    enableAutoScaling = optional(bool)
     nodeTaints        = optional(list(string))
     nodeLabels        = optional(map(string))
     maxPods           = optional(number)
     name              = optional(string)
     osSKU             = optional(string, "CBLMariner")
     osType            = optional(string, "Linux")
-    vmSize            = optional(string)
+    vmSize            = optional(string, "Standard_A4_v2")
   }))
   description = "The agent pool profiles"
 

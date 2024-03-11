@@ -1,5 +1,5 @@
 resource "azapi_resource" "connectedCluster" {
-  type = "Microsoft.Kubernetes/connectedClusters@2023-11-01-preview"
+  type = "Microsoft.Kubernetes/connectedClusters@2024-01-01"
   depends_on = [
     azapi_resource.logicalNetwork,
     data.azapi_resource.logicalNetwork,
@@ -12,10 +12,6 @@ resource "azapi_resource" "connectedCluster" {
 
   payload = {
     kind = "ProvisionedCluster"
-    identity = {
-      type = "SystemAssigned"
-    }
-    location = var.resourceGroup.location
     properties = {
       aadProfile = {
         adminGroupObjectIDs = var.rbacAdminGroupObjectIds
@@ -23,12 +19,38 @@ resource "azapi_resource" "connectedCluster" {
         tenantID            = var.azureRBACTenantId
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
+      azureHybridBenefit        = null
+      distribution              = null
+      infrastructure            = null
+      privateLinkState          = null
+      provisioningState         = null
     }
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  location = var.resourceGroup.location
+
+  lifecycle {
+    ignore_changes = [
+      identity[0],
+      payload.properties.azureHybridBenefit,
+      payload.properties.distribution,
+      payload.properties.infrastructure,
+      payload.properties.privateLinkState,
+      payload.properties.provisioningState,
+    ]
   }
 
   # timeouts {}
 }
-
+locals {
+  agentPoolProfiles = [for pool in var.agentPoolProfiles : {
+    for k, v in pool : k => v if v != null
+  }]
+}
 
 resource "azapi_resource" "provisionedClusterInstance" {
   type       = "Microsoft.HybridContainerService/provisionedClusterInstances@2024-01-01"
@@ -41,7 +63,8 @@ resource "azapi_resource" "provisionedClusterInstance" {
       type = "CustomLocation"
     }
     properties = {
-      agentPoolProfiles = var.agentPoolProfiles
+      agentPoolProfiles = local.agentPoolProfiles
+      autoScalerProfile = null
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
@@ -50,7 +73,8 @@ resource "azapi_resource" "provisionedClusterInstance" {
         }
       }
       controlPlane = {
-        count = var.controlPlaneCount
+        count  = var.controlPlaneCount
+        vmSize = var.controlPlaneVmSize
         controlPlaneEndpoint = {
           hostIP = var.controlPlaneIp
         }
@@ -66,6 +90,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
         }
       }
       networkProfile = {
+        podCidr       = var.podCidr
         networkPolicy = "calico"
         loadBalancerProfile = {
           // acctest0002 network only supports a LoadBalancer count of 0
@@ -82,6 +107,15 @@ resource "azapi_resource" "provisionedClusterInstance" {
       clusterVMAccessProfile = {}
       licenseProfile         = { azureHybridBenefit = "False" }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      payload.properties.autoScalerProfile,
+      payload.properties.networkProfile.podCidr,
+      payload.properties.provisioningStateTransitionTime,
+      payload.properties.provisioningStateUpdatedTime,
+    ]
   }
   # timeouts {}
 }

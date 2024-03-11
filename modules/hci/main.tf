@@ -4,18 +4,21 @@ resource "azapi_resource" "cluster" {
   name      = var.clusterName
 
   payload = {
-    identity = {
-      type = "SystemAssigned"
-    }
-    location   = var.resourceGroup.location
     properties = {}
   }
 
   lifecycle {
     ignore_changes = [
-      payload.properties
+      payload.properties,
+      identity[0]
     ]
   }
+  identity {
+    type = "SystemAssigned"
+  }
+  
+  location = var.resourceGroup.location
+  
   # timeouts {}
 }
 

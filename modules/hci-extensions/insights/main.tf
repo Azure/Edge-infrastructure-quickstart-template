@@ -80,7 +80,6 @@ resource "azapi_resource" "monitor_agent" {
     }
   }
 
-  ignore_missing_property = true
   # timeouts {}
 }
 
