@@ -54,7 +54,7 @@ resource "azapi_resource" "logicalNetwork" {
     }
     properties = {
       dhcpOptions = {
-        dnsServers = var.dnsServers
+        dnsServers = flatten(var.dnsServers)
       }
       subnets = [{
         name       = "default"

@@ -36,7 +36,7 @@ locals {
       "Compute",
       "Storage"
     ],
-    adapter                            = var.managementAdapters,
+    adapter                            = flatten(var.managementAdapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
@@ -58,7 +58,7 @@ locals {
       "Management",
       "Compute"
     ],
-    adapter                            = var.managementAdapters
+    adapter                            = flatten(var.managementAdapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
     overrideAdapterProperty            = false,
@@ -170,13 +170,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.convergedIntents
-                storageNetworks               = var.storageNetworks
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath
@@ -261,13 +261,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.seperateIntents
-                storageNetworks               = var.storageNetworks
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath

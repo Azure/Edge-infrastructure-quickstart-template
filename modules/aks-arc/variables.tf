@@ -169,7 +169,7 @@ variable "agentPoolProfiles" {
   validation {
     condition = length([
       for profile in var.agentPoolProfiles : true
-      if profile.enableAutoScaling == false
+      if profile.enableAutoScaling == false || profile.enableAutoScaling == null
     ]) == length(var.agentPoolProfiles)
     error_message = "Agent pool profiles enableAutoScaling is not supported yet."
   }

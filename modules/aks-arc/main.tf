@@ -14,7 +14,7 @@ resource "azapi_resource" "connectedCluster" {
     kind = "ProvisionedCluster"
     properties = {
       aadProfile = {
-        adminGroupObjectIDs = var.rbacAdminGroupObjectIds
+        adminGroupObjectIDs = flatten(var.rbacAdminGroupObjectIds)
         enableAzureRBAC     = var.enableAzureRBAC
         tenantID            = var.azureRBACTenantId
       }
@@ -48,7 +48,7 @@ resource "azapi_resource" "connectedCluster" {
 }
 locals {
   agentPoolProfiles = [for pool in var.agentPoolProfiles : {
-    for k, v in pool : k => v if v != null
+    for k, v in pool : k => (k == "nodeTaints" ? flatten(v) : v) if v != null
   }]
 }
 
@@ -63,7 +63,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
       type = "CustomLocation"
     }
     properties = {
-      agentPoolProfiles = local.agentPoolProfiles
+      agentPoolProfiles = flatten(local.agentPoolProfiles)
       autoScalerProfile = null
       cloudProviderProfile = {
         infraNetworkProfile = {
