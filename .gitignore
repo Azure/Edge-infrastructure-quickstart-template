@@ -27,4 +27,6 @@
 .DS_Store  
 Thumbs.db  
 
+**/temp/*
+*.tmp
 az-edge-module-export
