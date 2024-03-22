@@ -26,3 +26,5 @@
 # OS-specific files  
 .DS_Store  
 Thumbs.db  
+
+az-edge-module-export
