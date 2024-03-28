@@ -2,6 +2,7 @@ locals {
   resourceGroupName          = "${var.siteId}-rg"
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
+  adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
   clusterName                = "${var.siteId}-cl"
   customLocationName         = "${var.siteId}-customlocation"
   workspaceName              = "${var.siteId}-workspace"

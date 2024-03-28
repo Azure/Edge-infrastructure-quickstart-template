@@ -21,8 +21,3 @@ variable "endingAddress" {
   description = "The ending IP address of the IP address range."
   type        = string
 }
-
-variable "adouPath" {
-  type        = string
-  description = "The Active Directory OU path."
-}
