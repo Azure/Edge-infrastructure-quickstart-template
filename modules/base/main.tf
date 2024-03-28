@@ -18,7 +18,7 @@ module "hci-provisioners" {
   resourceGroup          = azurerm_resource_group.rg
   siteId                 = var.siteId
   domainFqdn             = var.domainFqdn
-  adouPath               = var.adouPath
+  adouPath               = local.adouPath
   tenant                 = var.tenant
   domainServerIP         = var.domainServerIP
   domainAdminUser        = var.domainAdminUser
@@ -50,7 +50,7 @@ module "hci" {
   endingAddress                 = var.endingAddress
   defaultGateway                = var.defaultGateway
   dnsServers                    = var.dnsServers
-  adouPath                      = var.adouPath
+  adouPath                      = local.adouPath
   tenant                        = var.tenant
   servers                       = var.servers
   managementAdapters            = var.managementAdapters

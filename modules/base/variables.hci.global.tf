@@ -3,6 +3,11 @@ variable "domainFqdn" {
   type        = string
 }
 
+variable "adouSuffix" {
+  type        = string
+  description = "The suffix of Active Directory OU path."
+}
+
 variable "subnetMask" {
   default     = "255.255.255.0"
   type        = string

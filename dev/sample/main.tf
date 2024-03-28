@@ -7,7 +7,7 @@
 #   endingAddress   = "<endingAddress>"
 #   defaultGateway  = "<defaultGateway>"
 #   dnsServers      = ["<dnsServer1>"]
-#   adouPath        = "<adouPath>"
+#   adouSuffix      = "<adouSuffix>"
 #   tenant          = "<tenant>"
 #   domainServerIP  = "<domainServerIP>"
 #   servers = [
@@ -49,14 +49,14 @@
 #   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 
 
-# # Region Hybrid AKS related parameters
-#   aksArc-controlPlaneIp                   = "<aksArc-controlPlaneIp>"
+#   # Region Hybrid AKS related parameters
+#   aksArc-controlPlaneIp = "<aksArc-controlPlaneIp>"
 
 #   // the following value only need to provide if you want to create a new logical network, if not, set aksArc-lnet-usingExistingLogicalNetwork to true and specify the existing logical network name in logicalNetworkName
-#   aksArc-lnet-startingAddress             = "<aksArc-lnet-startingAddress>"
-#   aksArc-lnet-endingAddress               = "<aksArc-lnet-endingAddress>"
-#   aksArc-lnet-addressPrefix               = "<aksArc-lnet-addressPrefix>"
-#   aksArc-lnet-defaultGateway              = "<aksArc-lnet-defaultGateway>"
-#   aksArc-lnet-dnsServers                  = ["<aksArc-lnet-dnsServer>"]
-# # end region of hybrid aks related parameters
+#   aksArc-lnet-startingAddress = "<aksArc-lnet-startingAddress>"
+#   aksArc-lnet-endingAddress   = "<aksArc-lnet-endingAddress>"
+#   aksArc-lnet-addressPrefix   = "<aksArc-lnet-addressPrefix>"
+#   aksArc-lnet-defaultGateway  = "<aksArc-lnet-defaultGateway>"
+#   aksArc-lnet-dnsServers      = ["<aksArc-lnet-dnsServer>"]
+#   # end region of hybrid aks related parameters
 # }
