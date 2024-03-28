@@ -64,7 +64,6 @@ resource "azapi_resource" "provisionedClusterInstance" {
     }
     properties = {
       agentPoolProfiles = flatten(local.agentPoolProfiles)
-      autoScalerProfile = null
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
