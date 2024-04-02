@@ -58,5 +58,6 @@
 #   aksArc-lnet-addressPrefix   = "<aksArc-lnet-addressPrefix>"
 #   aksArc-lnet-defaultGateway  = "<aksArc-lnet-defaultGateway>"
 #   aksArc-lnet-dnsServers      = ["<aksArc-lnet-dnsServer>"]
+#   rbacAdminGroupObjectIds     = ["<rbacAdminGroupObjectId1>"]
 #   # end region of hybrid aks related parameters
 # }
