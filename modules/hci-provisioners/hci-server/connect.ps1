@@ -96,6 +96,20 @@ for ($count = 0; $count -lt 3; $count++) {
             else {
                 throw "Arc server connection failed"
             }
+
+            $ready = $false
+            while (!$ready) {
+                Connect-AzAccount -Subscription $subscriptionId -Tenant $tenant -Credential $creds -ServicePrincipal
+                $extension = Get-AzConnectedMachineExtension -Name "AzureEdgeLifecycleManager" -ResourceGroup $resourceGroupName -MachineName $env:COMPUTERNAME -SubscriptionId $subscriptionId
+                if ($extension.ProvisioningState -eq "Succeeded") {
+                    $ready = $true
+                }
+                else {
+                    echo "Waiting for LCM extension to be ready"
+                    Start-Sleep -Seconds 30
+                }
+            }
+
         } -ArgumentList $subscriptionId, $resourceGroupName, $region, $tenant, $servicePrincipalId, $servicePrincipalSecret
         break
     }
@@ -110,5 +124,5 @@ for ($count = 0; $count -lt 3; $count++) {
 }
 
 if ($count -ge 3) {
-    throw "Failed to provision AD after 3 retries."
+    throw "Failed to connect Arc server after 3 retries."
 }
