@@ -97,6 +97,7 @@ for ($count = 0; $count -lt 3; $count++) {
                 throw "Arc server connection failed"
             }
 
+            sleep 600
             $ready = $false
             while (!$ready) {
                 Connect-AzAccount -Subscription $subscriptionId -Tenant $tenant -Credential $creds -ServicePrincipal
