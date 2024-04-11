@@ -10,6 +10,26 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
+module "site" {
+  source          = "../site"
+  siteId          = var.siteId
+  resourceGroup   = azurerm_resource_group.rg
+  country         = var.country
+  city            = var.city
+  companyName     = var.companyName
+  postalCode      = var.postalCode
+  stateOrProvince = var.stateOrProvince
+  streetAddress1  = var.streetAddress1
+  streetAddress2  = var.streetAddress2
+  streetAddress3  = var.streetAddress3
+  zipExtendedCode = var.zipExtendedCode
+  contactName     = var.contactName
+  emailList       = var.emailList
+  mobile          = var.mobile
+  phone           = var.phone
+  phoneExtension  = var.phoneExtension
+}
+
 //Prepare AD and arc server
 module "hci-provisioners" {
   depends_on             = [azurerm_resource_group.rg]

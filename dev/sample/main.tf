@@ -60,4 +60,6 @@
 #   aksArc-lnet-dnsServers      = ["<aksArc-lnet-dnsServer>"]
 #   rbacAdminGroupObjectIds     = ["<rbacAdminGroupObjectId1>"]
 #   # end region of hybrid aks related parameters
+
+#   country = "US"
 # }
