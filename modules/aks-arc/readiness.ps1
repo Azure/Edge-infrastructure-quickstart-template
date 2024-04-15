@@ -9,6 +9,14 @@ $ErrorActionPreference = "Stop"
 az config set extension.use_dynamic_install=yes_without_prompt
 
 while ($true) {
+    if ($env:ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
+        $resp = Invoke-WebRequest -Uri "$env:ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" -Headers @{"Authorization" = "bearer $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN"}
+        $token = (echo $resp.Content | ConvertFrom-Json).value
+    
+        az login --federated-token $token --tenant $env:ARM_TENANT_ID -u $env:ARM_CLIENT_ID --service-principal
+        az account set --subscription $env:ARM_SUBSCRIPTION_ID
+    }
+
     $state = az aksarc get-versions --custom-location $customLocationResourceId
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
