@@ -92,6 +92,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
+4. (Optional) you may reference[Add Site Manager](./doc/Add-Site-Manager.md) to view site overview from Azure portal by [https://aka.ms/site](https://aka.ms/site)
 
 ## Manage updates
 

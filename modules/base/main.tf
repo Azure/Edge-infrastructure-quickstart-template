@@ -10,8 +10,8 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-module "site" {
-  source          = "../site"
+module "site-manager" {
+  source          = "../site-manager"
   siteId          = var.siteId
   resourceGroup   = azurerm_resource_group.rg
   country         = var.country
