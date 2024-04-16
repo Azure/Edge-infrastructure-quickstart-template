@@ -49,7 +49,7 @@ variable "zipExtendedCode" {
 variable "contactName" {
   description = "The contact name of the site."
   type        = string
-  default     = ""
+  default     = " "
 }
 
 variable "emailList" {
