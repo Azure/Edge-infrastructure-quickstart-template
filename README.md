@@ -105,7 +105,7 @@ Following tutorials help you to turn on opt-in features:
 
 ## Advanced topics
 
-- [Customize Stages](./doc/Edit-Stages.md)
+- [Customize Stages](./doc/Customize-Stages.md)
 - [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
