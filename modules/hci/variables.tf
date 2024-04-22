@@ -133,6 +133,10 @@ variable "storageConnectivitySwitchless" {
 variable "clusterName" {
   type = string
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
+  validation {
+    condition     = length(var.clusterName) < 16 && length(var.clusterName) > 0
+    error_message = "value of clusterName should be less than 16 characters and greater than 0 characters"
+  }
 }
 
 variable "customLocationName" {

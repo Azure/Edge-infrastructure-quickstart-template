@@ -1,4 +1,4 @@
-# Edge Infrastructure QuickStart Template
+# Edge Infrastructure QuickStart Template (Preview)
 
 ## Introduction
 
@@ -75,6 +75,7 @@ Base module contains the global variables across all sites. Each stage and each 
 - [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
 - [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
 - [Azure Kubernetes Service (AKS) enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/aks/hybrid/)
+- [Arc Site Manager](https://review.learn.microsoft.com/en-us/azure/azure-arc/site-manager/overview?branch=release-preview-site-manager)
 
 ## Getting started
 
@@ -92,6 +93,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
+4. (Optional) you may reference [Add Site Manager](./doc/Add-Site-Manager.md) to view site overview from Azure portal by [https://aka.ms/site](https://aka.ms/site).
 
 ## Manage updates
 
@@ -100,11 +102,11 @@ Any change merged into `main` branch will trigger the update pipeline. If the ch
 Following tutorials help you to turn on opt-in features:
 
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
-- [Add AKS Arc](./doc/Add-AKS-Arc.md)
+- [Add Site Manager](./doc/Add-Site-Manager.md)
 
 ## Advanced topics
 
-- [Customize Stages](./doc/Edit-Stages.md)
+- [Customize Stages](./doc/Customize-Stages.md)
 - [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)

@@ -29,16 +29,11 @@ variable "agentPoolProfiles" {
   }]
 }
 
-variable "enableAzureRBAC" {
-  description = "Whether to enable Azure RBAC for the Kubernetes cluster."
-  type        = bool
-  default     = false
-}
-
 variable "rbacAdminGroupObjectIds" {
   description = "The object id of the Azure AD group that will be assigned the 'cluster-admin' role in the Kubernetes cluster."
   type        = list(string)
-  default     = []
+  # Add your default admin groups here. Refer to the documentation under doc/AKS-Arc-Admin-Groups.md for more information.
+  # default     = ["<your-admin-group-object-id>"]
 }
 
 variable "aksArc-lnet-dnsServers" {

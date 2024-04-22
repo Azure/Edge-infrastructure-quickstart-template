@@ -109,13 +109,15 @@ variable "enableAzureRBAC" {
 variable "azureRBACTenantId" {
   type        = string
   description = "The tenant id of the azure rbac"
-  default     = ""
 }
 
 variable "rbacAdminGroupObjectIds" {
   type        = list(string)
   description = "The object id of the admin group of the azure rbac"
-  default     = []
+  validation {
+    condition     = length(var.rbacAdminGroupObjectIds) > 0
+    error_message = "At least one admin group object id must be specified"
+  }
 }
 
 variable "kubernetesVersion" {
