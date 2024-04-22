@@ -27,12 +27,6 @@ variable "domainAdminPassword" {
   type        = string
 }
 
-variable "deploymentUserName" {
-  sensitive   = true
-  type        = string
-  description = "The username for deployment user."
-}
-
 variable "deploymentUserPassword" {
   sensitive   = true
   type        = string

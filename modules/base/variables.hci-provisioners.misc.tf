@@ -1,6 +1,5 @@
 # Pass through variables
 variable "domainAdminUser" {
-  sensitive   = true
   type        = string
   description = "The username for the domain administrator account."
 }
@@ -37,7 +36,7 @@ variable "serverPorts" {
 # variable "siteName"               "ref/main/siteName"
 # variable "subscriptionId"         "ref/main/subscriptionId"
 # variable "servers"                "ref/hci/servers"
-# variable "deploymentUserName"     "ref/hci/deploymentUserName"
+# variable "deploymentUser"         "ref/hci/deploymentUser"
 # variable "deploymentUserPassword" "ref/hci/deploymentUserPassword"
 # variable "localAdminUser"         "ref/hci/localAdminUser"
 # variable "localAdminPassword"     "ref/hci/localAdminPassword"

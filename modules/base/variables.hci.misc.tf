@@ -11,7 +11,6 @@ variable "deploymentUserPassword" {
 }
 
 variable "localAdminUser" {
-  sensitive   = true
   type        = string
   description = "The username for the local administrator account."
 }
