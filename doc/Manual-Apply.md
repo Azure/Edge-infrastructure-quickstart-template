@@ -27,7 +27,6 @@ If you want to deploy locally:
     localAdminPassword     = "<local admin password>"
     domainAdminUser        = "<domain admin user name>"
     domainAdminPassword    = "<domain admin user password>"
-    deploymentUserName     = "<deployment user name>"
     deploymentUserPassword = "<deployment user password>"
     servicePrincipalId     = "<service principal id created in the first step of setting pipeline>"
     servicePrincipalSecret = "<service principal secret created in the first step of setting pipeline>"

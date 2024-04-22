@@ -6,8 +6,7 @@ variable "servers" {
   }))
 }
 
-variable "deploymentUserName" {
-  sensitive   = true
+variable "deploymentUser" {
   type        = string
   description = "The username for deployment user."
 }

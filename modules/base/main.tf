@@ -49,7 +49,7 @@ module "hci-provisioners" {
   subscriptionId         = var.subscriptionId
   localAdminUser         = var.localAdminUser
   localAdminPassword     = var.localAdminPassword
-  deploymentUserName     = var.deploymentUserName
+  deploymentUser         = var.deploymentUser
   deploymentUserPassword = var.deploymentUserPassword
   servicePrincipalId     = var.servicePrincipalId
   servicePrincipalSecret = var.servicePrincipalSecret
@@ -83,7 +83,7 @@ module "hci" {
   keyvaultName                  = local.keyvaultName
   randomSuffix                  = local.randomSuffix
   subscriptionId                = var.subscriptionId
-  deploymentUserName            = var.deploymentUserName
+  deploymentUser                = var.deploymentUser
   deploymentUserPassword        = var.deploymentUserPassword
   localAdminUser                = var.localAdminUser
   localAdminPassword            = var.localAdminPassword
