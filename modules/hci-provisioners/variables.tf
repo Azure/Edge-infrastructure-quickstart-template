@@ -37,7 +37,6 @@ variable "destory_adou" {
 }
 
 variable "domainAdminUser" {
-  sensitive   = true
   type        = string
   description = "The username for the domain administrator account."
 }
@@ -49,7 +48,6 @@ variable "domainAdminPassword" {
 }
 
 variable "localAdminUser" {
-  sensitive   = true
   type        = string
   description = "The username for the local administrator account."
 }
@@ -60,8 +58,7 @@ variable "localAdminPassword" {
   description = "The password for the local administrator account."
 }
 
-variable "deploymentUserName" {
-  sensitive   = true
+variable "deploymentUser" {
   type        = string
   description = "The username for deployment user."
 }

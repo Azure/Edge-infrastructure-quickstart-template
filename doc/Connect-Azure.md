@@ -60,7 +60,6 @@ Set up the following secrets：
     - domainAdminPassword: create new password
     - localAdminUser: username when you login to the local host
     - localAdminPassword: password you use to login into the local host
-    - deploymentUserName
     - deploymentUserPassword
     - servicePrincipalId
     - servicePrincipalSecret
