@@ -70,7 +70,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 </details>
 
-## Supported edge resources** (By March 2024)
+## Supported edge resources**
 
 - [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
 - [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
@@ -88,21 +88,29 @@ This repository implements AD preparation and Arc connection. If you want to tak
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
-## Scale to more sites
+## Scenario 1: Create a resource through the Terraform modules defined in this repository
+
+Go to `dev\sample\main.tf` and select the resource by uncommenting the code blocks. After you commit the change and merge it to `main` branch, the deployment pipeline will be executed.
+
+## Scenario 2: Scale to more sites
+
+### Option 1: If you are using resource group to manage your resources
 
 1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
-4. (Optional) you may reference [Add Site Manager](./doc/Add-Site-Manager.md) to view site overview from Azure portal by [https://aka.ms/site](https://aka.ms/site).
 
-## Manage updates
+### Option 2: If you are using Arc Site Manager to manage your resources
+
+Reference to [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md).
+
+## Scenario 3: Manage updates
 
 Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
 
 Following tutorials help you to turn on opt-in features:
 
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
-- [Add Site Manager](./doc/Add-Site-Manager.md)
 
 ## Advanced topics
 
