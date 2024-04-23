@@ -1,0 +1,192 @@
+name: Terraform plan check
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_USE_OIDC: true
+  TF_VAR_subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TF_VAR_localAdminUser: ${{ secrets.localAdminUser }}
+  TF_VAR_localAdminPassword: ${{ secrets.localAdminPassword }}
+  TF_VAR_domainAdminUser: ${{ secrets.domainAdminUser }}
+  TF_VAR_domainAdminPassword: ${{ secrets.domainAdminPassword }}
+  TF_VAR_deploymentUserPassword: ${{ secrets.deploymentUserPassword }}
+  TF_VAR_servicePrincipalId: ${{ secrets.servicePrincipalId }}
+  TF_VAR_servicePrincipalSecret: ${{ secrets.servicePrincipalSecret }}
+  TF_VAR_rpServicePrincipalObjectId: ${{ secrets.rpServicePrincipalObjectId }}
+  TF_VAR_runnumber: ${{ github.run_number }}
+
+jobs:
+    provide_paths:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+            - name: Check diff to see what content is changed
+              id: check_diff
+              run: |
+                ## the || true is to avoid the exit code 1 of grep when no tf files are changed
+                changedFiles=$(git diff --name-only origin/main HEAD -- | grep ".tf" || true)
+                if [ -z "$changedFiles" ]; then
+                  echo "No terraform files are changed"
+                  echo "isModuleChanged=false" >> $GITHUB_OUTPUT
+                  echo "planNeeded=false" >> $GITHUB_OUTPUT
+                  exit 0
+                fi
+                if [[ $chchangedFiles == *"modules"* ]]; then
+                  echo "changedFiles contain modules"
+                  echo "isModuleChanged=true" >> $GITHUB_OUTPUT
+                  exit 0
+                else
+                  echo "changedFiles do not contain modules"
+                  echo "isModuleChanged=false" >> $GITHUB_OUTPUT
+                fi
+                ## get changed directories
+                echo "generate directory based on changed files"
+                directories=$(echo "$changedFiles" | xargs -n 1 dirname | sort -u)
+                echo "directory=$directories" >> $GITHUB_OUTPUT
+            
+            - name: Set matrix 
+              id: set-matrix
+              run: |
+                array=()
+                if !${{ steps.check_diff.outputs.planNeeded }}; then
+                  echo "No directories to process, no need to plan"
+                  echo "planNeeded=false" >> $GITHUB_OUTPUT
+                  exit 0
+                fi
+                if ${{ steps.check_diff.outputs.isModuleChanged }}; then
+                  echo "the module is changed, so generate the matrix based on the stages and sites"
+                  readarray -t stages < ./.stages
+                  for count in "${!stages[@]}"; do
+                      stage=${stages[$count]}
+                      pushd ./$stage > /dev/null
+                      for d in */ ; do
+                          if [[ $d == "*/" ]]; then
+                              break
+                          fi
+                          group=$(echo "$d" | sed 's/\///g' | sed 's/ /_/g')
+                          array+=("$stage/$group")
+                      done
+                      popd > /dev/null
+                  done
+                else
+                  echo "the module is not changed, so generate the matrix based on the changed directories"
+                  IFS=' ' read -ra dirs <<< "${{ steps.check_diff.outputs.directory }}"
+                  for i in "${dirs[@]}"; do
+                    if [[ "$i" != ".azure" ]]
+                    then
+                      array+=("$i")
+                    fi
+                  done
+                fi
+                if [ ${#array[@]} -eq 0 ]; then
+                  echo "No directories to process"
+                  echo "planNeeded=false" >> $GITHUB_OUTPUT
+                else
+                  echo "planNeeded=true" >> $GITHUB_OUTPUT
+                fi
+                json=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+                echo "matrix=$json"
+                echo "matrix=$json" >> $GITHUB_OUTPUT
+        outputs:
+            matrix: ${{ steps.set-matrix.outputs.matrix }}
+            planNeeded: ${{ steps.check_diff.outputs.planNeeded }}
+    terraform_plan_comments:
+        runs-on: ubuntu-latest
+        needs: provide_paths
+        if: needs.provide_paths.outputs.planNeeded != 'false'
+        strategy:
+            matrix:
+              path: ${{fromJson(needs.provide_paths.outputs.matrix)}}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Log in to Azure using OIDC
+              uses: azure/login@v1
+              with:
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+              
+            # Install node
+            - uses: actions/setup-node@v4
+              with:
+                node-version: latest
+            - run: node --version
+              
+            # Install the latest version of Terraform CLI
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+              with:
+                terraform_wrapper: false
+              
+            # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+            - name: Terraform Init
+              id: init
+              run: terraform init
+              working-directory: ${{ matrix.path }}
+              
+            - name: Terraform Fmt
+              id: fmt
+              run: terraform fmt -check
+              working-directory: ${{ matrix.path }}
+              
+            - name: Terraform Validate
+              id: validate
+              run: terraform validate -no-color
+              working-directory: ${{ matrix.path }}
+              
+            # Generates an execution plan for Terraform
+            - name: Terraform Plan
+              id: plan
+              run: terraform plan -input=false -lock=false -out "${{ runner.temp }}/${{ matrix.path }}/terraform.plan"
+              continue-on-error: false
+              working-directory: ${{ matrix.path }}
+            - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
+              working-directory: ${{ matrix.path }}
+            # generate json output
+            - run: terraform show -json "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
+              working-directory: ${{ matrix.path }}
+
+            - uses: aep-edge-microsoft/install-gh-cli-action@main
+              with:
+                # tell the action the plan outputs
+                terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
+                terraform-json: ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                remove-stale-reports: true
+            - name: Update Pull Request
+              uses: actions/github-script@v7
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                  const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+                  #### Terraform Initialization 🤖\`${{ steps.init.outcome }}\`
+                  #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+                  #### Terraform Plan 🤖\`${{ steps.plan.outcome }}\`
+              
+                  *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+              
+                  github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: output
+                  })
+            - name: Terraform Plan Status
+              if: steps.plan.outcome == 'failure'
+              run: exit 1
+              
