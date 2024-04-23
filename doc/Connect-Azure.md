@@ -22,6 +22,10 @@ Select `Environment` as entity type and input `terraform` to `Based on selection
 
 <img src="img/CreateCredentials.png" alt="CreateCredential" width="800"/>
 
+Repeat above steps to create another federation crendential and Select `Pull Request` as entity type
+
+<img src="img/Terraform_plan_permission.png"  alt="CreatePlanCredential" width="800"/>
+
 Add a **secret** into the service principal, then, save it to `servicePrincipalSecret`. We will need it in your IaC repository.
 
 <img src="img/AddSecretes.png" alt="AddSecretes" width="800"/>
