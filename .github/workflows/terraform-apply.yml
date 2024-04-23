@@ -1,0 +1,41 @@
+name: infra deploy
+
+on:
+  workflow_call:
+    inputs:
+      sites:
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+    provide_paths:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Set matrix 
+              id: set-matrix
+              run: |
+                echo "sites=['dev, dev/sample, dev/test','qa, qa/test2','prod']">>$GITHUB_OUTPUT
+        outputs:
+            sites: ${{ steps.set-matrix.outputs.site }}
+            stage: ${{ steps.set-matrix.outputs.stage }}
+    stage:
+      needs: provide_paths
+      name: ${{ needs.provide_paths.outputs.stage}}
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "running ${{ needs.provide_paths.outputs.stage}} stage"
+    terraform_apply_for_stages:
+      runs-on: ubuntu-latest
+      needs: [stage, provide_paths]
+      strategy:
+          matrix:
+            sites: ${{ fromJson(needs.provide_paths.outputs.sites) }}
+      steps:
+        - name: Terraform Apply
+          uses: ./.github/workflows/site-test.yml
+          with:
+            working-directory: ${{ matrix.sites }}
