@@ -79,6 +79,7 @@ jobs:
                           fi
                           group=$(echo "$d" | sed 's/\///g' | sed 's/ /_/g')
                           array+=("$stage/$group")
+                          break
                       done
                       popd > /dev/null
                   done
