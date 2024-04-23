@@ -162,7 +162,7 @@ jobs:
             - run: terraform show -json "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
               working-directory: ${{ matrix.path }}
 
-            - uses: aep-edge-microsoft/install-gh-cli-action@main
+            - uses: ahmadnassri/action-terraform-report@v3
               with:
                 # tell the action the plan outputs
                 terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
