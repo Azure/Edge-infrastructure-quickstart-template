@@ -90,9 +90,11 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Scenario 1: Create a resource through the Terraform modules defined in this repository
 
-Go to `dev\sample\main.tf` and select the resource by uncommenting the code blocks. After you commit the change and merge it to `main` branch, the deployment pipeline will be executed.
+1. Go to `dev\sample\main.tf` and select the resource by uncommenting the code blocks. After you commit the change and merge it to `main` branch, the deployment pipeline will be executed.
 
-## Scenario 2: Scale to more sites
+2. Disable the pipeline [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
+
+## Scenario 2: Scale to more sites manually
 
 ### Option 1: If you are using resource group to manage your resources
 
@@ -104,7 +106,9 @@ Go to `dev\sample\main.tf` and select the resource by uncommenting the code bloc
 
 Reference to [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md).
 
-## Scenario 3: Manage updates
+## Scenario 3: Scale to more sites with our automations (Coming soon)
+
+## Scenario 4: Manage updates
 
 Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
 
@@ -115,7 +119,6 @@ Following tutorials help you to turn on opt-in features:
 ## Advanced topics
 
 - [Customize Stages](./doc/Customize-Stages.md)
-- [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
 
