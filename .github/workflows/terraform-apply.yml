@@ -15,10 +15,18 @@ jobs:
     provide_paths:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
             - name: Set matrix 
               id: set-matrix
               run: |
-                echo "sites=['dev, dev/sample, dev/test','qa, qa/test2','prod']">>$GITHUB_OUTPUT
+                IFS=', ' read -r -a array <<< ${{ inputs.sites }}
+                stage=${array[0]}
+                sites=("${array[@]:1}")
+                echo "stage=$stage" >> $GITHUB_OUTPUT
+                echo "sites=${sites[@]}" >> $GITHUB_OUTPUT
         outputs:
             sites: ${{ steps.set-matrix.outputs.site }}
             stage: ${{ steps.set-matrix.outputs.stage }}
