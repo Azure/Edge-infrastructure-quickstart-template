@@ -114,7 +114,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
     module.serverRoleBindings,
     azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
-  # timeouts {}
+  timeouts {}
 
   lifecycle {
     ignore_changes = [
@@ -205,7 +205,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
-  # timeouts {}
+  timeouts {}
   // ignore the deployment mode change after the first deployment
   lifecycle {
     ignore_changes = [

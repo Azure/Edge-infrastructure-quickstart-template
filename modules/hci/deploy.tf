@@ -4,11 +4,11 @@ resource "azapi_update_resource" "deploymentsetting" {
   name       = "default"
   parent_id  = azapi_resource.cluster.id
   depends_on = [azapi_resource.validatedeploymentsetting, azapi_resource.validatedeploymentsetting_seperate]
-  # timeouts {
-  #   create = "24h"
-  #   update = "24h"
-  #   delete = "60m"
-  # }
+  timeouts {
+    create = "24h"
+    update = "24h"
+    delete = "60m"
+  }
   body = {
     properties = {
       deploymentMode = "Deploy"
