@@ -36,7 +36,7 @@ locals {
       "Compute",
       "Storage"
     ],
-    adapter                            = var.managementAdapters,
+    adapter                            = flatten(var.managementAdapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
@@ -58,7 +58,7 @@ locals {
       "Management",
       "Compute"
     ],
-    adapter                            = var.managementAdapters
+    adapter                            = flatten(var.managementAdapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
     overrideAdapterProperty            = false,
@@ -115,11 +115,14 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
   timeouts {}
-  // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.deploymentMode
+    ]
+  }
+
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = var.isExported ? "Deploy" : "Validate"
@@ -167,13 +170,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.convergedIntents
-                storageNetworks               = var.storageNetworks
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath
@@ -187,7 +190,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
         ]
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "validatedeploymentsetting_seperate" {
@@ -204,10 +207,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   ]
   timeouts {}
   // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+  lifecycle {
+    ignore_changes = [
+      body.properties.deploymentMode
+    ]
+  }
+
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy
@@ -255,13 +261,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.seperateIntents
-                storageNetworks               = var.storageNetworks
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath
@@ -274,5 +280,5 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
         ]
       }
     }
-  })
+  }
 }

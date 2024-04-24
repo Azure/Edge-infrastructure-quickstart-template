@@ -4,17 +4,22 @@ resource "azapi_resource" "cluster" {
   name      = var.clusterName
   depends_on = [ azurerm_role_assignment.ServicePrincipalRoleAssign ]
 
-  body = jsonencode({
-    identity = {
-      type = "SystemAssigned"
-    }
-    location   = var.resourceGroup.location
+  body = {
     properties = {}
-  })
+  }
 
-  ignore_body_changes = [
-    "properties"
-  ]
+  lifecycle {
+    ignore_changes = [
+      body.properties,
+      identity[0]
+    ]
+  }
+  identity {
+    type = "SystemAssigned"
+  }
+  
+  location = var.resourceGroup.location
+  
   timeouts {}
 }
 

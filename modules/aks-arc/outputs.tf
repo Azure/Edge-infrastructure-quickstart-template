@@ -1,5 +1,5 @@
 output "rsaPrivateKey" {
-  value     = var.generateSshKey ? tls_private_key.rsaKey[0].private_key_pem : ""
+  value     = var.sshPublicKey == null ? tls_private_key.rsaKey[0].private_key_pem : ""
   sensitive = true
 }
 

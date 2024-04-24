@@ -6,12 +6,11 @@ resource "azapi_update_resource" "deploymentsetting" {
   depends_on = [azapi_resource.validatedeploymentsetting, azapi_resource.validatedeploymentsetting_seperate]
   timeouts {
     create = "24h"
-    update = "24h"
     delete = "60m"
   }
-  body = jsonencode({
+  body = {
     properties = {
       deploymentMode = "Deploy"
     }
-  })
+  }
 }
