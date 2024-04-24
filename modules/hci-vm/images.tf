@@ -5,7 +5,6 @@ resource "azapi_resource" "winServerImage" {
   location  = var.location
   timeouts {
     create = "24h"
-    update = "24h"
     delete = "60m"
   }
   lifecycle {
