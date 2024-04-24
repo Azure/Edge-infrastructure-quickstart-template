@@ -1,7 +1,7 @@
 
 # Enale Arc Site Manager to manage your resources with physical location
 
-Go to `dev/sample/main.tf` and uncomment "Region Site manager parameters". In Arc Site Manager, only country information is required, if you would like to define any optional parameters. Feel free to add them into the module block.
+Go to `dev/sample/main.tf` and uncomment "Region Site manager parameters". In Arc Site Manager, only country information is required, feel free to remove any other optional parameters you don't need.
 
 ```
 
