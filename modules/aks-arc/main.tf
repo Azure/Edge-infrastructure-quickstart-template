@@ -20,8 +20,6 @@ resource "azapi_resource" "connectedCluster" {
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
       azureHybridBenefit        = null
-      distribution              = null
-      infrastructure            = null
       privateLinkState          = null
       provisioningState         = null
     }
