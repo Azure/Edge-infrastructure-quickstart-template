@@ -6,11 +6,6 @@ variable "servers" {
   }))
 }
 
-variable "deploymentUser" {
-  type        = string
-  description = "The username for deployment user."
-}
-
 variable "startingAddress" {
   description = "The starting IP address of the IP address range."
   type        = string
