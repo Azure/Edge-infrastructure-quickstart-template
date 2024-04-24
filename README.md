@@ -6,7 +6,8 @@ This repository offers a simple solution with static infrastructure templates to
 
 By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations.
 
-This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repostiroy as a starting point to explore).  
+> [!NOTE]
+> This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repostiroy as a starting point to explore).  
 
 <details>
 
