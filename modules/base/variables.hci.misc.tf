@@ -37,3 +37,4 @@ variable "servicePrincipalSecret" {
 # variable "siteId"         "ref/main/siteId"
 # variable "siteName"       "ref/main/siteName"
 # variable "subscriptionId" "ref/main/subscriptionId"
+# variable "deploymentUser" "ref/naming/deploymentUserName"
