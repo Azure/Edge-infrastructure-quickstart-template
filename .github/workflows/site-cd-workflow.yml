@@ -80,7 +80,7 @@ jobs:
       # Telemetry: Plan Successful
       - name: "Telemetry: Plan Successful"
         if: success()
-        uses: duzitong/IaC-Telemetry@main
+        uses: Azure/IaC-Telemetry@main
         with:
           event-name: "plan-success"
           directory: ${{ inputs.working-directory }}
@@ -88,7 +88,7 @@ jobs:
       # Telemetry: Plan Failed
       - name: "Telemetry: Plan Failed"
         if: failure()
-        uses: duzitong/IaC-Telemetry@main
+        uses: Azure/IaC-Telemetry@main
         with:
           event-name: "plan-failure"
           directory: ${{ inputs.working-directory }}
@@ -102,7 +102,7 @@ jobs:
       # Telemetry: Apply Successful
       - name: "Telemetry: Apply Successful"
         if: success()
-        uses: duzitong/IaC-Telemetry@main
+        uses: Azure/IaC-Telemetry@main
         with:
           event-name: "apply-success"
           directory: ${{ inputs.working-directory }}
@@ -110,7 +110,7 @@ jobs:
       # Telemetry: Apply Failed
       - name: "Telemetry: Apply Failed"
         if: failure()
-        uses: duzitong/IaC-Telemetry@main
+        uses: Azure/IaC-Telemetry@main
         with:
           event-name: "apply-failure"
           directory: ${{ inputs.working-directory }}
