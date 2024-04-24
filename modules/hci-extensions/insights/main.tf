@@ -68,7 +68,7 @@ resource "azapi_resource" "monitor_agent" {
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings/Extensions@2023-08-01"
   parent_id = var.arcSettingId
   name      = "AzureMonitorWindowsAgent"
-  payload = {
+  body = {
     properties = {
       extensionParameters = {
         autoUpgradeMinorVersion = false

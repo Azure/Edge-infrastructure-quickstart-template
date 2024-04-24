@@ -118,11 +118,11 @@ resource "azapi_resource" "validatedeploymentsetting" {
 
   lifecycle {
     ignore_changes = [
-      payload.properties.deploymentMode
+      body.properties.deploymentMode
     ]
   }
 
-  payload = {
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = var.isExported ? "Deploy" : "Validate"
@@ -209,11 +209,11 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
   // ignore the deployment mode change after the first deployment
   lifecycle {
     ignore_changes = [
-      payload.properties.deploymentMode
+      body.properties.deploymentMode
     ]
   }
 
-  payload = {
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy

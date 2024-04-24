@@ -10,10 +10,10 @@ resource "azapi_resource" "winServerImage" {
   # }
   lifecycle {
     ignore_changes = [
-      payload.properties.version.properties.storageProfile.osDiskImage
+      body.properties.version.properties.storageProfile.osDiskImage
     ]
   }
-  payload = {
+  body = {
     properties = {
       osType           = "Windows"
       hyperVGeneration = "V2"

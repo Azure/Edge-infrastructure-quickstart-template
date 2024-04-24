@@ -9,7 +9,7 @@ resource "azapi_update_resource" "deploymentsetting" {
   #   update = "24h"
   #   delete = "60m"
   # }
-  payload = {
+  body = {
     properties = {
       deploymentMode = "Deploy"
     }

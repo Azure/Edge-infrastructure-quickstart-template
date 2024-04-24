@@ -4,13 +4,13 @@ resource "azapi_resource" "cluster" {
   name      = var.clusterName
   depends_on = [ azurerm_role_assignment.ServicePrincipalRoleAssign ]
 
-  payload = {
+  body = {
     properties = {}
   }
 
   lifecycle {
     ignore_changes = [
-      payload.properties,
+      body.properties,
       identity[0]
     ]
   }

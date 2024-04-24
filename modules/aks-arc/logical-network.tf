@@ -44,10 +44,10 @@ resource "azapi_resource" "logicalNetwork" {
       error_message = "When not using existing logical network, startingAddress, endingAddress, defaultGateway, dnsServers, addressPrefix are required"
     }
     ignore_changes = [
-      payload.properties.subnets[0].properties.ipPools[0].info,
+      body.properties.subnets[0].properties.ipPools[0].info,
     ]
   }
-  payload = {
+  body = {
     extendedLocation = {
       name = var.customLocationId
       type = "CustomLocation"

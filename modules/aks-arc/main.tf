@@ -10,7 +10,7 @@ resource "azapi_resource" "connectedCluster" {
   name      = var.aksArcName
   parent_id = var.resourceGroup.id
 
-  payload = {
+  body = {
     kind = "ProvisionedCluster"
     properties = {
       aadProfile = {
@@ -36,11 +36,11 @@ resource "azapi_resource" "connectedCluster" {
   lifecycle {
     ignore_changes = [
       identity[0],
-      payload.properties.azureHybridBenefit,
-      payload.properties.distribution,
-      payload.properties.infrastructure,
-      payload.properties.privateLinkState,
-      payload.properties.provisioningState,
+      body.properties.azureHybridBenefit,
+      body.properties.distribution,
+      body.properties.infrastructure,
+      body.properties.privateLinkState,
+      body.properties.provisioningState,
     ]
   }
 
@@ -57,7 +57,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
   depends_on = [azapi_resource.connectedCluster]
   parent_id  = azapi_resource.connectedCluster.id
   name       = "default"
-  payload = {
+  body = {
     extendedLocation = {
       name = var.customLocationId
       type = "CustomLocation"
@@ -110,10 +110,10 @@ resource "azapi_resource" "provisionedClusterInstance" {
 
   lifecycle {
     ignore_changes = [
-      payload.properties.autoScalerProfile,
-      payload.properties.networkProfile.podCidr,
-      payload.properties.provisioningStateTransitionTime,
-      payload.properties.provisioningStateUpdatedTime,
+      body.properties.autoScalerProfile,
+      body.properties.networkProfile.podCidr,
+      body.properties.provisioningStateTransitionTime,
+      body.properties.provisioningStateUpdatedTime,
     ]
   }
   # timeouts {}
