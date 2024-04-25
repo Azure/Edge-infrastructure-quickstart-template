@@ -165,6 +165,11 @@ jobs:
             # generate json output
             - run: terraform show -json "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
               working-directory: ${{ matrix.path }}
+            - name: Upload the plan json
+              uses: actions/upload-artifact@v3
+              with:
+                name: paln.json
+                path: "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
 
             - uses: ahmadnassri/action-terraform-report@v3
               with:
