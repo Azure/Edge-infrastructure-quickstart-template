@@ -7,7 +7,7 @@ This repository offers a simple solution with static infrastructure templates to
 By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations.
 
 > [!NOTE]
-> This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repostiroy as a starting point to explore).  
+> This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repository as a starting point to explore).  
 
 <details>
 
@@ -93,15 +93,13 @@ This repository implements AD preparation and Arc connection. If you want to tak
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
-## Scenario 1: Scale to more sites manually
+## Scale more sites
 
 1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
 
-## Scenario 2: Scale to more sites with our automations (Coming soon)
-
-## Scenario 3: Enable Arc extensions for all sites
+## Enable Arc extensions for all sites
 
 Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
 
@@ -109,6 +107,11 @@ Following tutorials help you to turn on opt-in features:
 
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
 - [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
+
+## Customize the base module
+The base module in this repository creates one resource group containing 1 HCI cluster, 1 AKS Arc cluster and optional monitoring extensions, site managers.
+
+If you want to customize the base module, E.g., add more AKS clusters, you can follow [Customize-Base-Module](./doc/Customize-Base-Module.md).
 
 ## Advanced topics
 
