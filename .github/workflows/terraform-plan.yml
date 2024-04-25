@@ -189,7 +189,7 @@ jobs:
                 # tell the action the plan outputs
                 terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
                 terraform-json: ${{ runner.temp }}/${{ matrix.path }}/terraform.json
-                remove-stale-reports: true
+                remove-stale-reports: false
               if: steps.plan.outcome == 'success'
 
             - name: Update Pull Request
