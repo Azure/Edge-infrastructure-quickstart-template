@@ -162,14 +162,21 @@ jobs:
               working-directory: ${{ matrix.path }}
             - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
               working-directory: ${{ matrix.path }}
+              
             # generate json output
-            - run: terraform show -json "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
+            - run: |
+                # this is a known issue for ahmadnassri/action-terraform-report when plan result is no change
+                terraform show -json ${{ runner.temp }}/${{ matrix.path }}/terraform.plan > ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json
+                # check if the .resource_changes is null in the tf.plan file and if it is,
+                # add an empty array to the json file else don't do anything.
+                  if [ "$(jq '.resource_changes' ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json)" == "null" ]; then
+                  echo "resource_changes is null"
+                  jq --argjson to_add '{"resource_changes":[]}' '. * $to_add' ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json > ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                else
+                  echo "resource_changes is not null"
+                  cp ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                fi  
               working-directory: ${{ matrix.path }}
-            - name: Upload the plan json
-              uses: actions/upload-artifact@v3
-              with:
-                name: paln.json
-                path: "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
 
             - uses: ahmadnassri/action-terraform-report@v3
               with:
