@@ -151,7 +151,9 @@ jobs:
               id: validate
               run: terraform validate -no-color
               working-directory: ${{ matrix.path }}
-              
+            
+            - run: mkdir -p "${{ runner.temp }}/${{ matrix.path }}"
+
             # Generates an execution plan for Terraform
             - name: Terraform Plan
               id: plan
