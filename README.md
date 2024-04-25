@@ -99,13 +99,13 @@ This repository will help you set up the scaling configuration code quickly and 
 
 ### User workflow diagram
 
-<img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction" width="1200"/>
+<img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction"/>
 
 ### Option 1: Set up the scaling configurations with the static templates
 
 This option will create one resource group containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extenion and Arc site manager for each site.
 
-If you are ready to scale the above settings to the multiple sites, please go to [Add New Sites](./doc/Add-New-Sites-with-static.md).
+If you are ready to scale the above settings to the multiple sites, please go to [Add New Sites with the static templates](./doc/Add-New-Sites-with-static.md).
 If you would like to change the global parameters for all sites in the future. Go to [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 
 ### Option 2: Set up the scaling configurations with the customized templates (Private Preview)

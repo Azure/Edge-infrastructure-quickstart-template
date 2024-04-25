@@ -1,4 +1,4 @@
-# Add New Sites with static templates
+# Add New Sites with the static templates
 
 ## Step 1: Confirm and update the global configurations
 
