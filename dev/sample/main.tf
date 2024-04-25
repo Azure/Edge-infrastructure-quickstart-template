@@ -1,7 +1,7 @@
 module "base" {
   source          = "../../modules/base"
   location        = "eastus"
-  siteId          = "<siteId>"
+  siteId          = "siteId"
   domainFqdn      = "<domainFqdn>"
   startingAddress = "<startingAddress>"
   endingAddress   = "<endingAddress>"
