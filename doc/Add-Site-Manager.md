@@ -1,12 +1,10 @@
-# Add Site Manager
-## Add regional status view
-Go to [https://aka.ms/site](https://aka.ms/site). Click `Create site` button. Select subscription level and input the information for this subscription. For example, if the subscription contains all sites in the united states, you may create a site as follows.
-![Subscription Site](./img/subscriptionSite.png)
 
-## Add site status view
-You may add your site information in the `main.tf` in the site folder. Country information is required. Other fields are optional. If you don't want to specify those details, you may remove that line.
+# Enale Arc Site Manager to manage your resources with physical location
+
+Go to `dev/sample/main.tf` and uncomment "Region Site manager parameters". In Arc Site Manager, only country information is required, feel free to remove any other optional parameters you don't need.
 
 ```
+
 module "base" {
   ...
 
@@ -25,7 +23,10 @@ module "base" {
   phone           = "<phone>"
   phoneExtension  = "<phoneExtension>"
 }
+
 ```
 
-After this change is applied, you can go to [https://aka.ms/site](https://aka.ms/site) to view your site health status.
-![Site view](./img/siteView.png)
+Then, you can submit the change and deploy through GitHub actions. After the deployment is finished, you can go to [https://aka.ms/site](https://aka.ms/site) to view your site health status. All the other resources created under the same resource group will be available in the new site.
+
+> [!NOTE]
+> We only support enabling Arc Site Manager with resource group scope in this quick-start repository.

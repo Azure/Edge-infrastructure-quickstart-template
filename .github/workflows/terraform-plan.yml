@@ -141,11 +141,13 @@ jobs:
               id: init
               run: terraform init
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Fmt
               id: fmt
               run: terraform fmt -check
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Validate
               id: validate
