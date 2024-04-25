@@ -7,3 +7,4 @@ provider "azurerm" {
 provider "azapi" {
   subscription_id = var.subscriptionId
 }
+# change
