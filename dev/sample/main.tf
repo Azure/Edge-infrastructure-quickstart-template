@@ -1,6 +1,6 @@
 module "base" {
   source          = "../../modules/base"
-  location        = "useast"
+  location        = "eastus"
   siteId          = "<siteId>"
   domainFqdn      = "<domainFqdn>"
   startingAddress = "<startingAddress>"
