@@ -95,9 +95,24 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Scale more sites
 
-1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
-2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
-3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
+This repository will help you set up the scaling configuration code quickly and get ready for scaling the fleet. You have the two options: setting up the scaling configurations by yourself or you can use our automation pipeline to accelerate the repository set up along with custom settings. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
+
+### User workflow diagram
+
+<img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction" width="1200"/>
+
+### Option 1: Set up the scaling configurations with the static templates
+
+This option will create one resource group containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extenion and Arc site manager for each site.
+
+If you are ready to scale the above settings to the multiple sites, please go to [Add New Sites](./doc/Add-New-Sites-with-static.md).
+If you would like to change the global parameters for all sites in the future. Go to [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
+
+### Option 2: Set up the scaling configurations with the customized templates (Private Preview)
+
+This feature is currently in Private Preview. Please contact arcIaCSupport@microsoft.com to signup for Private Preview and get the access. We will send you two SAS tokens to download the Automation binaries.
+
+This option will customize the base module for scaling settings, E.g., add more AKS clusters, customize your HCI cluster settings automatically, please go to [Add-New-Sites-with-automation](./doc/Add-New-Sites-with-automation.md) for the details.
 
 ## Enable Arc extensions for all sites
 
@@ -108,16 +123,15 @@ Following tutorials help you to turn on opt-in features:
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
 - [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
 
-## Customize the base module
-The base module in this repository creates one resource group containing 1 HCI cluster, 1 AKS Arc cluster and optional monitoring extensions, site managers.
-
-If you want to customize the base module, E.g., add more AKS clusters, you can follow [Customize-Base-Module](./doc/Customize-Base-Module.md).
-
 ## Advanced topics
 
 - [Customize Stages](./doc/Customize-Stages.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
+
+## Ask for support
+
+Contact arcIaCSupport@microsoft.com for any issue or support
 
 ## License  
   
