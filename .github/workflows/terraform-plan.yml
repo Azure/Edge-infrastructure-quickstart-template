@@ -141,19 +141,16 @@ jobs:
               id: init
               run: terraform init
               working-directory: ${{ matrix.path }}
-              continue-on-error: true
               
             - name: Terraform Fmt
               id: fmt
               run: terraform fmt -check
               working-directory: ${{ matrix.path }}
-              continue-on-error: true
               
             - name: Terraform Validate
               id: validate
               run: terraform validate -no-color
               working-directory: ${{ matrix.path }}
-              continue-on-error: true
             
             - run: mkdir -p "${{ runner.temp }}/${{ matrix.path }}"
 
@@ -161,12 +158,10 @@ jobs:
             - name: Terraform Plan
               id: plan
               run: terraform plan -input=false -lock=false -out "${{ runner.temp }}/${{ matrix.path }}/terraform.plan"
-              continue-on-error: true
               working-directory: ${{ matrix.path }}
 
             - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
               working-directory: ${{ matrix.path }}
-              if: steps.plan.outcome == 'success'
               
             # generate json output
             - run: |
@@ -189,8 +184,8 @@ jobs:
               with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
-                  const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-                  #### Terraform Initialization 🤖\`${{ steps.init.outcome }}\`
+                  const output = `#### Terraform Initialization 🤖\`${{ steps.init.outcome }}\`
+                  #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
                   #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
                   #### Terraform Plan 🤖\`${{ steps.plan.outcome }}\`
               
@@ -202,7 +197,8 @@ jobs:
                     repo: context.repo.repo,
                     body: output
                   })
-                  
+              if: always()
+
             - uses: ahmadnassri/action-terraform-report@v3
               with:
                 # tell the action the plan outputs
