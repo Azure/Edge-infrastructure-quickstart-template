@@ -95,7 +95,7 @@ module "hci" {
 locals {
   serverNames = [for server in var.servers : server.name]
 }
-
+// change
 module "extension" {
   source                     = "../hci-extensions"
   depends_on                 = [module.hci]
