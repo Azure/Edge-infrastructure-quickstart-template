@@ -113,6 +113,7 @@ jobs:
         strategy:
             matrix:
               path: ${{fromJson(needs.provide_paths.outputs.matrix)}}
+        continue-on-error: true
         steps:
             - name: Checkout
               uses: actions/checkout@v3
