@@ -4,7 +4,10 @@
 
 This repository offers a simple solution with static infrastructure templates to set up your multiple edge locations, designed for ease of use. Scale effortlessly to multiple sites with a comprehensive stage-by-stage management pipeline.
 
-By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations
+By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations.
+
+> [!NOTE]
+> This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repostiroy as a starting point to explore).  
 
 <details>
 
@@ -23,6 +26,7 @@ By using this template, you can get 1) a scalable and extendible repository stru
 ├───.github
 │   └───workflows
 │           site-cd-workflow.yml        // Set up CD pipeline
+|           terraform-plan.yml
 │
 ├───dev                                 // The first stage to deploy
 │   └───sample
@@ -43,6 +47,7 @@ By using this template, you can get 1) a scalable and extendible repository stru
 │   ├───hci-provisioners                // Module to connect servers to Arc
 │   │───aks-arc                         // Module to manage AKS Arc clusters
 │   └───hci-vm                          // Module to manage HCI VMs
+│   └───site-manager                    // Module to manage site-manager
 │
 ├───prod                                // prod stage sites are deployed after qa stage
 │   │
@@ -70,7 +75,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 </details>
 
-## Supported edge resources** (By March 2024)
+## Supported edge resources**
 
 - [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
 - [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
@@ -88,26 +93,26 @@ This repository implements AD preparation and Arc connection. If you want to tak
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
-## Scale to more sites
+## Scenario 1: Scale to more sites manually
 
 1. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
 2. Then, you can add values for parameters that are common across all sites. You can change the global parameters in one line for all sites in future. [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 3. Now, you are ready to [Add New Sites](./doc/Add-New-Sites.md).
-4. (Optional) you may reference [Add Site Manager](./doc/Add-Site-Manager.md) to view site overview from Azure portal by [https://aka.ms/site](https://aka.ms/site).
 
-## Manage updates
+## Scenario 2: Scale to more sites with our automations (Coming soon)
+
+## Scenario 3: Enable Arc extensions for all sites
 
 Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
 
 Following tutorials help you to turn on opt-in features:
 
 - [Add HCI Insights](./doc/Add-HCI-Insights.md)
-- [Add Site Manager](./doc/Add-Site-Manager.md)
+- [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
 
 ## Advanced topics
 
 - [Customize Stages](./doc/Customize-Stages.md)
-- [Manual Apply without GitHub Action](./doc/Manual-Apply.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
 
