@@ -113,7 +113,6 @@ jobs:
         strategy:
             matrix:
               path: ${{fromJson(needs.provide_paths.outputs.matrix)}}
-        continue-on-error: true
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -142,16 +141,19 @@ jobs:
               id: init
               run: terraform init
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Fmt
               id: fmt
               run: terraform fmt -check
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Validate
               id: validate
               run: terraform validate -no-color
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
             
             - run: mkdir -p "${{ runner.temp }}/${{ matrix.path }}"
 
@@ -159,10 +161,12 @@ jobs:
             - name: Terraform Plan
               id: plan
               run: terraform plan -input=false -lock=false -out "${{ runner.temp }}/${{ matrix.path }}/terraform.plan"
-              continue-on-error: false
+              continue-on-error: true
               working-directory: ${{ matrix.path }}
+
             - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
               working-directory: ${{ matrix.path }}
+              if: steps.plan.outcome == 'success'
               
             # generate json output
             - run: |
@@ -178,6 +182,7 @@ jobs:
                   cp ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json ${{ runner.temp }}/${{ matrix.path }}/terraform.json
                 fi  
               working-directory: ${{ matrix.path }}
+              if: steps.plan.outcome == 'success'
 
             - uses: ahmadnassri/action-terraform-report@v3
               with:
@@ -185,6 +190,8 @@ jobs:
                 terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
                 terraform-json: ${{ runner.temp }}/${{ matrix.path }}/terraform.json
                 remove-stale-reports: true
+              if: steps.plan.outcome == 'success'
+
             - name: Update Pull Request
               uses: actions/github-script@v7
               with:
