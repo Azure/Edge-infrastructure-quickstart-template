@@ -45,7 +45,8 @@ jobs:
                   echo "planNeeded=false" >> $GITHUB_OUTPUT
                   exit 0
                 fi
-                if [[ $chchangedFiles == *"modules"* ]]; then
+                echo "changedFiles=$changedFiles"
+                if [[ $changedFiles == *"modules"* ]]; then
                   echo "changedFiles contain modules"
                   echo "isModuleChanged=true" >> $GITHUB_OUTPUT
                   exit 0
