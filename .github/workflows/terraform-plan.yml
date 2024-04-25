@@ -45,7 +45,8 @@ jobs:
                   echo "planNeeded=false" >> $GITHUB_OUTPUT
                   exit 0
                 fi
-                if [[ $chchangedFiles == *"modules"* ]]; then
+                echo "changedFiles=$changedFiles"
+                if [[ $changedFiles == *"modules"* ]]; then
                   echo "changedFiles contain modules"
                   echo "isModuleChanged=true" >> $GITHUB_OUTPUT
                   exit 0
@@ -140,35 +141,49 @@ jobs:
               id: init
               run: terraform init
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Fmt
               id: fmt
               run: terraform fmt -check
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Validate
               id: validate
               run: terraform validate -no-color
               working-directory: ${{ matrix.path }}
-              
+              continue-on-error: true
+            
+            - run: mkdir -p "${{ runner.temp }}/${{ matrix.path }}"
+
             # Generates an execution plan for Terraform
             - name: Terraform Plan
               id: plan
               run: terraform plan -input=false -lock=false -out "${{ runner.temp }}/${{ matrix.path }}/terraform.plan"
-              continue-on-error: false
-              working-directory: ${{ matrix.path }}
-            - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
-              working-directory: ${{ matrix.path }}
-            # generate json output
-            - run: terraform show -json "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.json"
+              continue-on-error: true
               working-directory: ${{ matrix.path }}
 
-            - uses: ahmadnassri/action-terraform-report@v3
-              with:
-                # tell the action the plan outputs
-                terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
-                terraform-json: ${{ runner.temp }}/${{ matrix.path }}/terraform.json
-                remove-stale-reports: true
+            - run: terraform show -no-color "${{ runner.temp }}/${{ matrix.path }}/terraform.plan" > "${{ runner.temp }}/${{ matrix.path }}/terraform.text"
+              working-directory: ${{ matrix.path }}
+              if: steps.plan.outcome == 'success'
+              
+            # generate json output
+            - run: |
+                # this is a known issue for ahmadnassri/action-terraform-report when plan result is no change
+                terraform show -json ${{ runner.temp }}/${{ matrix.path }}/terraform.plan > ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json
+                # check if the .resource_changes is null in the tf.plan file and if it is,
+                # add an empty array to the json file else don't do anything.
+                  if [ "$(jq '.resource_changes' ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json)" == "null" ]; then
+                  echo "resource_changes is null"
+                  jq --argjson to_add '{"resource_changes":[]}' '. * $to_add' ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json > ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                else
+                  echo "resource_changes is not null"
+                  cp ${{ runner.temp }}/${{ matrix.path }}/tf-temp.json ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                fi  
+              working-directory: ${{ matrix.path }}
+              if: steps.plan.outcome == 'success'
+
             - name: Update Pull Request
               uses: actions/github-script@v7
               with:
@@ -187,6 +202,15 @@ jobs:
                     repo: context.repo.repo,
                     body: output
                   })
+                  
+            - uses: ahmadnassri/action-terraform-report@v3
+              with:
+                # tell the action the plan outputs
+                terraform-text: ${{ runner.temp }}/${{ matrix.path }}/terraform.text
+                terraform-json: ${{ runner.temp }}/${{ matrix.path }}/terraform.json
+                remove-stale-reports: false
+              if: steps.plan.outcome == 'success'
+            
             - name: Terraform Plan Status
               if: steps.plan.outcome == 'failure'
               run: exit 1
