@@ -1,13 +1,30 @@
 # Edge Infrastructure QuickStart Template (Preview)
 
-## Introduction
+## Overview
 
-This repository offers a simple solution with static infrastructure templates to set up your multiple edge locations, designed for ease of use. Scale effortlessly to multiple sites with a comprehensive stage-by-stage management pipeline.
+This Quick-Start template is to simplify your Infrastructure as Code journey in Azure edge products life-cycle management. It provides a couple of Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a repository structure for scaling purpose and the automations to set up the infrastructure configurations.
 
-By using this template, you can get 1) a scalable and extendible repository structure following the best practice, 2) organized variables with the recommended values to boost your initial setup, and 3) a customizable CD pipeline with automations.
+### What You'll Get
 
-> [!NOTE]
-> This repository is designed for setting up IaC for a site composed of specific resources (AKS Arc, HCI23H2, Arc extensions). Setting up Terraform code for individual resource is not covered in the supported scenarios. (However, feel free to use this repository as a starting point to explore).  
+By using this template, you can get all of the followings inside a single PR under your Github account
+
+* a scalable and extendible repository structure following the DevOps best practice
+* organized variables with the recommended values to boost your initial setup
+* a customizable CD pipeline with automations.
+
+### Is This Right for You?
+
+**Yes** if you want to:
+
+* Create a site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
+* Replicate the above site's settings hundreds or thoudsands of times
+* Integrate the above settings with CI/CD pipeline using Github Actions
+* Automate all of the above scenarios
+
+**No** if you want to:
+
+* Create single AKS Arc or HCI instance using Terraform. Altough this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
+* Use any other IaC tool such as Bicep or ARM to provision your Azure resouces. We are working on our roadmap. Please stay tuned for future releases. 
 
 <details>
 
@@ -77,10 +94,10 @@ Base module contains the global variables across all sites. Each stage and each 
 
 ## Supported edge resources**
 
-- [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
-- [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
-- [Azure Kubernetes Service (AKS) enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/aks/hybrid/)
-- [Arc Site Manager](https://review.learn.microsoft.com/en-us/azure/azure-arc/site-manager/overview?branch=release-preview-site-manager)
+* [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
+* [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
+* [Azure Kubernetes Service (AKS) enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/aks/hybrid/)
+* [Arc Site Manager](https://review.learn.microsoft.com/en-us/azure/azure-arc/site-manager/overview?branch=release-preview-site-manager)
 
 ## Getting started
 
@@ -88,8 +105,8 @@ Getting started tutorials help you to configure a GitHub repository to create yo
 
 This repository implements AD preparation and Arc connection. If you want to take advantage of this you may refer:
 
-- If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
-- If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
+* If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
+* If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
