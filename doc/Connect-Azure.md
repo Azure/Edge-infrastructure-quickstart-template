@@ -91,3 +91,6 @@ Click `Microsoft.AzureStackHCI Resource Provider`. Copy its Object ID, this valu
 Run `az ad sp list --filter "appid eq '1412d89f-b8a8-4111-b4fd-e82905cbd85d'"`. Copy the value in `id` field.
 
 <img src="img/rpObj4.png" alt="rpObj4" width="800"/>
+
+---
+Next Step: [Configure Local Git](./Configure-Local-Git.md)

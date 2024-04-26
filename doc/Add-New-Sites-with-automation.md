@@ -15,9 +15,9 @@
     ```json
     [
         {
-            "resourceGroup": "/subscriptions/<your-subscription-id>/resourceGroups/<sample-resource-group>",
+            "resourceGroup": "/subscriptions/<your-subscription-id>/resourceGroups/<yourSampleResourceGroup>",
             "baseModulePath": "./modules/<name-of-the-module>",
-            "groupPath": "./dev/<sample-site>"
+            "groupPath": "./dev/<yourSiteName>"
         }
     ]
     ```
@@ -25,7 +25,7 @@
 3. Commit and push `.azure/export.json`: `git commit -m <commit message>` and `git push -u <yourFeatureBranch>`. A GitHub workflow will be triggered automatically. Create a pull request to `main`.
 4. After workflow execution, check the generated code.
    - If the workflow runs successfully, the generated code is identical to Azure resources. Please merge the branch ASAP. If there are changes happened after export, the changes will be reverted.
-   - If the workflow run fails, you can check `./dev/<sample-site>/export-diff` to see what are the changes.
+   - If the workflow run fails, you can check `./dev/<yourSiteName>/export-diff` to see what are the changes.
 
 ## Step 3: Setting up the scaling configurations through IaC automation
 
@@ -36,3 +36,9 @@
 5. Commit `git commit -m <commit message>`and then push the CSV `git push -u origin <yourFeatureBranch>` to the remote feature branch. The pre-commit hook will add new sites to the deployment workflow automatically.
 6. After pushing to the remote branch, new scaling configurations in Terraform format will be automatically generated through our automation workflow. Create a pull request to `main`.
 7. Check the workflow execution. If all jobs complete successfully, you can merge the branch to `main`.
+
+## Next Step:
+Learn more:
+- About [view your CI/CD pipeline running status](./View-pipeline.md)
+- About [troubleShoot](./TroubleShooting.md)
+- About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)

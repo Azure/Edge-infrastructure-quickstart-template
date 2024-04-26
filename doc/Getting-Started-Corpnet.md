@@ -34,3 +34,11 @@ Before you get started, here are the steps you need to perform for prerequisites
     7. Custom location of ARB named `<site>-customLocation`
     8. Two storage paths named `UserStorage1`, `UserStorage2`
 5. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
+
+## Next Step:
+Learn more:
+- About [view your CI/CD pipeline running status](./View-pipeline.md)
+- About [troubleShoot](./TroubleShooting.md)
+- About [Set up the scaling configurations with the static templates](./Add-New-Sites-with-static.md)
+- About [Set up the scaling configurations with the customized templates](./Add-New-Sites-with-automation.md)
+- About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
