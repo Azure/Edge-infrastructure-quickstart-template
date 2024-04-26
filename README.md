@@ -92,7 +92,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 </details>
 
-## Supported edge resources**
+### Supported edge resources**
 
 * [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
 * [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
@@ -101,22 +101,33 @@ Base module contains the global variables across all sites. Each stage and each 
 
 ## Getting started
 
-Getting started tutorials help you to configure a GitHub repository to create your first site.
+This repository implements AD preparation and Arc connection. Follow the instructions below to set up the rest of the components.
 
-This repository implements AD preparation and Arc connection. If you want to take advantage of this you may refer:
-
-* If your servers are exposed to Corpnet only: [Getting-Started-Corpnet](./doc/Getting-Started-Corpnet.md)
-* If your servers are exposed to Internet: [Getting-Started-Internet](./doc/Getting-Started-Internet.md)
+* [Getting-Started](./doc/Getting-Started.md)
 
 Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
 
+## Create your fist site
+
+[Create your first site](./doc/Add-first-Site)
+
 ## Scale more sites
 
-This repository will help you set up the scaling configuration code quickly and get ready for scaling the fleet. You have the two options: setting up the scaling configurations by yourself or you can use our automation pipeline to accelerate the repository set up along with custom settings. It's recommended to understand how the repository is structured so that you can have better understanding on the changes you made.
+This repository will help you set up the scaling configuration code quickly and get ready for scaling the fleet. You have the two options: setting up the scaling configurations by yourself or you can use our automation pipeline to accelerate the repository set up along with custom settings.
 
 ### User workflow diagram
 
 <img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction"/>
+
+### Prerequisites
+
+We automatically generate all the scaling configurations for you. This feature is currently in **Private Preview**. Please fill in this form to sign up for Private Preview to get the SAS tokens.
+After you get the SAS tokens, following the steps below:
+
+1. Add `EXPORT_SAS` and `SCALE_SAS` to your GitHub repo secrets correspondingly.
+2. Download the binaries to run locally
+3. Open `https://aka.ms/az-edge-module-export-linux-amd64?<EXPORT_SAS>` to download `az-edge-module-export-linux-amd64`. Rename to `az-edge-module-export` and add to PATH.
+4. Open `https://aka.ms/az-edge-site-scale-linux-amd64?<SCALE_SAS>` to download `az-edge-site-scale-linux-amd64`. Rename to `az-edge-site-scale` and add to PATH.
 
 ### Option 1: Set up the scaling configurations with the static templates
 
@@ -125,9 +136,7 @@ This option will create one resource group containing 1 HCI cluster, 1 AKS Arc c
 If you are ready to scale the above settings to the multiple sites, please go to [Add New Sites with the static templates](./doc/Add-New-Sites-with-static.md).
 If you would like to change the global parameters for all sites in the future. Go to [Edit Global Parameters](./doc/Edit-Global-Parameters.md).
 
-### Option 2: Set up the scaling configurations with the customized templates (Private Preview)
-
-This feature is currently in Private Preview. Please contact arcIaCSupport@microsoft.com to signup for Private Preview and get the access. We will send you two SAS tokens to download the Automation binaries.
+### Option 2: Set up the scaling configurations with the customized templates
 
 This option will customize the base module for scaling settings, E.g., add more AKS clusters, customize your HCI cluster settings automatically, please go to [Add-New-Sites-with-automation](./doc/Add-New-Sites-with-automation.md) for the details.
 
@@ -137,8 +146,8 @@ Any change merged into `main` branch will trigger the update pipeline. If the ch
 
 Following tutorials help you to turn on opt-in features:
 
-- [Add HCI Insights](./doc/Add-HCI-Insights.md)
-- [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
+* [Add HCI Insights](./doc/Add-HCI-Insights.md)
+* [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
 
 ## Advanced topics
 
