@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "<ResourceGroupName>"
-    storage_account_name = "<StorageAccountName>"
-    container_name       = "<StorageContainerName>"
+    resource_group_name  = "bugBashV1"
+    storage_account_name = "iactestingwen"
+    container_name       = "iactestingcontainer"
     key                  = "{{.GroupName}}.tfstate"
   }
 }
