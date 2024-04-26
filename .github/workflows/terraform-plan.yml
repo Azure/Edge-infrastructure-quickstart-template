@@ -56,7 +56,7 @@ jobs:
                 fi
                 ## get changed directories
                 echo "generate directory based on changed files"
-                directories=$(echo "$changedFiles" | xargs -n 1 dirname | sort -u)
+                directories=$(echo "$changedFiles" | xargs -n 1 dirname | sort -u | tr '\n' ' ')
                 echo "directory=$directories" >> $GITHUB_OUTPUT
             
             - name: Set matrix 
