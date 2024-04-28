@@ -128,8 +128,8 @@ Following tutorials help you to turn on opt-in features:
 - [Customize Stages](./doc/Customize-Stages.md)
 - [Disable Telemetry](./doc/Disable-Telemetry.md)
 - [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
-- [View your CI/CD pipeline running status](./View-pipeline.md)
-- [TroubleShoot](./TroubleShooting.md)
+- [View your CI/CD pipeline running status](./doc/View-pipeline.md)
+- [TroubleShoot](./doc/TroubleShooting.md)
 
 ## Ask for support
 
