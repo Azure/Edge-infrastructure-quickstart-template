@@ -13,4 +13,4 @@ Commit `.azure/backendTemplate.tf` by running `git commit` and the run `git push
 ---
 If your servers are exposed to Corpnet only, Next Step: [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
 
-If your servers are exposed to Internet: Next Step: [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
+If your servers are exposed to Internet or you already have arc connected server: Next Step: [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
