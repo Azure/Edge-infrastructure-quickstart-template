@@ -133,7 +133,7 @@ Following tutorials help you to turn on opt-in features:
 
 ## Ask for support
 
-Contact arcIaCSupport@microsoft.com for any issue or support
+[Open issue](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new) or contact arcIaCSupport@microsoft.com for any issue or support
 
 ## License  
   
