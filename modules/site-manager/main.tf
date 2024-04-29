@@ -4,7 +4,7 @@ resource "azapi_resource" "address" {
   parent_id = var.resourceGroup.id
   name      = var.siteId
   location  = var.resourceGroup.location
-  body = jsonencode({
+  body = {
     properties = {
       addressClassification = "Site"
       shippingAddress = {
@@ -27,7 +27,7 @@ resource "azapi_resource" "address" {
         phoneExtension = var.phoneExtension
       }
     }
-  })
+  }
   timeouts {}
 }
 
@@ -36,11 +36,11 @@ resource "azapi_resource" "site" {
   type      = "Microsoft.Edge/Sites@2023-07-01-preview"
   parent_id = var.resourceGroup.id
   name      = var.siteId
-  body = jsonencode({
+  body = {
     properties = {
       displayName       = var.siteId
       addressResourceId = azapi_resource.address[0].id
     }
-  })
+  }
   schema_validation_enabled = false
 }
