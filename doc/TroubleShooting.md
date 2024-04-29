@@ -6,7 +6,7 @@
 The problem is the sas token repo secret is not being set or incorrect.
 
 Solution:
-1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets correspondingly.
+1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
 
 
 # Deploy Infra workflow failure
