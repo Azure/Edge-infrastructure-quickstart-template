@@ -112,9 +112,9 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Scenario 1: Create your fist site (for Greenfiled customers)
+## Scenario 1: Create your fist site (for Greenfield customers)
 
-**Overview**: If you don't have any existing edge resources created yet, this scenario can help you quickly set up a fresh new site using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
+**Overview**: If you don't have any existing edge resources created yet, this scenario can help you quickly set up a fresh new site with edge resources and connect them with Arc using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
