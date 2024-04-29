@@ -110,9 +110,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 This repository implements AD preparation and Arc connection. Follow the instructions below to set up the rest of the components.
 
-* [Getting-Started](./doc/Getting-Started.md)
-
-Otherwise, you need to finish AD preparation and connect servers to Arc by yourself for all sites. Then, HCI and AKS provisioning can follow [Getting-Started-Self-Connect](./doc/Getting-Started-Self-Connect.md)
+**Steps**: [Getting-Started](./doc/Getting-Started.md)
 
 ## Scenario 1: Create your fist site (for Greenfiled customers)
 
@@ -128,7 +126,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Scenario 2: Scale more sites (Private Preview)
 
-This repository will help you set up the scaling configuration code quickly and get ready for scaling the fleet. You have the two options: setting up the scaling configurations by yourself or you can use our automation pipeline to accelerate the repository set up along with custom settings.
+The following guidance will streamline your setup of the scaling configuration code with Terraform and Github Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC setting.
 
 ### User workflow diagram
 
