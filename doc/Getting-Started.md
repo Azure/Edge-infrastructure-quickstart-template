@@ -23,6 +23,8 @@ Before you get started, here are the steps you need to perform for prerequisites
 
 ## Next Step
 
+[Go back to home page](../README.md)
+
 Learn more:
 
 - About [add your first site](./Add-first-Site.md)

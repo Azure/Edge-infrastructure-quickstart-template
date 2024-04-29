@@ -18,6 +18,8 @@ In the base modules, we have prefilled the global configurations' values. Please
 
 ## Next Step
 
+[Go back to home page](../README.md)
+
 Learn more:
 
 * About [view your CI/CD pipeline running status](./View-pipeline.md)

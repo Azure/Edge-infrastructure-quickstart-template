@@ -26,12 +26,12 @@
 
 ## Next Step
 
-If you want to scale more site, you can [add new sites with the static templates](./Add-New-Sites-with-static.md).
+If you want to scale more site, you can [add new sites with the static templates](./Add-New-Sites-with-static.md) or [Go back to home page](../README.md)
 
 Learn more:
 
 - About [view your CI/CD pipeline running status](./View-pipeline.md)
 - About [troubleShoot](./TroubleShooting.md)
 - About [add new sites with the static templates](./Add-New-Sites-with-static.md)
-- About [add new sites with the customized templates](./Add-New-Sites-with-automation.md)
+- About [add new sites with the custom templates](./Add-New-Sites-with-automation.md)
 - About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)

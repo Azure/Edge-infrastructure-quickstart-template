@@ -34,9 +34,13 @@
 
 6. After the workflow execution finished, you can check the files changed by the automation workflow. If all jobs complete successfully, you can merge the branch to `main`.
 <img src="./img/view_commit_for_scale.png" width="600" />
+
 ## Next Step
 
+[Go back to home page](../README.md)
+
 Learn more:
+
 - About [scale sites](./Add-New-Sites-with-static.md)
 - About [view your CI/CD pipeline running status](./View-pipeline.md)
 - About [troubleShoot](./TroubleShooting.md)
