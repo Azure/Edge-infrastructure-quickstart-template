@@ -30,4 +30,6 @@ Thumbs.db
 **/temp/*
 *.tmp
 az-edge-module-export
+az-edge-module-export.exe
 az-edge-site-scale
+az-edge-site-scale.exe

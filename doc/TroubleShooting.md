@@ -6,10 +6,7 @@
 The problem is the sas token repo secret is not being set or incorrect.
 
 Solution:
-1. Add `EXPORT_SAS` and `SCALE_SAS` to your GitHub repo secrets correspondingly.
-2. Download the binaries to run locally
-3. Open `https://aka.ms/az-edge-module-export-linux-amd64?<EXPORT_SAS>` to download `az-edge-module-export-linux-amd64`. Rename to `az-edge-module-export` and add to PATH.
-4. Open `https://aka.ms/az-edge-site-scale-linux-amd64?<SCALE_SAS>` to download `az-edge-site-scale-linux-amd64`. Rename to `az-edge-site-scale` and add to PATH.
+1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets correspondingly.
 
 
 # Deploy Infra workflow failure

@@ -124,10 +124,16 @@ This repository will help you set up the scaling configuration code quickly and 
 We automatically generate all the scaling configurations for you. This feature is currently in **Private Preview**. Please fill in this form to sign up for Private Preview to get the SAS tokens.
 After you get the SAS tokens, following the steps below:
 
-1. Add `EXPORT_SAS` and `SCALE_SAS` to your GitHub repo secrets correspondingly.
+1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
 2. Download the binaries to run locally
-3. Open `https://aka.ms/az-edge-module-export-linux-amd64?<EXPORT_SAS>` to download `az-edge-module-export-linux-amd64`. Rename to `az-edge-module-export` and add to PATH.
-4. Open `https://aka.ms/az-edge-site-scale-linux-amd64?<SCALE_SAS>` to download `az-edge-site-scale-linux-amd64`. Rename to `az-edge-site-scale` and add to PATH.
+    - Windows: Run `./private_preview.ps1 "<PRIVATE_PREVIEW_SAS>"`
+    - Linux: Run `./private_preview.sh "<PRIVATE_PREVIEW_SAS>"`
+3. Verify your downloads
+    - Run `./az-edge-module-export -v` & `az-edge-site-scale -v`.
+    ```
+    2024/04/29 10:37:54 telemetry.go:110: InstallationId: ***, SessionId: ***
+    az-edge-module-export version main(20240426.2)
+    ```
 
 ### Option 1: Set up the scaling configurations with the static templates
 

@@ -48,7 +48,7 @@ jobs:
     # Download az-edge-site-scale
     - name: Download az-edge-site-scale
       run: |
-        wget "https://aka.ms/az-edge-site-scale-linux-amd64?${{ secrets.SCALE_SAS }}" -O az-edge-site-scale
+        wget "https://aka.ms/az-edge-site-scale-linux-amd64?${{ secrets.PRIVATE_PREVIEW_SAS }}" -O az-edge-site-scale
         chmod +x az-edge-site-scale
         ./az-edge-site-scale -v
     # Run az-edge-site-scale scale
