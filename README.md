@@ -114,19 +114,19 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 ## Scenario 1: Create your fist site (for Greenfiled customers)
 
-**Overview**: If you don't have any existing edge resources set up yet, this scenario can help you quickly set uo a fresh new site using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
+**Overview**: If you don't have any existing edge resources created yet, this scenario can help you quickly set up a fresh new site using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
 **Expected outcome**:
 
 * A PR containing Terraform code set up for AKS Arc, HCI, Arc extensions under a single resource group
-* A PR containign the pre-defined CI/CD pipeline containing 3 stages: Dev, QA, Prod
+* A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
 ## Scenario 2: Scale more sites (Private Preview)
 
-The following guidance will streamline your setup of the scaling configuration code with Terraform and Github Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC setting.
+The following guidance will streamline your setup of the scaling configuration code with Terraform and Github Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC settings.
 
 ### User workflow diagram
 
@@ -156,8 +156,8 @@ After you get the SAS tokens, following the steps below:
 
 **Expected outcome**:
 
-* A PR containing Terraform code for # of sites, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring extension and Arc site manager extension.
-* A PR containing a pre-defined CI/CD pipeline containing 3 stages: Dev, QA, Prod
+* A PR with the Terraform code for # of sites, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring extension and Arc site manager extension.
+* A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
 ### Option 2: Set up the scaling configurations with the custom templates
