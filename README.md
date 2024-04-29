@@ -134,7 +134,7 @@ The following guidance will streamline your setup of the scaling configuration c
 
 ### Prerequisites
 
-This feature is currently in **Private Preview**. Before you begin, ensure you have the access to our automation tools. Please fill in this [form](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new?assignees=xwen11&labels=customers+onboarding&projects=&template=preview-sign-up-form.md&title=%5BOnboarding%5D) to sign up for Private Preview.
+This feature is currently in **Private Preview**. Before you begin, review and accept the [Terms](./doc/Infrastructure-as-Code-Automation-Use-Terms.pdf), then ensure you have the access to our automation tools. Please fill in this [form](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new?assignees=xwen11&labels=customers+onboarding&projects=&template=preview-sign-up-form.md&title=%5BOnboarding%5D) to sign up for Private Preview.
 After you get the SAS tokens, following the steps below:
 
 1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
