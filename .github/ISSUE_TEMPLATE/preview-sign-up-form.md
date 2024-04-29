@@ -1,7 +1,7 @@
 ---
 name: Preview sign up form
 about: An intake form to help customers sign up for IaC Automation preview program
-title: ''
+title: "[Onboarding]"
 labels: customers onboarding
 assignees: xwen11
 
