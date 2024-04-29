@@ -109,7 +109,7 @@ Otherwise, you need to finish AD preparation and connect servers to Arc by yours
 
 ## Create your fist site
 
-[Create your first site](./doc/Add-first-Site)
+[Create your first site](./doc/Add-first-Site.md)
 
 ## Scale more sites
 
