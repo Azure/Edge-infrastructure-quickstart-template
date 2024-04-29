@@ -21,7 +21,6 @@ Before you get started, here are the steps you need to perform for prerequisites
    1. If you have internet accessible servers, [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
    2. If you have corpnet network accessible servers, [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
 
-<<<<<<< HEAD:doc/Getting-Started-Internet.md
 ## Add your first site with customized template (private preview)
 If you already have HCI resources, you can skip the following and go to [create template based on your own resource and scale with automations (private preview)](./Add-New-Sites-with-automation.md).
 
@@ -44,10 +43,6 @@ If you already have HCI resources, you can skip the following and go to [create 
 
 If you want to scale more site, you can [add new sites with the static templates](./Add-New-Sites-with-static.md).
 ## Next Step:
-=======
-## Next Step
-
->>>>>>> 74a6b67 (Updating the readme):doc/Getting-Started.md
 Learn more:
 
 - About [add your first site](./Add-first-Site)
