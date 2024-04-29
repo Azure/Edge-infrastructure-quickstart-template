@@ -1,13 +1,19 @@
-## Add your first site with customized template (private preview)
-If you already have HCI resources, you can skip the following and go to [create template based on your own resource and scale with automations (private preview)](./Add-New-Sites-with-automation.md).
+# Add First Site
 
 ## Add your first site with static template
 
-
 1. Create a branch from `main`.
 2. (Optional) This template predefined resource names. You can change them following [Edit Resource Naming Conventions](./Naming-Conventions.md).
-3. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
-4. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
+
+   > [!NOTE]
+   > the resource group name must be same as the resource group when you connect servers to Azure Arc.
+
+3. Rename `dev/sample` to `dev/<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
+4. (Optional) Skip this step if you haven't provisioned Arc for servers yet.
+
+   If the Arc servers are already provisioned by yourself, go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
+
+5. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
     1. A resource group name `<site>-rg`
     2. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
     3. Arc servers that make up the HCI cluster
@@ -16,10 +22,12 @@ If you already have HCI resources, you can skip the following and go to [create 
     6. Arc Resource Bridge named `<site>-cl-arcbridge`
     7. Custom location of ARB named `<site>-customLocation`
     8. Two storage paths named `UserStorage1`, `UserStorage2`
-5. After the pull request is merged, new sites will be applied.
+6. After the pull request is merged, new sites will be applied.
+
+## Next Step
 
 If you want to scale more site, you can [add new sites with the static templates](./Add-New-Sites-with-static.md).
-## Next Step:
+
 Learn more:
 
 - About [view your CI/CD pipeline running status](./View-pipeline.md)
