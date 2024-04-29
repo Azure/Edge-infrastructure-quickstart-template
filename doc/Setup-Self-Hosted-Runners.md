@@ -8,4 +8,4 @@
 6. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator. **Shorten the work folder of your runner as much as possible to avoid Windows path length limit.** E.g., `C:\_r\_w`
 
 ---
-Next Step: Continue on [Getting-Started-Corpnet](./Getting-Started-Corpnet.md#add-your-first-site)
+Next Step: Continue on [Getting-Started](./Getting-Started.md#add-your-first-site)

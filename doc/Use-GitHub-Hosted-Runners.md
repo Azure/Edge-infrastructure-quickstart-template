@@ -13,4 +13,4 @@ Next step:
 
 if you already have arc connected server, continue on [Getting Started for Self Connected Servers](./Getting-Started-Self-Connect.md).
 
-else, continue on [Getting-Started-Internet](./Getting-Started-Internet.md#add-your-first-site).
+else, continue on [Getting-Started](./Getting-Started.md#add-your-first-site).

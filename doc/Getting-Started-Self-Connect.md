@@ -1,15 +1,7 @@
-# Getting Started for Internet Accessible Servers
-
+# Getting Started for Self Connected Servers
 ## Prerequisites
 
-Before you get started, here are the steps you need to perform for prerequisites:
-
-- Check deployment checklist and install AzureStack HCI OS on your servers to be deployed as AzureStack HCI clusters
-- Complete the step 2 (Download the software) & 3 (Install the OS) in this [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software).
-- **Make sure `Remote management` section is `Enabled`.**
-![Remote management](./img/remoteManagement.png)
-
-<mark>Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project.</mark>
+Finish 1-4 steps in [Azure Stack HCI, version 23H2 deployment](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-introduction). This repository is an alternative way to deploy HCI. This repository can also provision more products like AKS on HCI.
 
 ## Setup
 
@@ -17,20 +9,18 @@ Before you get started, here are the steps you need to perform for prerequisites
 2. [Connect GitHub Actions and Azure](./Connect-Azure.md)
 3. [Configure Local Git](./Configure-Local-Git.md)
 4. [Setup Terraform Backend](./Setup-Terraform-Backend.md)
-5. Set up Github Runners
-   1. If you have internet accessible servers, [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
-   2. If you have corpnet network accessible servers, [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
+5. [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
 
 ## Add your first site with customized template (private preview)
 If you already have HCI resources, you can skip the following and go to [create template based on your own resource and scale with automations (private preview)](./Add-New-Sites-with-automation.md).
 
 ## Add your first site with static template
 
-
 1. Create a branch from `main`.
-2. (Optional) This template predefined resource names. You can change them following [Edit Resource Naming Conventions](./Naming-Conventions.md).
+2. (**Important**) This template predefined resource names. You need to change them following [Edit Resource Naming Conventions](./Naming-Conventions.md). Especially the resource group name must be same as the resource group when you connect servers to Azure Arc.
 3. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
-4. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
+4. Go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
+5. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
     1. A resource group name `<site>-rg`
     2. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
     3. Arc servers that make up the HCI cluster
@@ -44,8 +34,6 @@ If you already have HCI resources, you can skip the following and go to [create 
 If you want to scale more site, you can [add new sites with the static templates](./Add-New-Sites-with-static.md).
 ## Next Step:
 Learn more:
-
-- About [add your first site](./Add-first-Site.md)
 - About [view your CI/CD pipeline running status](./View-pipeline.md)
 - About [troubleShoot](./TroubleShooting.md)
 - About [add new sites with the static templates](./Add-New-Sites-with-static.md)
