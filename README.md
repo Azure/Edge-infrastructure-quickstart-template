@@ -1,4 +1,4 @@
-# Edge Infrastructure QuickStart Template (Preview)
+# Edge Infrastructure QuickStart Template For Scaling (Preview)
 
 ## Overview
 
