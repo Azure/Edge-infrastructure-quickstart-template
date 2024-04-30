@@ -22,7 +22,7 @@ Select `Environment` as entity type and input `terraform` to `Based on selection
 
 <img src="img/CreateCredentials.png" alt="CreateCredential" width="800"/>
 
-Repeat above steps to create another federation crendential and Select `Pull Request` as entity type
+Repeat above steps to create another federation credential and Select `Pull Request` as entity type
 
 <img src="img/Terraform_plan_permission.png"  alt="CreatePlanCredential" width="800"/>
 
@@ -91,3 +91,6 @@ Click `Microsoft.AzureStackHCI Resource Provider`. Copy its Object ID, this valu
 Run `az ad sp list --filter "appid eq '1412d89f-b8a8-4111-b4fd-e82905cbd85d'"`. Copy the value in `id` field.
 
 <img src="img/rpObj4.png" alt="rpObj4" width="800"/>
+
+---
+Next Step: [Configure Local Git](./Configure-Local-Git.md)

@@ -1,0 +1,69 @@
+name: Scale Edge Sites
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+    paths:
+      - '.azure/scale.csv'
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  scale:
+    environment: terraform
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    # checkout to input branch when input branch is not empty
+    - name: Checkout to input branch
+      if: ${{ inputs.branch != '' }}
+      run: |
+        git fetch origin ${{ inputs.branch }}
+        git checkout ${{ inputs.branch }}
+    # Install node
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+    - run: node --version
+    # az login
+    - name: Log in to Azure using OIDC
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    # check first 18 characters of az account user name
+    - name: Check az account
+      run: az account show --query user.name --output tsv | cut -c 1-18
+    # Download az-edge-site-scale
+    - name: Download az-edge-site-scale
+      run: |
+        wget "https://aka.ms/az-edge-site-scale-linux-amd64?${{ secrets.PRIVATE_PREVIEW_SAS }}" -O az-edge-site-scale
+        chmod +x az-edge-site-scale
+        ./az-edge-site-scale -v
+    # Run az-edge-site-scale scale
+    - name: Run az-edge-site-scale scale
+      run: |
+        ./az-edge-site-scale scale -c ./.azure/scale.csv
+        rm ./az-edge-site-scale
+        rm ./.azure/scale.csv
+    # Commit and push the changes
+    - name: Commit and push the changes
+      if: always()
+      run: |
+        git config --global user.email "scaler@iac.microsoft.com"
+        git config --global user.name "IaC Scaler"
+        git add .
+        git commit -m "Scale more sites according to .azure/scale.csv"
+        git push
+    
