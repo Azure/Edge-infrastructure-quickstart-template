@@ -2,11 +2,11 @@
 
 ## Overview
 
-This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products througout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup the infrastructure configurations.
+This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup the infrastructure configurations.
 
 ### What You'll Get
 
-By using this template, you can get all of the followings inside a single PR under your Github account
+By using this template, you can get all of the followings inside a single PR under your GitHub account
 
 * a scalable and extendible repository structure following the DevOps best practice
 * organized variables with the recommended values to boost your initial setup
@@ -17,14 +17,14 @@ By using this template, you can get all of the followings inside a single PR und
 **Yes** if you want to:
 
 * Create a site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
-* Replicate the above site's settings hundreds or thoudsands of times
-* Integrate the above settings with CI/CD pipeline using Github Actions
+* Replicate the above site's settings hundreds or thousands of times
+* Integrate the above settings with CI/CD pipeline using GitHub Actions
 * Automate all of the above scenarios
 
 **No** if you want to:
 
-* Create single AKS Arc or HCI instance using Terraform. Altough this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
-* Use any other IaC tool such as Bicep or ARM to provision your Azure resouces. We are working on our roadmap. Please stay tuned for future releases. 
+* Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
+* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases. 
 
 <details>
 
@@ -96,7 +96,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 <details>
 
-<summary><b> Supported Azureedge resource types</b></summary>
+<summary><b> Supported Azure edge resource types</b></summary>
 
 * [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
 * [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
@@ -112,7 +112,7 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Scenario 1: Create your fist site (for Greenfield customers)
+## Scenario 1: Create your first site (for Greenfield customers)
 
 **Overview**: If you don't have any existing edge resources created yet, this scenario can help you quickly set up a fresh new site with edge resources and connect them with Arc using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
 
@@ -126,7 +126,7 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 ## Scenario 2: Scale more sites (Private Preview)
 
-The following guidance will streamline your setup of the scaling configuration code with Terraform and Github Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC settings.
+The following guidance will streamline your setup of the scaling configuration code with Terraform and GitHub Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC settings.
 
 ### User workflow diagram
 
@@ -154,7 +154,7 @@ After you get the SAS tokens, following the steps below:
 
 ### Option 1: Set up the scaling configurations with the static templates
 
-**Overview**: This option allows for the creation of the code configurations for multiple resource groups, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extenion and Arc site manager.
+**Overview**: This option allows for the creation of the code configurations for multiple resource groups, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extension and Arc site manager.
 
 **Steps**:  [Add New Sites with the static templates](./doc/Add-New-Sites-with-static.md)
 
@@ -166,13 +166,13 @@ After you get the SAS tokens, following the steps below:
 
 ### Option 2: Set up the scaling configurations with the custom templates
 
-**Overview**: If you already have a sample Site modeld with a resource group. This option will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
+**Overview**: If you already have a sample Site modeled with a resource group. This option will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
 
 **Steps**: [Add-New-Sites-with-automation](./doc/Add-New-Sites-with-automation.md)
 
 **Expected outcome**:
 
-* A Github repository with Terraform code for # of sites, each containing custom settings for HCI clusters, AKS Arc clusters
+* A GitHub repository with Terraform code for # of sites, each containing custom settings for HCI clusters, AKS Arc clusters
 * A pre-defined CI/CD pipeline containing 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 

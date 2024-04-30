@@ -17,7 +17,7 @@ Before you get started, here are the steps you need to perform for prerequisites
 2. [Connect GitHub Actions and Azure](./Connect-Azure.md)
 3. [Configure Local Git](./Configure-Local-Git.md)
 4. [Setup Terraform Backend](./Setup-Terraform-Backend.md)
-5. Set up Github Runners
+5. Set up GitHub Runners
    1. If you have internet accessible servers, [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
    2. If you have corpnet network accessible servers, [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
 
