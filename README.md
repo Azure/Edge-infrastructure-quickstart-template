@@ -143,10 +143,14 @@ After you get the SAS tokens, following the steps below:
     - Linux: Run `./private_preview.sh "<PRIVATE_PREVIEW_SAS>"`
 3. Verify your downloads
     - Run `./az-edge-module-export -v` & `az-edge-site-scale -v`.
-    ```
-    2024/04/29 10:37:54 telemetry.go:110: InstallationId: ***, SessionId: ***
-    az-edge-module-export version main(20240426.2)
-    ```
+        <details><summary><b> Sample output </b></summary>
+        <code>
+            
+            2024/04/29 10:37:54 telemetry.go:110: InstallationId: ***, SessionId: ***
+
+            az-edge-module-export version main(20240426.2)
+        </code>
+        </details>
 
 ### Option 1: Set up the scaling configurations with the static templates
 
