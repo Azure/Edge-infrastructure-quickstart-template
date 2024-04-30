@@ -1,6 +1,6 @@
 # module "base" {
 #   source          = "../../modules/base"
-#   location        = "<location>"
+#   location        = "<siteId>"
 #   siteId          = basename(abspath(path.module))
 #   domainFqdn      = "<domainFqdn>"
 #   startingAddress = "<startingAddress>"
