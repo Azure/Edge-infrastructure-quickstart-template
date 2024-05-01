@@ -79,8 +79,6 @@ resource "azapi_resource" "monitor_agent" {
       }
     }
   }
-
-  timeouts {}
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "association" {
