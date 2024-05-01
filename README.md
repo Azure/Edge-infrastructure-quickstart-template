@@ -123,7 +123,10 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 ## Scenario 1: Create your first site
 
-**Overview**: If you haven't yet created any edge resources, this scenario provides a quick and efficient way to establish a new site with edge resources and integrate them using Arc with a predefined infrastructure template. However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
+**Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
+This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template. 
+> [!NOTE]
+> However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
