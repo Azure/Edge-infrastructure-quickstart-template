@@ -18,10 +18,14 @@ Before you get started, here are the steps you need to perform for prerequisites
 3. [Configure Local Git](./Configure-Local-Git.md)
 4. [Setup Terraform Backend](./Setup-Terraform-Backend.md)
 <<<<<<< HEAD
+<<<<<<< HEAD
 5. Set up Github Runners
 =======
 5. Set up GitHub Runners
 >>>>>>> main
+=======
+5. Set up GitHub Runners
+>>>>>>> 0397c2e401f05ff90cd98d4bac16325dd1435b8d
    1. If you have internet accessible servers, [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
    2. If you have corpnet network accessible servers, [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
 
