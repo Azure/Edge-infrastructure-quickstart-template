@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup the infrastructure configurations.
+This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup the infrastructure configurations for production scaling.
 
 ### What You'll Get
 
@@ -16,8 +16,9 @@ By using this template, you can get all of the followings inside a single PR und
 
 **Yes** if you want to:
 
-* Create a site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
-* Replicate the above site's settings hundreds or thousands of times
+* Create an initial site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
+* If you have manually created a PoC site and wish to convert the PoC site settings into Terraform code.
+* Replicate the settings from the above site multiple times
 * Integrate the above settings with CI/CD pipeline using GitHub Actions
 * Automate all of the above scenarios
 
@@ -112,9 +113,9 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Scenario 1: Create your first site (for Greenfield customers)
+## Scenario 1: Create your first site
 
-**Overview**: If you don't have any existing edge resources created yet, this scenario can help you quickly set up a fresh new site with edge resources and connect them with Arc using a pre-defined infrastructure template. Otherwise, feel free to skip this scenario if you already have a testing resource group with AKS on HCI.
+**Overview**: If you haven't yet created any edge resources, this scenario provides a quick and efficient way to establish a new site with edge resources and integrate them using Arc with a predefined infrastructure template. However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
@@ -156,7 +157,7 @@ This feature is currently in **Private Preview**. Before you begin
 
 ### Option 1: Set up the scaling configurations with the static templates
 
-**Overview**: This option allows for the creation of the code configurations for multiple resource groups, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extension and Arc site manager.
+**Overview**: This option facilitates the creation of the code configurations for multiple resource groups, each composing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extension and Arc site manager. **Please ensure that you have completed Scenario 1 before proceeding with this option**.
 
 **Steps**:  [Add New Sites with the static templates](./doc/Add-New-Sites-with-static.md)
 
