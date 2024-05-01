@@ -3,7 +3,11 @@
 ## Download az-edge-site-scale step failed
 <img src="./img/troubleshooting_sas.png" width="800" />
 
+<<<<<<< HEAD
 The problem is the sas token repo secret is not being set or incorrect.
+=======
+The problem is the SAS token repo secret is not being set or incorrect.
+>>>>>>> main
 
 Solution:
 1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
@@ -13,12 +17,21 @@ Solution:
 
 ## Terraform apply step failed
 <img src="./img/troubleshooting_infraapply.png" width="800"/>
+<<<<<<< HEAD
 In this case, terraform has send rest api to arm but got failure, the first thing to do is to identify which resource is failed. We can determine which resource failed from the portion enclosed in the red box in the image, in this snapshot, it is deploymentsetting resource.
 
 ### deploymentsetting resource failed
 If the resource is azapi_update_resource_deploymentsetting, then this is because the deployment of HCI cluster is failed.
 
 If the resource is azapi_resource.validatedeploymentsetting or azapi_resource.validatedeploymentsetting_seperate, then this is because the validation of hci cluster is failed.
+=======
+In this case, terraform has send rest API to arm but got failure, the first thing to do is to identify which resource is failed. We can determine which resource failed from the portion enclosed in the red box in the image, in this snapshot, it is deploymentSetting resource.
+
+### deploymentSetting resource failed
+If the resource is azapi_update_resource_deploymentsetting, then this is because the deployment of HCI cluster is failed.
+
+If the resource is azapi_resource.validatedeploymentsetting or azapi_resource.validatedeploymentsetting_seperate, then this is because the validation of HCI cluster is failed.
+>>>>>>> main
 
 The log in the action have error message, you can troubleshooting according to [HCI's guide](https://learn.microsoft.com/en-us/azure-stack/hci/manage/get-support)
 

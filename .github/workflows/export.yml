@@ -56,6 +56,11 @@ jobs:
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
+<<<<<<< HEAD
+=======
+      with:
+        terraform_wrapper: false
+>>>>>>> main
     # check terraform version
     - name: Check terraform version
       run: terraform version

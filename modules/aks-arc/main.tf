@@ -41,8 +41,6 @@ resource "azapi_resource" "connectedCluster" {
       body.properties.provisioningState,
     ]
   }
-
-  timeouts {}
 }
 locals {
   agentPoolProfiles = [for pool in var.agentPoolProfiles : {
@@ -114,5 +112,4 @@ resource "azapi_resource" "provisionedClusterInstance" {
       body.properties.provisioningStateUpdatedTime,
     ]
   }
-  timeouts {}
 }

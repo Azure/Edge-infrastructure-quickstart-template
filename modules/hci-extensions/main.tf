@@ -26,5 +26,4 @@ resource "azapi_resource" "alerts" {
       }
     }
   }
-  timeouts {}
 }
