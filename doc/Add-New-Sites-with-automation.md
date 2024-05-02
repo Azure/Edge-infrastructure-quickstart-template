@@ -15,7 +15,7 @@
     ]
     ```
 
-3. Commit and push `.azure/export.json`: `git commit -m <commit message>` and `git push -u <yourFeatureBranch>`. A GitHub workflow will be triggered automatically. Create a pull request to `main`.You can find your workflow run as following.
+3. Commit and push `.azure/export.json`: `git commit -m <commit message>` and `git push -u origin <yourFeatureBranch>`. A GitHub workflow will be triggered automatically. Create a pull request to `main`.You can find your workflow run as following.
 <img src="./img/view_export_workflow_in_action_panel.png" width="800" />
 4. After workflow execution, check the generated code.
 <img src="./img/view_commit_for_export.png" width="600" />
