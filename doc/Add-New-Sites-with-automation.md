@@ -24,7 +24,7 @@
 
 ## Step 2: Setting up the scaling configurations through IaC automation
 
-1. You can find a spread sheet under `./.azure/scale/` after Step 2. The spread sheet contains all the entries which need customized inputs from you per site.
+1. You can find a spread sheet under `./.azure/scale/` after Step 1. The spread sheet contains all the entries which need your inputs per site.
 2. Create a new branch from `main` by running `git checkout -b <yourFeatureBranch>`
 3. Copy `./.azure/scale/<module-name>.csv` to `./.azure/scale.csv`.
 4. Open the CSV file by Excel. Input new values according to the first line.
