@@ -22,6 +22,8 @@ resource "azapi_resource" "connectedCluster" {
       azureHybridBenefit        = null
       privateLinkState          = null
       provisioningState         = null
+      infrastructure            = null
+      distribution              = null
     }
   }
 
