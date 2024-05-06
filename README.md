@@ -125,9 +125,9 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Scenario 1: Create your first site from scratch using quickstart template, then scale more sites
+## Scenario 1: Create your first site from scratch using quick-start template, then scale more sites
 
-### Create your first site from scratch using quickstart template
+### Create your first site from scratch using quick-start template
 
 **Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
 This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template.
@@ -142,16 +142,16 @@ This scenario provides a quick and efficient way to establish a new site with ed
 
 ### Scale more sites (Private Preview)
 
-**Overview**: Automatically generate scaling configurations following the settings from the previous step
+**Overview**: Automatically configure scaling settings based on the parameters defined in the previous steps.
 
 **Steps**:
 
 * This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
-* Confirm and update the global configurations: If you would like to update the pre-filled values of the global configurations, follow the guidance [Edit-Global-Parameters](./Edit-Global-Parameters.md) to make the change.
-* Get the scaling code based on quick-start template:
+* Confirm and update the global configurations: If you would like to update the pre-filled values of the global configurations, follow the guidance [Edit-Global-Parameters](./doc/Edit-Global-Parameters.md) to make the change.
+* Get the scaling code based on the quick-start template:
     1. Create a new branch from `main` by running `git checkout -b <yourFeatureBranch>`
     2. Run `./az-edge-site-scale generate -c ./.azure/scale.csv -s ./dev/<yourSiteName>` to get the scaling csv file. You can find a spread sheet under `./.azure`. The spread sheet contains all the entries which need customized inputs from you per site.
-* [Scale with automations](./doc/Add-New-Sites-with-automation.md)
+* [Scale with the automations](./doc/Scale-with-automation.md)
 
 **Expected outcome**:
 
@@ -159,9 +159,7 @@ This scenario provides a quick and efficient way to establish a new site with ed
 * A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
-## Scenario 2: Convert your PoC site settings into IaC code, then scale
-
-The following guidance will streamline your setup of the scaling configuration code with Terraform and GitHub Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC settings.
+## Scenario 2: Convert your PoC site settings into IaC code, then scale (Private Preview)
 
 **Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
 
