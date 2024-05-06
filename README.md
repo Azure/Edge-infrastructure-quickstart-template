@@ -9,23 +9,6 @@ This Quick-Start template simplifies your Infrastructure as Code journey with Az
 By using this template, you can get all of the followings inside a single PR under your GitHub account
 
 * a scalable and extendible repository structure following the DevOps best practice
-* organized variables with the recommended values to boost your initial setup
-* a customizable CD pipeline with the automations.
-
-### Is This Right for You?
-
-**Yes** if you want to:
-
-* Create an initial site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
-* If you have manually created a PoC site and wish to convert the PoC site settings into Terraform code.
-* Replicate the settings from the above site multiple times
-* Integrate the above settings with CI/CD pipeline using GitHub Actions
-* Automate all of the above scenarios
-
-**No** if you want to:
-
-* Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
-* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases. 
 
 <details>
 
@@ -80,6 +63,7 @@ Base module contains the global variables across all sites. Each stage and each 
 
 </details>
 
+* organized variables with the prefilled values to boost your initial setup
 <details>
 
 <summary><b>Variables Structure</b></summary>
@@ -92,6 +76,30 @@ Base module contains the global variables across all sites. Each stage and each 
 | Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
 
 </details>
+
+* a customizable CD pipeline with the automations.
+<details>
+
+<summary><b>CI/CD Pipeline</b></summary>
+
+<img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
+
+</details>
+
+### Is This Right for You?
+
+**Yes** if you want to:
+
+* Create an initial site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
+* If you have manually created a PoC site and wish to convert the PoC site settings into Terraform code.
+* Replicate the settings from the above site multiple times
+* Integrate the above settings with CI/CD pipeline using GitHub Actions
+* Automate all of the above scenarios
+
+**No** if you want to:
+
+* Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
+* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases. 
 
 ### Supported Azure edge resource types
 
@@ -115,7 +123,10 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 ## Scenario 1: Create your first site
 
-**Overview**: If you haven't yet created any edge resources, this scenario provides a quick and efficient way to establish a new site with edge resources and integrate them using Arc with a predefined infrastructure template. However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
+**Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
+This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template. 
+> [!NOTE]
+> However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
