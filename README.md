@@ -10,81 +10,81 @@ By using this template, you can get all of the followings inside a single PR und
 
 * a scalable and extendible repository structure following the DevOps best practice
 
-<details>
+    <details>
 
-<summary><b>Repo Structure</b></summary>
+    <summary><b>Repo Structure</b></summary>
 
-<img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
+    <img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
 
-```PROJECT_ROOT
-│
-├───.azure
-│   │   backendTemplate.tf              // Backend storage account config file
-│   │
-│   └───hooks
-│           pre-commit                  // Git hook to generate deployment workflow and set backend
-│
-├───.github
-│   └───workflows
-│           site-cd-workflow.yml        // Set up CD pipeline
-|           terraform-plan.yml
-│
-├───dev                                 // The first stage to deploy
-│   └───sample
-│           backend.tf
-│           main.tf                     // Main configuration file for the site
-│           provider.tf
-│           terraform.tf
-│           variables.tf
-│
-├───modules
-│   ├───base                            // Base module of all sites
-│   │       main.tf
-│   │       variables.tf
-│   │
-│   ├───hci                             // Module to manage HCI clusters
-│   │
-│   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
-│   ├───hci-provisioners                // Module to connect servers to Arc
-│   │───aks-arc                         // Module to manage AKS Arc clusters
-│   └───hci-vm                          // Module to manage HCI VMs
-│   └───site-manager                    // Module to manage site-manager
-│
-├───prod                                // prod stage sites are deployed after qa stage
-│   │
-│   └───prod1
-│
-└───qa                                  // qa stage sites are deployed after dev stage
+    ```PROJECT_ROOT
     │
-    └───qa1
-```
+    ├───.azure
+    │   │   backendTemplate.tf              // Backend storage account config file
+    │   │
+    │   └───hooks
+    │           pre-commit                  // Git hook to generate deployment workflow and set backend
+    │
+    ├───.github
+    │   └───workflows
+    │           site-cd-workflow.yml        // Set up CD pipeline
+    |           terraform-plan.yml
+    │
+    ├───dev                                 // The first stage to deploy
+    │   └───sample
+    │           backend.tf
+    │           main.tf                     // Main configuration file for the site
+    │           provider.tf
+    │           terraform.tf
+    │           variables.tf
+    │
+    ├───modules
+    │   ├───base                            // Base module of all sites
+    │   │       main.tf
+    │   │       variables.tf
+    │   │
+    │   ├───hci                             // Module to manage HCI clusters
+    │   │
+    │   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
+    │   ├───hci-provisioners                // Module to connect servers to Arc
+    │   │───aks-arc                         // Module to manage AKS Arc clusters
+    │   └───hci-vm                          // Module to manage HCI VMs
+    │   └───site-manager                    // Module to manage site-manager
+    │
+    ├───prod                                // prod stage sites are deployed after qa stage
+    │   │
+    │   └───prod1
+    │
+    └───qa                                  // qa stage sites are deployed after dev stage
+        │
+        └───qa1
+    ```
 
-Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
+    Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
 
-</details>
+    </details>
 
 * organized variables with the prefilled values to boost your initial setup
-<details>
+    <details>
 
-<summary><b>Variables Structure</b></summary>
+    <summary><b>Variables Structure</b></summary>
 
-| Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                       | Override Priority |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | :---------------: |
-| Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                          |        low        |
-| Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                            |       high        |
-| Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                     |                   |
-| Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
+    | Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                       | Override Priority |
+    | ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | :---------------: |
+    | Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                          |        low        |
+    | Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                            |       high        |
+    | Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                     |                   |
+    | Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
 
-</details>
+    </details>
 
 * a customizable CD pipeline with the automations.
-<details>
+    <details>
 
-<summary><b>CI/CD Pipeline</b></summary>
+    <summary><b>CI/CD Pipeline</b></summary>
 
-<img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
+    <img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
 
-</details>
+    </details>
 
 ### Is This Right for You?
 
@@ -131,8 +131,6 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
 This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template.
-> [!NOTE]
-> However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
