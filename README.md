@@ -10,81 +10,81 @@ By using this template, you can get all of the followings inside a single PR und
 
 * a scalable and extendible repository structure following the DevOps best practice
 
-<details>
+    <details>
 
-<summary><b>Repo Structure</b></summary>
+    <summary><b>Repo Structure</b></summary>
 
-<img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
+    <img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
 
-```PROJECT_ROOT
-│
-├───.azure
-│   │   backendTemplate.tf              // Backend storage account config file
-│   │
-│   └───hooks
-│           pre-commit                  // Git hook to generate deployment workflow and set backend
-│
-├───.github
-│   └───workflows
-│           site-cd-workflow.yml        // Set up CD pipeline
-|           terraform-plan.yml
-│
-├───dev                                 // The first stage to deploy
-│   └───sample
-│           backend.tf
-│           main.tf                     // Main configuration file for the site
-│           provider.tf
-│           terraform.tf
-│           variables.tf
-│
-├───modules
-│   ├───base                            // Base module of all sites
-│   │       main.tf
-│   │       variables.tf
-│   │
-│   ├───hci                             // Module to manage HCI clusters
-│   │
-│   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
-│   ├───hci-provisioners                // Module to connect servers to Arc
-│   │───aks-arc                         // Module to manage AKS Arc clusters
-│   └───hci-vm                          // Module to manage HCI VMs
-│   └───site-manager                    // Module to manage site-manager
-│
-├───prod                                // prod stage sites are deployed after qa stage
-│   │
-│   └───prod1
-│
-└───qa                                  // qa stage sites are deployed after dev stage
+    ```PROJECT_ROOT
     │
-    └───qa1
-```
+    ├───.azure
+    │   │   backendTemplate.tf              // Backend storage account config file
+    │   │
+    │   └───hooks
+    │           pre-commit                  // Git hook to generate deployment workflow and set backend
+    │
+    ├───.github
+    │   └───workflows
+    │           site-cd-workflow.yml        // Set up CD pipeline
+    |           terraform-plan.yml
+    │
+    ├───dev                                 // The first stage to deploy
+    │   └───sample
+    │           backend.tf
+    │           main.tf                     // Main configuration file for the site
+    │           provider.tf
+    │           terraform.tf
+    │           variables.tf
+    │
+    ├───modules
+    │   ├───base                            // Base module of all sites
+    │   │       main.tf
+    │   │       variables.tf
+    │   │
+    │   ├───hci                             // Module to manage HCI clusters
+    │   │
+    │   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
+    │   ├───hci-provisioners                // Module to connect servers to Arc
+    │   │───aks-arc                         // Module to manage AKS Arc clusters
+    │   └───hci-vm                          // Module to manage HCI VMs
+    │   └───site-manager                    // Module to manage site-manager
+    │
+    ├───prod                                // prod stage sites are deployed after qa stage
+    │   │
+    │   └───prod1
+    │
+    └───qa                                  // qa stage sites are deployed after dev stage
+        │
+        └───qa1
+    ```
 
-Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
+    Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
 
-</details>
+    </details>
 
 * organized variables with the prefilled values to boost your initial setup
-<details>
+    <details>
 
-<summary><b>Variables Structure</b></summary>
+    <summary><b>Variables Structure</b></summary>
 
-| Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                       | Override Priority |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | :---------------: |
-| Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                          |        low        |
-| Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                            |       high        |
-| Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                     |                   |
-| Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
+    | Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                       | Override Priority |
+    | ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | :---------------: |
+    | Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                          |        low        |
+    | Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                            |       high        |
+    | Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                     |                   |
+    | Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
 
-</details>
+    </details>
 
 * a customizable CD pipeline with the automations.
-<details>
+    <details>
 
-<summary><b>CI/CD Pipeline</b></summary>
+    <summary><b>CI/CD Pipeline</b></summary>
 
-<img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
+    <img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
 
-</details>
+    </details>
 
 ### Is This Right for You?
 
@@ -100,6 +100,10 @@ Base module contains the global variables across all sites. Each stage and each 
 
 * Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
 * Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases. 
+
+### Supported scenarios
+
+<img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction"/>
 
 ### Supported Azure edge resource types
 
@@ -121,12 +125,12 @@ This repository implements AD preparation and Arc connection. Follow the instruc
 
 **Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Scenario 1: Create your first site
+## Scenario 1: Create your first site from scratch using quick-start template, then scale more sites
+
+### Create your first site from scratch using quick-start template
 
 **Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
-This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template. 
-> [!NOTE]
-> However, if you already have a testing resource group (with AKS on HCI) in place, you may skip this scenario and proceed directly to Option 2 in Scenario 2 for scaling.
+This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template.
 
 **Steps**: [Create your first site](./doc/Add-first-Site.md)
 
@@ -136,41 +140,18 @@ This scenario provides a quick and efficient way to establish a new site with ed
 * A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
-## Scenario 2: Scale more sites (Private Preview)
+### Scale more sites (Private Preview)
 
-The following guidance will streamline your setup of the scaling configuration code with Terraform and GitHub Actions, preparing you for scaling your production fleet. You have two options (also illustrated in the diagram below): set up the repository with the static settings or you can use our automation pipeline to codify and replicate your existing PoC settings.
+**Overview**: Automatically configure scaling settings based on the parameters defined in the previous steps.
 
-### User workflow diagram
+**Steps**:
 
-<img src="doc/img/IaCGithubAction.png" alt="IaCGithubAction"/>
-
-### Prerequisites
-
-This feature is currently in **Private Preview**. Before you begin
-  * Review and accept the [Terms](./doc/Infrastructure-as-Code-Automation-Use-Terms.pdf).
-  * Please fill in this [form](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new?assignees=xwen11&labels=customers+onboarding&projects=&template=preview-sign-up-form.md&title=%5BOnboarding%5D) to sign up for Private Preview. We will send a private preview SAS token to you.
-  * After you get the SAS tokens, following the steps below:
-
-    1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
-    2. Download the binaries to run locally
-        - Windows: Run `./private_preview.ps1 "<PRIVATE_PREVIEW_SAS>"`
-        - Linux: Run `./private_preview.sh "<PRIVATE_PREVIEW_SAS>"`
-    3. Verify your downloads
-        - Run `./az-edge-module-export -v` & `az-edge-site-scale -v`.
-            <details><summary><b> Sample output </b></summary>
-            <code>
-                
-                2024/04/29 10:37:54 telemetry.go:110: InstallationId: ***, SessionId: ***
-
-                az-edge-module-export version main(20240426.2)
-            </code>
-            </details>
-
-### Option 1: Set up the scaling configurations with the static templates
-
-**Overview**: This option facilitates the creation of the code configurations for multiple resource groups, each composing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring Arc extension and Arc site manager. **Please ensure that you have completed Scenario 1 before proceeding with this option**.
-
-**Steps**:  [Add New Sites with the static templates](./doc/Add-New-Sites-with-static.md)
+* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+* Confirm and update the global configurations: If you would like to update the pre-filled values of the global configurations, follow the guidance [Edit-Global-Parameters](./doc/Edit-Global-Parameters.md) to make the change.
+* Get the scaling code based on the quick-start template:
+    1. Create a new branch from `main` by running `git checkout -b <yourFeatureBranch>`
+    2. Run `./az-edge-site-scale generate -c ./.azure/scale.csv -s ./dev/<yourSiteName>` to get the scaling csv file. You can find a spread sheet under `./.azure`. The spread sheet contains all the entries which need customized inputs from you per site.
+* [Scale with the automations](./doc/Scale-with-automation.md)
 
 **Expected outcome**:
 
@@ -178,11 +159,39 @@ This feature is currently in **Private Preview**. Before you begin
 * A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
-### Option 2: Set up the scaling configurations with the custom templates
+## Scenario 2: Convert your PoC site settings into IaC code, then scale (Private Preview)
 
-**Overview**: If you already have a sample Site modeled with a resource group. This option will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
+**Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
 
-**Steps**: [Add-New-Sites-with-automation](./doc/Add-New-Sites-with-automation.md)
+**Steps**:
+
+* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+* Convert the PoC site into IaC code:
+
+    1. Create a branch from `main` branch by running `git checkout -b <yourFeatureBranch>`
+    2. Add a new file `.azure/export.json`. Do not use `base` as the name of the module. It may carry the original contents in your exported module.
+
+    ```json
+    [
+        {
+            "resourceGroup": "/subscriptions/<your-subscription-id>/resourceGroups/<yourSampleResourceGroup>",
+            "baseModulePath": "./modules/<name-of-the-module>",
+            "groupPath": "./dev/<yourSiteName>"
+        }
+    ]
+    ```
+
+    3. Commit and push `.azure/export.json`: `git commit -m <commit message>` and `git push -u origin <yourFeatureBranch>`. A GitHub workflow will be triggered automatically. Create a pull request to `main`.You can find your workflow run as following.
+    
+    <img src="./doc/img/view_export_workflow_in_action_panel.png" width="800" />
+    
+    4. After workflow execution, check the generated code.
+    
+    <img src="./doc/img/view_commit_for_export.png" width="600" />
+        * If the workflow runs successfully, the generated code is identical to Azure resources. Please merge the branch ASAP. If there are changes happened after export, the changes will be reverted.
+        * If the workflow run fails, you can check `./dev/<yourSiteName>/export-diff` to see what are the changes.
+
+* [Scale with automations](./doc/Scale-with-automation.md)
 
 **Expected outcome**:
 
