@@ -24,11 +24,6 @@ variable "dnsServers" {
   description = "A list of DNS server IP addresses."
 }
 
-variable "tenant" {
-  type        = string
-  description = "The tenant name."
-}
-
 variable "managementAdapters" {
   type    = list(string)
   default = ["ethernet", "ethernet 2"]

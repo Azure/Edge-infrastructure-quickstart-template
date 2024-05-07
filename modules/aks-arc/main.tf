@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 resource "azapi_resource" "connectedCluster" {
   type = "Microsoft.Kubernetes/connectedClusters@2024-01-01"
   depends_on = [
@@ -16,7 +18,7 @@ resource "azapi_resource" "connectedCluster" {
       aadProfile = {
         adminGroupObjectIDs = flatten(var.rbacAdminGroupObjectIds)
         enableAzureRBAC     = true
-        tenantID            = var.azureRBACTenantId
+        tenantID            = data.azurerm_client_config.current.tenant_id
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
       azureHybridBenefit        = null

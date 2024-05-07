@@ -106,11 +106,6 @@ variable "enableAzureRBAC" {
   default     = false
 }
 
-variable "azureRBACTenantId" {
-  type        = string
-  description = "The tenant id of the azure rbac"
-}
-
 variable "rbacAdminGroupObjectIds" {
   type        = list(string)
   description = "The object id of the admin group of the azure rbac"
