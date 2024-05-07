@@ -19,8 +19,6 @@ resource "azapi_resource" "cluster" {
   }
   
   location = var.resourceGroup.location
-  
-  timeouts {}
 }
 
 # Generate random integer suffix for storage account and key vault

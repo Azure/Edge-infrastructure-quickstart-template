@@ -28,7 +28,6 @@ resource "azapi_resource" "address" {
       }
     }
   }
-  timeouts {}
 }
 
 resource "azapi_resource" "site" {
