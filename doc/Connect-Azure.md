@@ -1,4 +1,4 @@
-# Connect GitHub Actions and Azure
+# Connect GitHub Actions and Azure Use Azure CLI
 This doc is using Azure CLI to do the job, if you want to use Azure portal, see [Connect Azure using Portal](./Connect-Azure-Portal.md).
 ## Prerequisite
 
@@ -10,18 +10,18 @@ Create `terraform` environment in your GitHub repository
 
 <img src="img/CreateRepoEnv.png" alt="createRepoEnv" width="800"/>
 
-Replace '\<yourServicePrincipleName>' with the service principle name you want to create, replace '\<yourSubscription>' with the subscription you want to create hci, replace '\<orignizationName>/\<repoName>' with the orignization and name of your GitHub repo.
-
-Run following script in powershell, this script will 
+the following script will do:
 1. Create a new service principle
 2. Setup federation credential for the github repo
 3. Grant Contributor/Key vault secrets officer/user access administrator to the service principal
 
+Replace '\<yourServicePrincipleName>' with the service principle name you want to create, replace '\<yourSubscription>' with the subscription you want to create hci, replace '\<orignizationName>/\<repoName>' with the orignization and name of your GitHub repo. Run following script in powershell.
+
 ```
 az login
-$spName="<yourServicePrincipleName>"
-$yoursubscription="<yourSubscription>"
-$yourreponame="<orignizationName>/<repoName>"
+$spName="<yourServicePrincipleName>" #Replace it!
+$yoursubscription="<yourSubscription>" #Replace it!
+$yourreponame="<orignizationName>/<repoName>" #Replace it!
 
 az account set --subscription $yoursubscription
 # test if the sp is exist

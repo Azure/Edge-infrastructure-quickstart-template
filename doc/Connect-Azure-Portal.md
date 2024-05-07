@@ -1,5 +1,5 @@
-# Connect GitHub Actions and Azure
-
+# Connect GitHub Actions and Azure Use Portal
+This doc is using Azure portal to do the job, if you want to use Azure CLI, see [Connect Azure using Azure CLI](./Connect-Azure.md).
 ## Prerequisite
 
 Ensure that you can create service principals in your tenant and you have the permission to assign roles.
