@@ -39,7 +39,6 @@ module "hci-provisioners" {
   siteId                 = var.siteId
   domainFqdn             = var.domainFqdn
   adouPath               = local.adouPath
-  tenant                 = var.tenant
   domainServerIP         = var.domainServerIP
   domainAdminUser        = var.domainAdminUser
   domainAdminPassword    = var.domainAdminPassword
@@ -71,7 +70,6 @@ module "hci" {
   defaultGateway                = var.defaultGateway
   dnsServers                    = var.dnsServers
   adouPath                      = local.adouPath
-  tenant                        = var.tenant
   servers                       = var.servers
   managementAdapters            = var.managementAdapters
   storageNetworks               = var.storageNetworks
@@ -139,6 +137,5 @@ module "aks-arc" {
   arbId                   = module.hci.arcbridge.id
   kubernetesVersion       = var.kubernetesVersion
   controlPlaneCount       = var.controlPlaneCount
-  azureRBACTenantId       = var.tenant
   rbacAdminGroupObjectIds = var.rbacAdminGroupObjectIds
 }

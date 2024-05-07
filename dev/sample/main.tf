@@ -8,7 +8,6 @@
 #   defaultGateway  = "<defaultGateway>"
 #   dnsServers      = ["<dnsServer1>"]
 #   adouSuffix      = "<adouSuffix>"
-#   tenant          = "<tenant>"
 #   domainServerIP  = "<domainServerIP>"
 #   servers = [
 #     {

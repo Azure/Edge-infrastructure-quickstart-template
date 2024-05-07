@@ -89,11 +89,6 @@ variable "subscriptionId" {
   description = "The subscription ID for the Azure account."
 }
 
-variable "tenant" {
-  type        = string
-  description = "The tenant ID for the Azure account."
-}
-
 variable "servicePrincipalId" {
   type        = string
   sensitive   = true
