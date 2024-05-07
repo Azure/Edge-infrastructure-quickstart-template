@@ -1,6 +1,6 @@
 # Sign up Private Preview
 
-* Review and accept the [Terms](./doc/Infrastructure-as-Code-Automation-Use-Terms.pdf).
+* Review and accept the [Terms](./Infrastructure-as-Code-Automation-Use-Terms.pdf).
 * Please fill in this [form](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new?assignees=xwen11&labels=customers+onboarding&projects=&template=preview-sign-up-form.md&title=%5BOnboarding%5D) to sign up for Private Preview. We will send a private preview SAS token to you.
 * After you get the SAS tokens, following the steps below:
     1. Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.

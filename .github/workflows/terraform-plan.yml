@@ -49,7 +49,6 @@ jobs:
                 if [[ $changedFiles == *"modules"* ]]; then
                   echo "changedFiles contain modules"
                   echo "isModuleChanged=true" >> $GITHUB_OUTPUT
-                  exit 0
                 else
                   echo "changedFiles do not contain modules"
                   echo "isModuleChanged=false" >> $GITHUB_OUTPUT
@@ -84,23 +83,26 @@ jobs:
                       done
                       popd > /dev/null
                   done
-                else
-                  echo "the module is not changed, so generate the matrix based on the changed directories"
-                  IFS=' ' read -ra dirs <<< "${{ steps.check_diff.outputs.directory }}"
-                  for i in "${dirs[@]}"; do
-                    if [[ "$i" != ".azure" ]]
-                    then
-                      array+=("$i")
-                    fi
-                  done
                 fi
+
+                echo "also generate the matrix based on the changed directories"
+                IFS=' ' read -ra dirs <<< "${{ steps.check_diff.outputs.directory }}"
+                for i in "${dirs[@]}"; do
+                  if [[ "$i" != ".azure" && "$i" != *"module"* ]]
+                  then
+                    array+=("$i")
+                  fi
+                done
+
                 if [ ${#array[@]} -eq 0 ]; then
                   echo "No directories to process"
                   echo "planNeeded=false" >> $GITHUB_OUTPUT
                 else
                   echo "planNeeded=true" >> $GITHUB_OUTPUT
                 fi
-                json=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+                echo "remove duplicates directory and sort"
+                sorted_array=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+                json=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${sorted_array[@]}")
                 echo "matrix=$json"
                 echo "matrix=$json" >> $GITHUB_OUTPUT
         outputs:
