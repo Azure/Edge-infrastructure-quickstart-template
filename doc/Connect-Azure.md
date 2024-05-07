@@ -66,6 +66,8 @@ az role assignment create --role "User Access Administrator" --assignee $spid --
 
 $rpid=az ad sp list --filter "appid eq '1412d89f-b8a8-4111-b4fd-e82905cbd85d'" --query "[0].id"
 
+echo "set sp related secret with"
+echo $pass
 $password = $pass | ConvertFrom-Json | Select-Object -ExpandProperty "password"
 echo "set repository secret rpServicePrincipalObjectId with $rpid"
 echo "set repository secret servicePrincipalSecret with $password"
