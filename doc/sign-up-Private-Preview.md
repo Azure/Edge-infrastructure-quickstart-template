@@ -9,7 +9,7 @@
         * Linux: Run `./private_preview.sh "<PRIVATE_PREVIEW_SAS>"`
 
     3. Verify your downloads
-        * Run `./az-edge-module-export -v` & `az-edge-site-scale -v`.
+        * Run `./az-edge-module-export -v` & `./az-edge-site-scale -v`.
             <details><summary><b> Sample output </b></summary>
             <code>
                 
