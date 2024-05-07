@@ -33,7 +33,7 @@ $reponamewithoutslash = $yourreponame -replace "/", "_"
 $jsonContent = @"
 {
     "name": "${reponamewithoutslash}_environment_terraform",
-    "issuer": "https://token.actions.githubusercontent.com/",
+    "issuer": "https://token.actions.githubusercontent.com",
     "subject": "repo:${yourreponame}:environment:terraform",
     "description": "service principal for terraform environment for repo $yourreponame",
     "audiences": [
@@ -46,7 +46,7 @@ az ad app federated-credential create --id $spid --parameters "$env:TEMP/terrafo
 $jsonContent = @"
 {
     "name": "repo_${reponamewithoutslash}_pull_request",
-    "issuer": "https://token.actions.githubusercontent.com/",
+    "issuer": "https://token.actions.githubusercontent.com",
     "subject": "repo:${yourreponame}:pull_request",
     "description": "service principal for pull request for repo $yourreponame",
     "audiences": [
