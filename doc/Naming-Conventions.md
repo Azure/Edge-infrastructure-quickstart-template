@@ -20,3 +20,7 @@ You may toggle whether to append random suffix for storage account and KeyVault 
 | Resource group          | `{siteId}-rg`                |
 | Witness storage account | `{siteId}wit{randomSuffix}`  |
 | KeyVault                | `{siteId}-kv-{randomSuffix}` |
+
+
+# Next Step
+Return to [Create your first site](./Add-first-Site.md)
