@@ -11,6 +11,16 @@ Before you get started, here are the steps you need to perform for prerequisites
 
 <mark>Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project.</mark>
 
+## Overview
+
+The QuickStart solution uses remote PowerShell to complete the Active Directory preparation and Arc registration. The following picture shows an overview of a basic hardware setup.
+
+In dev center, there are Windows servers act as GitHub runners and Active Directory Domain Controllers. On edge, servers are installed with HCI OS. All the servers are connected to the Corp net. Servers on edge allows remote management inside the Corp net. No inbound is allowed from the Internet.
+
+With this hardware setup, system admins can provision HCI clusters at scale by GitHub Actions.
+
+![topology](./img/topology.png)
+
 ## Setup
 
 1. [Create a repository based on this template](./Create-Repository.md)

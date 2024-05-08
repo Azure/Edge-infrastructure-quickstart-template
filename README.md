@@ -166,6 +166,8 @@ This scenario provides a quick and efficient way to establish a new site with ed
 **Steps**:
 
 * This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+  > [!NOTE]
+  > Resources under the resource group must belong to one single site. Code generation **doesn't** support resource groups containing multiple HCI clusters for now.
 * Convert the PoC site into IaC code:
 
     1. Create a branch from `main` branch by running `git checkout -b <yourFeatureBranch>`
