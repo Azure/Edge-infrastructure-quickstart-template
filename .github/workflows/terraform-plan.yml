@@ -102,7 +102,14 @@ jobs:
                 fi
                 echo "remove duplicates directory and sort"
                 sorted_array=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-                json=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${sorted_array[@]}")
+                echo "check directories is exist"
+                checkarray=()
+                for i in "${sorted_array[@]}"; do
+                  if [  -d "$i" ]; then
+                    checkarray+=("$i")
+                  fi
+                done
+                json=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${checkarray[@]}")
                 echo "matrix=$json"
                 echo "matrix=$json" >> $GITHUB_OUTPUT
         outputs:
