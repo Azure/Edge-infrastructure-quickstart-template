@@ -21,6 +21,10 @@ If the resource is azapi_resource.validatedeploymentsetting or azapi_resource.va
 
 The log in the action have error message, you can troubleshooting according to [HCI's guide](https://learn.microsoft.com/en-us/azure-stack/hci/manage/get-support)
 
+## ad_creation_provisioner resource failed
+<img src="./img/ad_prepared_error.png" width="800"/>
+This is because the preparation of self host runner is not ready, see [self-host runner](./Setup-Self-Hosted-Runners.md), ensure the Allow Delegating Fresh Credentials with NTLM-only Server Authentication is enabled as stated. Then, rerun the failed job.
+
 ## Further Support
 
 For problem that not include in this file, you can [open issue](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new) in Azure
