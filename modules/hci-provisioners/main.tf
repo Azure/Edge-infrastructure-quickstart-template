@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 module "servers" {
   for_each = {
     for index, server in var.servers :
@@ -14,7 +16,7 @@ module "servers" {
   winrmPort              = var.virtualHostIp == "" ? 5985 : var.serverPorts[each.key]
   subscriptionId         = var.subscriptionId
   location               = var.resourceGroup.location
-  tenant                 = var.tenant
+  tenant                 = data.azurerm_client_config.current.tenant_id
   servicePrincipalId     = var.servicePrincipalId
   servicePrincipalSecret = var.servicePrincipalSecret
   expandC                = var.virtualHostIp == "" ? false : true

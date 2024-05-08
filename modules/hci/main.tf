@@ -23,7 +23,6 @@ resource "azapi_resource" "cluster" {
 
 # Generate random integer suffix for storage account and key vault
 resource "random_integer" "random_suffix" {
-  keepers = {}
   min = 10
   max = 99
 }
