@@ -2,7 +2,7 @@
  $${\color{blue}Accelerate, Automate, and \space Simplify \space the \space IaC \space setup \space using \space your \space familiar \space tools}$$
 ## Overview
 
-This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup the infrastructure configurations for production scaling.
+This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup of the infrastructure configurations for production scaling.
 
 ### What You'll Get
 
@@ -99,7 +99,7 @@ By using this template, you can get all of the followings inside a single PR und
 **No** if you want to:
 
 * Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
-* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases. 
+* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases.
 
 ### Supported scenarios
 
@@ -161,11 +161,13 @@ This scenario provides a quick and efficient way to establish a new site with ed
 
 ## Scenario 2: Convert your PoC site settings into IaC code, then scale (Private Preview)
 
-**Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom modules for multiple sites.
+**Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom templates for multiple sites.
 
 **Steps**:
 
 * This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+  > [!NOTE]
+  > Resources under the resource group must belong to one single site. Code generation **doesn't** support resource groups containing multiple HCI clusters for now.
 * Convert the PoC site into IaC code:
 
     1. Create a branch from `main` branch by running `git checkout -b <yourFeatureBranch>`
