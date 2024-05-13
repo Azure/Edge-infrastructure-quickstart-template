@@ -34,3 +34,4 @@ Learn more:
 - About [add new sites with the static templates](./Add-New-Sites-with-static.md)
 - About [add new sites with the custom templates](./Add-New-Sites-with-automation.md)
 - About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
+- About [add new stage](./Customize-Stages.md)

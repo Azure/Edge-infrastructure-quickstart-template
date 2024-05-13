@@ -37,9 +37,8 @@ With this hardware setup, system admins can provision HCI clusters at scale by G
 
 Learn more:
 
-- About [add your first site](./Add-first-Site.md)
+- About [add your first site with static templates](./Add-first-Site.md)
 - About [view your CI/CD pipeline running status](./View-pipeline.md)
 - About [troubleShoot](./TroubleShooting.md)
-- About [add new sites with the static templates](./Add-New-Sites-with-static.md)
-- About [add new sites with the customized templates](./Add-New-Sites-with-automation.md)
+- About [add new sites with the customized templates](../README.md#scenario-2-convert-your-poc-site-settings-into-iac-code-then-scale-private-preview)
 - About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
