@@ -19,3 +19,4 @@ Learn more:
 * About [view your CI/CD pipeline running status](./View-pipeline.md)
 * About [troubleShoot](./TroubleShooting.md)
 * About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
+* About [add new stage](./Customize-Stages.md)
