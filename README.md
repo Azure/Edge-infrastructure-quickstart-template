@@ -1,5 +1,5 @@
 # Edge Infrastructure QuickStart Template For Scaling (Preview) 
- $${\color{blue}Accelerate, Automate, and \space Simplify \space the \space IaC \space setup \space using \space your \space familiar \space tools}$$
+  ----- Accelerate, Automate, and Simplify the IaC setup using your familiar tools
 ## Overview
 
 This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup of the infrastructure configurations for production scaling.
