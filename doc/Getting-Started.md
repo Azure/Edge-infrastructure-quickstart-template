@@ -29,7 +29,9 @@ With this hardware setup, system admins can provision HCI clusters at scale by G
 4. [Setup Terraform Backend](./Setup-Terraform-Backend.md)
 5. Set up GitHub Runners
    1. If you have internet accessible servers, [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
-   2. If you have corpnet network accessible servers, [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
+   2. If you have corpnet network accessible servers,
+      * If you want to use automations in this repository to onboard Arc servers and prepare AD, then [Setup Self Hosted Runners](./Setup-Self-Hosted-Runners.md)
+      * If servers in all sites are connected to Arc by yourself, then [Use GitHub Hosted Runners](./Use-GitHub-Hosted-Runners.md)
 
 ## Next Step
 
