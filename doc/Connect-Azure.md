@@ -14,6 +14,9 @@ the following script will do:
 1. Create a new service principle
 2. Setup federation credential for the github repo
 3. Grant Contributor/Key vault secrets officer/user access administrator to the service principal
+   
+> [!NOTE]
+> If you are reusing a existing service principal, this guide might not suit you because it will reset the service principal secret. try [Connect Azure using Portal](./Connect-Azure-Portal.md).
 
 Replace '\<yourServicePrincipleName>' with the service principle name you want to create, replace '\<yourSubscription>' with the subscription you want to create hci, replace '\<orignizationName>/\<repoName>' with the orignization and name of your GitHub repo. Run following script in powershell.
 
@@ -24,7 +27,6 @@ $yoursubscription="<yourSubscription>" #Replace it!
 $yourreponame="<orignizationName>/<repoName>" #Replace it!
 
 az account set --subscription $yoursubscription
-# test if the sp is exist
 
 az ad sp create-for-rbac --name $spName
 

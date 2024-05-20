@@ -11,4 +11,4 @@ Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
 ---
 Next step: 
 
-continue on [Add-first-site](./Add-first-Site.md), if you already have arc connected server, be ware the step 4 is now required for you.
+continue on [Add-first-site](./Add-first-Site.md), if you already have arc-connected servers, be aware that the step 2 and step 4 is now required for you.

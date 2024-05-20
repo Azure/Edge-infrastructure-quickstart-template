@@ -26,7 +26,7 @@ If you scale by static template, you need to run `./az-edge-site-scale generate 
 
 Learn more:
 
-* About [view your CI/CD pipeline running status](./View-pipeline.md)
-* About [troubleShoot](./TroubleShooting.md)
-* About [enable arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
-* About [add new stage](./Customize-Stages.md)
+* About [your CI/CD pipeline running status](./View-pipeline.md)
+* About [troubleshooting](./TroubleShooting.md)
+* About [enabling arc extensions for all sites](../README.md#enable-arc-extensions-for-all-sites)
+* About [adding new stage](./Customize-Stages.md)
