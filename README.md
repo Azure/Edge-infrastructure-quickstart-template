@@ -105,16 +105,21 @@ By using this template, you can get all of the followings inside a single PR und
 
 ```mermaid
 flowchart LR;
-    A[Fork QuickStart Repo] --> B[Finish setup in Getting-Started];
+    A[Fork QuickStart Repo] --> B["`Finish setup 
+    in Getting-Started`"];
     B --> C{Have a POC site?};
     C -- Yes --> D([Export your site to code]);
     D --> E([Check export results]);
     C -- No --> F[Uncomment sample code];
-    F --> G[Input values for your first site];
+    F --> G["`Input values 
+    for your first site`"];
     E --> H[Merge pull request];
-    H --> I([Scale more sites by exported module]);
-    G --> J[Move shared paramteres to global];
-    J --> K([Scale more sites by sample module]);
+    H --> I(["`Scale more sites
+    by exported module`"]);
+    G --> J["`Move shared 
+    paramteres to global`"];
+    J --> K(["`Scale more sites
+    by sample module`"]);
     I --> L[Get scaled sites];
     K --> L;
     Z(["`Private Preview
