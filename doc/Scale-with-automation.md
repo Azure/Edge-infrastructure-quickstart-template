@@ -1,3 +1,13 @@
+# methodology
+The scale workflow will run every time you push `./.azure/scale.csv` into a non-main branch; the workflow will generating terraform codes according to the csv file and then delete the csv file.
+
+In the csv file, each column represents a parameter required for customer input, the first row is parameters from the sample site, each other row represents a site that needs to be scaled.
+
+If you convert your PoC site settings into IaC code, then the sample csv file can be found in `./.azure/scale/<yourModuleName>.csv`, You can resave the file to `./.azure/scale.csv`.
+
+If you scale by static template, you need to run `./az-edge-site-scale generate -c ./.azure/scale.csv -s ./dev/<yourSiteName>` to get the scaling csv file. You can find a spreadsheet under `./.azure`. The spreadsheet contains all the entries which need customized inputs from you per site.
+
+
 # Scale with automations
 
 1. Make sure your are in <yourFeatureBranch> by running `git branch`. If not, `git checkout -b <yourFeatureBranch>`.
