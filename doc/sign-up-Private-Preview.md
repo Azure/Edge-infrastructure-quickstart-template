@@ -18,3 +18,7 @@
                 az-edge-module-export version main(20240426.2)
             </code>
             </details>
+
+
+## next step
+[Go back to home page](../README.md)

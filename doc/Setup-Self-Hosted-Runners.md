@@ -10,4 +10,4 @@
 ![runner](./img/selfHostRunner.png)
 
 ---
-Next Step: Continue on [Getting-Started](./Getting-Started.md#add-your-first-site)
+Next Step: Continue on [Add-first-site](./Add-first-Site.md)
