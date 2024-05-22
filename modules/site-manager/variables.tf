@@ -1,5 +1,15 @@
-variable "siteId" {
-  description = "A unique identifier for the site."
+variable "siteResourceName" {
+  description = "A resource name for the site."
+  type        = string
+}
+
+variable "siteDisplayName" {
+  description = "A display name for the site."
+  type        = string
+}
+
+variable "addressResourceName" {
+  description = "A resource name for the address."
   type        = string
 }
 
