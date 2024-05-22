@@ -1,6 +1,9 @@
 locals {
   resourceGroupName          = "${var.siteId}-rg"
-  deploymentUserName         = "${var.siteId}deployment"
+  siteResourceName           = length(var.siteId) < 4 ? "${var.siteId}-site" : "${var.siteId}"
+  siteDisplayName            = "${var.siteId}"
+  addressResourceName        = "${var.siteId}-address"
+  deploymentUserName         = "${var.siteId}deploy"
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
   adouPath                   = "OU=${var.siteId},${var.adouSuffix}"

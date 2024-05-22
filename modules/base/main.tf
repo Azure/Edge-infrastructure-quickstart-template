@@ -11,23 +11,25 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "site-manager" {
-  source          = "../site-manager"
-  siteId          = var.siteId
-  resourceGroup   = azurerm_resource_group.rg
-  country         = var.country
-  city            = var.city
-  companyName     = var.companyName
-  postalCode      = var.postalCode
-  stateOrProvince = var.stateOrProvince
-  streetAddress1  = var.streetAddress1
-  streetAddress2  = var.streetAddress2
-  streetAddress3  = var.streetAddress3
-  zipExtendedCode = var.zipExtendedCode
-  contactName     = var.contactName
-  emailList       = var.emailList
-  mobile          = var.mobile
-  phone           = var.phone
-  phoneExtension  = var.phoneExtension
+  source              = "../site-manager"
+  siteResourceName    = local.siteResourceName
+  siteDisplayName     = local.siteDisplayName
+  addressResourceName = local.addressResourceName
+  resourceGroup       = azurerm_resource_group.rg
+  country             = var.country
+  city                = var.city
+  companyName         = var.companyName
+  postalCode          = var.postalCode
+  stateOrProvince     = var.stateOrProvince
+  streetAddress1      = var.streetAddress1
+  streetAddress2      = var.streetAddress2
+  streetAddress3      = var.streetAddress3
+  zipExtendedCode     = var.zipExtendedCode
+  contactName         = var.contactName
+  emailList           = var.emailList
+  mobile              = var.mobile
+  phone               = var.phone
+  phoneExtension      = var.phoneExtension
 }
 
 //Prepare AD and arc server
