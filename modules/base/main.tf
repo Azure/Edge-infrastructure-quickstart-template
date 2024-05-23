@@ -1,4 +1,7 @@
 resource "azurerm_resource_group" "rg" {
+  depends_on = [
+    data.external.aksIpCheck
+  ]
   name     = local.resourceGroupName
   location = var.location
   tags = {
