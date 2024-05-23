@@ -7,8 +7,8 @@ variable "resourceGroup" {
   description = "The resource group for the Azure Stack HCI cluster."
 }
 
-variable "clusterId" {
-  description = "The resource ID for the Azure Stack HCI cluster."
+variable "arcSettingsId" {
+  description = "The resource ID for the Azure Stack HCI cluster arc settings."
   type        = string
 }
 

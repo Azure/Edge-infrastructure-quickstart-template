@@ -6,6 +6,6 @@ variable "resourceGroup" {
   description = "The resource group where the resources will be deployed."
 }
 
-variable "subId" {
+variable "subscriptionId" {
   description = "The subscription id."
 }

@@ -1,270 +1,267 @@
-# Edge Infrastructure QuickStart Template
-  
-This repository provides a simple and efficient way for users to provision AzureStack HCI clusters in a bunch of locations using Terraform. By forking this repository and modifying the parameters, you can quickly and easily deploy AzureStack HCI to your environment.
+# Edge Infrastructure QuickStart Template For Scaling (Preview) 
+  ----- Accelerate, Automate, and Simplify the IaC setup using your familiar tools
+## Overview
 
-## Prerequisites
-Check deployment checklist and install AzureStack HCI OS on your servers to be deployed as AzureStack HCI clusters. Complete the step 2 (Download the software) & 3 (Install the OS) in this [doc](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/download-azure-stack-hci-23h2-software). Step 1 (Prepare Active Directory) & 4 (Register with Arc and set up permissions) are covered in the project. Follow the guidance in this repository to start HCI deployments.
+This Quick-Start template simplifies your Infrastructure as Code journey with Azure edge products throughout their lifecycle. It includes a few Terraform modules (**AKS Arc**, **Azure Stack HCI**, **Arc Site Manager** and **Arc extensions**), a scalable hands-on repository structure and the automation tools to streamline the setup of the infrastructure configurations for production scaling.
 
-## Getting Started  
-  
-To get started, follow these steps:  
-1. Create a repository base on this template.
-1. [Setup pipeline](#setup-pipeline).
-1. Create a branch from `main`.
-1. Rename `dev/sample` to `<your location>`. Edit the variables in the `dev/<your location>/main.tf` commit and push.
-1. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
-    1. A resource group name `<site>-rg`
-    1. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
-    1. Arc servers that make up the HCI cluster
-    1. A storage account used for HCI cloud witness
-    1. An HCI cluster name `<site>-cl`
-    1. Arc Resource Bridge named `<site>-cl-arcbridge`
-    1. Custom location of ARB named `<site>-customLocation`
-    1. Two storage paths named `UserStorage1`, `UserStorage2`
-1. Add new sites by copy and paste your first site folder to others. Commit and create a pull request for new sites. After the pull request is merged, new sites will be applied.
-  
-## Setup Pipeline
-1. Setup [OIDC service principle](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure) to allow your repository terraform environment authenticate as the service principle. The detailed steps are described in [Azure documentation](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows). Here's the steps:
-   1. Create `terraform` environment in your GitHub repository. [Creating an environment]([https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#creating-an-environment))
-   1. Create a service principal in Microsoft Entra ID [Application and service principal objects in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser).
-   1. Add Federated credential to the service principal. Use `Environment` as entity type and input `terraform` to `Based on selection` input box.
-   1. Add a secret and save it to `servicePrincipalSecret` in the repo secrets described in the next step.
-   1. Grant the following permissions to the service principle in your subscription:
-      - Contributor (to create resource group / KeyVault / HCI cluster...)
-      - Key Vault Secrets Officer (to create secret in azure KeyVault)
-      - User Access Administrator (to grant role for arc-enabled servers)
-1. Setup repository secret following [Managing secrets for your repository and organization for GitHub Codespaces](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-secrets-for-your-repository-and-organization-for-github-codespaces):
-    - Pipeline secrets:
-        * AZURE_CLIENT_ID: The client ID of the service principle in step 1.
-        * AZURE_SUBSCRIPTION_ID: The subscription ID of the service principle in step 1.
-        * AZURE_TENANT_ID: The tenant ID of the service principle in step 1.
-    - HCI secrets:
-        * domainAdminUser
-        * domainAdminPassword
-        * localAdminUser
-        * localAdminPassword
-        * servicePrincipalId
-        * servicePrincipalSecret 
-1. Setup Terraform backend:
-    1. Create a storage account in your Azure subscription (the same subscription as AZURE_SUBSCRIPTION_ID). Create a container in it.
-    1. Open `.azure/backendTemplate.tf` in this repository. Replace `\<ResourceGroupName\>`, `\<StorageAccountName\>`, `\<StorageContainerName\>` to the storage account and container you just created.
-    1. Commit `.azure/backendTemplate.tf` and push.
-1. Setup git hooks:
- 
-    Run `git config --local core.hooksPath ./.azure/hooks/`.
-    This hook will generate the pipeline definition `deploy-infra.yml` when you commit changes to this repository.
-1. Setup GitHub runners.
-    - If the remote PowerShell port(5985) of HCI is exposed to the Internet. Open `.github/workflows/site-cd-workflow.yml`. Modify `runs-on` section to
-    ```yml
-        runs-on: [ubuntu-latest]
-        # runs-on: [self-hosted]
-    ```
-    - If your HCI nodes can be remote managed inside your CorpNet. You can [setup self-host runner](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Runner hosts must setup the following tools.
-        1. Install [Git](https://git-scm.com/downloads). Add `Git` to path. Run `git --version` to validate.
-        1. Add `<Git installation root>\usr\bin` to path. The default path is `C:\Program Files\Git\usr\bin`. 
-        1. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
-        1. Follow the first answer in [PowerShell Remoting - stackoverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
-        1. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator.
+### What You'll Get
 
-## Add new sites
-After the first HCI deployment succeeds, you may want to scale the deployment to more sites. You can simply copy and paste your first site folder. Edit `main.tf` for each newly copied sites to the site specific values. Commit and create a pull request for the changes. Deployment pipeline and backend settings will be set during the commit. Once the pull request is merged into `main` branch, pipeline will be triggered and deploy new sites accordingly. An example could be
-```
-├───dev
-│   └───firstsite
-│           main.tf
-│           ...
-│
-├───prod
-│   ├───prod1
-│   │       main.tf
-│   │       ...
-│   │
-│   ├───prod2
-│   │       main.tf
-│   │       ...
-│   │
-│   └───prod3
-│           main.tf
-│           ...
-│
-└───qa
-    ├───qa1
-    │       main.tf
-    │       ...
+By using this template, you can get all of the followings inside a single PR under your GitHub account
+
+* a scalable and extendible repository structure following the DevOps best practice
+
+    <details>
+
+    <summary><b>Repo Structure</b></summary>
+
+    <img src="doc/img/repoStructure.png" alt="repoStructure" width="800"/>
+
+    ```PROJECT_ROOT
     │
-    └───qa2
-            main.tf
-            ...
-```
-
-## Telemetry
-Microsoft collects deployment pipeline telemetry. If you do not want to send telemetry, edit `.github/workflows/site-cd-workflow.yml`, remove all steps starts with `Telemetry`.
-
-## Clean Up
-Removing one folder will not remove the resources created by this folder previously.
-
-You have 2 ways to cleanup if you do want to remove the resources.
-- Before removing the folder, run `terraform destroy` to destroy the resources created by this Terraform configuration. Then remove this folder.
-- Go to Azure portal or use CLI to remove `${siteId}-rg` resource group and remove this folder.
-
-# Advanced
-
-## Repo Structure
-```
-PROJECT_ROOT
-│
-├───.azure
-│   │   backendTemplate.tf              // Backend storage account config file
-│   │
-│   └───hooks
-│           pre-commit                  // Git hook to generate deployment workflow and set backend
-│
-├───.github
-│   └───workflows
-│           site-cd-workflow.yml        // Steps to deploy a single site
-│
-├───dev                                 // The first stage to deploy
-│   └───sample
-│           backend.tf
-│           main.tf                     // Main configuration file for the site
-│           provider.tf
-│           terraform.tf
-│           variables.tf
-│
-├───modules
-│   ├───base                            // Base module of all sites
-│   │       main.tf
-│   │       variables.tf
-│   │
-│   ├───hci                             // Module to manage HCI clusters
-│   │   │
-│   │   └───hciserver
-│   │
-│   ├───hci-extensions                  // Module to manage HCI extensions
-│   │
-│   └───hci-vm                          // Module to manage HCI VMs
-│
-├───prod                                // prod stage sites are deployed after qa stage
-│   │
-│   └───prod1
-│
-└───qa                                  // qa stage sites are deployed after dev stage
+    ├───.azure
+    │   │   backendTemplate.tf              // Backend storage account config file
+    │   │
+    │   └───hooks
+    │           pre-commit                  // Git hook to generate deployment workflow and set backend
     │
-    └───qa1
+    ├───.github
+    │   └───workflows
+    │           site-cd-workflow.yml        // Set up CD pipeline
+    |           terraform-plan.yml
+    │
+    ├───dev                                 // The first stage to deploy
+    │   └───sample
+    │           backend.tf
+    │           main.tf                     // Main configuration file for the site
+    │           provider.tf
+    │           terraform.tf
+    │           variables.tf
+    │
+    ├───modules
+    │   ├───base                            // Base module of all sites
+    │   │       main.tf
+    │   │       variables.tf
+    │   │
+    │   ├───hci                             // Module to manage HCI clusters
+    │   │
+    │   ├───hci-extensions                  // Module to manage HCI extensions                                                                     
+    │   ├───hci-provisioners                // Module to connect servers to Arc
+    │   │───aks-arc                         // Module to manage AKS Arc clusters
+    │   └───hci-vm                          // Module to manage HCI VMs
+    │   └───site-manager                    // Module to manage site-manager
+    │
+    ├───prod                                // prod stage sites are deployed after qa stage
+    │   │
+    │   └───prod1
+    │
+    └───qa                                  // qa stage sites are deployed after dev stage
+        │
+        └───qa1
+    ```
+
+    Base module contains the global variables across all sites. Each stage and each site folder contains the local variables specific to the stage/site. Local settings can override the global settings.
+
+    </details>
+
+* organized variables with the prefilled values to boost your initial setup
+    <details>
+
+    <summary><b>Variables Structure</b></summary>
+
+    | Variable Type           | Description                                                                                                     | Example             | Where to set value                                                                                       | Override Priority |
+    | ----------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- | :---------------: |
+    | Global Variables        | The values of the global variables typically are consistent across the whole fleet but specific for one product | `domainFqdn` in HCI | Set in `modules/base/<product>.hci.global.tf`. Add default value for variables.                          |        low        |
+    | Site specific variables | The values of these variables are unique in each site                                                           | `siteId`            | These variables must be set in the site `main.tf` file under each site folder                            |       high        |
+    | Pass through variables  | The values of these variables are inherited from GitHub secrets                                                 | `subscriptionId`    | `modules/base/<product>.hci.misc.tf`                                                                     |                   |
+    | Reference variables     | These variables are shared by 2 or more products                                                                | `location`          | Its definition can be found in `variables.<product>.*.tf` if its link is `ref/<product>/<variable_name>` |                   |
+
+    </details>
+
+* a customizable CD pipeline with the automations.
+    <details>
+
+    <summary><b>CI/CD Pipeline</b></summary>
+
+    <img src="doc/img/CDPipeline.png" alt="CDPipeline"/>
+
+    </details>
+
+### Is This Right for You?
+
+**Yes** if you want to:
+
+* Create an initial site containing AKS Arc, HCI23H2 along with Arc extensions using Terraform
+* If you have manually created a PoC site and wish to convert the PoC site settings into Terraform code.
+* Replicate the settings from the above site multiple times
+* Integrate the above settings with CI/CD pipeline using GitHub Actions
+* Automate all of the above scenarios
+
+**No** if you want to:
+
+* Create single AKS Arc or HCI instance using Terraform. Although this template contains the Terraform module for each of them, we are still waiting to officially publish them into public Terraform registry. You are welcome to use this repository for testing and exploration. For production usage, please contact arcIaCSupport@microsoft.com for each module's status.
+* Use any other IaC tool such as Bicep or ARM to provision your Azure resources. We are working on our roadmap. Please stay tuned for future releases.
+
+### Supported scenarios
+
+```mermaid
+flowchart LR;
+    A[Fork QuickStart Repo] --> B["`Finish setup 
+    in Getting-Started`"];
+    B --> C{Have a POC site?};
+    C -- Yes --> D([Export your site to code]);
+    D --> E([Check export results]);
+    C -- No --> F[Uncomment sample code];
+    F --> G["`Input values 
+    for your first site`"];
+    E --> H[Merge pull request];
+    H --> I(["`Scale more sites
+    by exported module`"]);
+    G --> J["`Move shared 
+    paramteres to global`"];
+    J --> K(["`Scale more sites
+    by sample module`"]);
+    I --> L[Get scaled sites];
+    K --> L;
+    Z(["`Private Preview
+    *(sign up required)*`"])
 ```
 
-## Edit Stages
+### Supported Azure edge resource types
 
-You may create new folders to represent a stage. Put new sites under the folder. Then, open `.stages` file to add the stage into your deployment workflow. Commit the changes, the deployment pipeline will change accordingly.
+<details>
 
-## Use your naming conventions for resources
+<summary><b> Supported Azure edge resource types</b></summary>
 
-Edit `modules/base/naming.tf` for your naming conventions. The default naming for resources are
+* [Azure Stack HCI, version 23H2](https://learn.microsoft.com/en-us/azure-stack/hci/whats-new)
+* [Azure Stack HCI extensions](https://learn.microsoft.com/en-us/azure-stack/hci/manage/arc-extension-management?tabs=azureportal)
+* [Azure Kubernetes Service (AKS) enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/aks/hybrid/)
+* [Arc Site Manager](https://review.learn.microsoft.com/en-us/azure/azure-arc/site-manager/overview?branch=release-preview-site-manager)
+* [Azure resource group](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/overview)
 
-| Resource                               | Naming                       |
-| -------------------------------------- | ---------------------------- |
-| Resource group                         | `{siteId}-rg`                |
-| Witness storage account                | `{siteId}wit`                |
-| KeyVault                               | `{siteId}-kv`                |
-| cluster                                | `{siteId}-cl`                |
-| custom location                        | `{siteId}-customlocation`    |
-| Log analytics workspace                | `{siteId}-workspace`         |
-| Log analytics data collection endpoint | `{siteId}-dce`               |
-| Log analytics data collection rule     | `AzureStackHCI-{siteId}-dcr` |
+</details>
 
-You may toggle whether to append random suffix for storage account and KeyVault by with `randomSuffix` local variable. If `randomSuffix` is set to true, it can avoid conflicts when storage account and KeyVault soft deletion is enabled. `randomSuffix` is a random integer from 10 to 99. The naming will changed to
+## Getting started
 
-| Resource                | Naming                       |
-| ----------------------- | ---------------------------- |
-| Resource group          | `{siteId}-rg`                |
-| Witness storage account | `{siteId}wit{randomSuffix}`  |
-| KeyVault                | `{siteId}-kv-{randomSuffix}` |
+This repository implements AD preparation and Arc connection. Follow the instructions below to set up the rest of the components.
 
-## Customize The Deployment  
-  
-You may edit `modules/base` to customize your deployment template for all sites. You may add default values for your sites in `modules/base/variables.tf`. For example, tenant name is likely to be the same for all sites. You can add a default value for `tenant` variable.
-```hcl
-variable "tenant" {
-  type        = string
-  description = "The tenant ID for the Azure account."
-  default     = "<your tennat ID>"
-}
-```
+**Steps**: [Getting-Started](./doc/Getting-Started.md)
 
-## Manual Apply
+## Scenario 1: Create your first site from scratch using quick-start template, then scale more sites
 
-If you want to deploy locally:
-1. Create a repository base on this template.
-1. Clone the forked repository to your local machine.  
-1. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) if not already installed.  
-1. Make sure you have the following permissions to the subscription you want to deploy HCI clusters.
-    - Contributor (to create resource group / KeyVault / HCI cluster...)
-    - Key Vault Secrets Officer (to create secret in azure KeyVault)
-    - User Access Administrator (to grant role for arc-enabled servers)
-1. Edit `.azure/backendTemplate.tf` to use local backend.
-    ```hcl
-    terraform {
-    backend "local" {}
-    }
+### Create your first site from scratch using quick-start template
+
+**Overview**: Ready to deploy your first with AKS Arc on HCI23H2 along with Arc extensions? It's the right place for you.
+This scenario provides a quick and efficient way to establish a new site with edge resources with a predefined infrastructure template.
+
+**Steps**: [Create your first site](./doc/Add-first-Site.md)
+
+**Expected outcome**:
+
+* A PR containing Terraform code set up for AKS Arc, HCI, Arc extensions under a single resource group
+* A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
+* Provisioning action will happen in your side (*merge the PR to `main`*)
+
+### Scale more sites (Private Preview)
+
+**Overview**: Automatically configure scaling settings based on the parameters defined in the previous steps.
+
+**Steps**:
+
+* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+* Confirm and update the global configurations: If you would like to update the pre-filled values of the global configurations, follow the guidance [Edit-Global-Parameters](./doc/Edit-Global-Parameters.md) to make the change.
+* Get the scaling code based on the quick-start template:
+    1. Create a new branch from `main` by running `git checkout -b <yourFeatureBranch>`
+    2. Run `./az-edge-site-scale generate -c ./.azure/scale.csv -s ./dev/<yourSiteName>` to get the scaling csv file. You can find a spread sheet under `./.azure`. The spread sheet contains all the entries which need customized inputs from you per site.
+* [Scale with the automations](./doc/Scale-with-automation.md)
+
+**Expected outcome**:
+
+* A PR with the Terraform code for # of sites, each containing 1 HCI cluster, 1 AKS Arc cluster and the optional monitoring extension and Arc site manager extension.
+* A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
+* Provisioning action will happen in your side (*merge the PR to `main`*)
+
+## Scenario 2: Convert your PoC site settings into IaC code, then scale (Private Preview)
+
+**Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom templates for multiple sites.
+
+**Steps**:
+
+* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
+  > [!NOTE]
+  > Resources under the resource group must belong to one single site. Code generation **doesn't** support resource groups containing multiple HCI clusters for now.
+* Convert the PoC site into IaC code:
+
+    1. Create a branch from `main` branch by running `git checkout -b <yourFeatureBranch>`
+    2. Add a new file `.azure/export.json`. Do not use `base` as the name of the module. It may carry the original contents in your exported module.
+
+    ```json
+    [
+        {
+            "resourceGroup": "/subscriptions/<your-subscription-id>/resourceGroups/<yourSampleResourceGroup>",
+            "baseModulePath": "./modules/<name-of-the-module>",
+            "groupPath": "./dev/<yourSiteName>"
+        }
+    ]
     ```
-1. Modify the variables in the `dev/sample/main.tf` file to fit your environment's requirements.
-1. Open a PowerShell as administrator, `az login` with your credentials.
-1. Go to the site folder `cd dev/sample`.
-1. Add `sample.tfvars` to assign values for variables.
-    ```hcl
-    subscriptionId         = "<your subscription id>"
-    localAdminUser         = "<local admin user name>"
-    localAdminPassword     = "<local admin password>"
-    domainAdminUser        = "<domain admin user name>"
-    domainAdminPassword    = "<domain admin user password>"
-    servicePrincipalId     = "<service principal id created in the first step of setting pipeline>"
-    servicePrincipalSecret = "<service principal secret created in the first step of setting pipeline>"
-    ```
-1. Initialize the Terraform working directory by running `terraform init`.
-1. Apply the Terraform configuration and create the resources by running `terraform apply -var-file="sample.tfvars"`.
-  
-The above commands will provision an AzureStack HCI cluster in your Azure subscription.  
 
-## Parameters
+    3. Commit and push `.azure/export.json`: `git commit -m <commit message>` and `git push -u origin <yourFeatureBranch>`. A GitHub workflow will be triggered automatically. Create a pull request to `main`.You can find your workflow run as following.
+    
+    <img src="./doc/img/view_export_workflow_in_action_panel.png" width="800" />
+    
+    4. After workflow execution, check the generated code.
+    
+    <img src="./doc/img/view_commit_for_export.png" width="600" />
 
-| Name                                                                                                 | Description                                            | Type                                                                                      | Default                                  | Required |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------- | :------: |
-| <a name="input_adouPath"></a> [adouPath](#input\_adouPath)                                           | The Active Directory OU path.                          | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway)                         | The default gateway for the network.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers)                                     | A list of DNS server IP addresses.                     | `list(string)`                                                                            | n/a                                      |   yes    |
-| <a name="input_domainAdminPassword"></a> [domainAdminPassword](#input\_domainAdminPassword)          | The password for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainAdminUser"></a> [domainAdminUser](#input\_domainAdminUser)                      | The username for the domain administrator account.     | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn)                                     | The domain FQDN.                                       | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainName"></a> [domainName](#input\_domainName)                                     | The domain name for the environment.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_domainServerIP"></a> [domainServerIP](#input\_domainServerIP)                         | The ip of the domain server.                           | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress)                            | The ending IP address of the IP address range.         | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)             | The password for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)                         | The username for the local administrator account.      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_servers"></a> [servers](#input\_servers)                                              | A list of servers with their names and IPv4 addresses. | <pre>list(object({<br>    name        = string<br>    ipv4Address = string<br>  }))</pre> | n/a                                      |   yes    |
-| <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)             | The service principal ID for the Azure account.        | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret) | The service principal secret for the Azure account.    | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_siteId"></a> [siteId](#input\_siteId)                                                 | A unique identifier for the site.                      | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress)                      | The starting IP address of the IP address range.       | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_subId"></a> [subId](#input\_subId)                                                    | The subscription ID for the Azure account.             | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_tenant"></a> [tenant](#input\_tenant)                                                 | The tenant ID for the Azure account.                   | `string`                                                                                  | n/a                                      |   yes    |
-| <a name="input_destory_adou"></a> [destory\_adou](#input\_destory\_adou)                             | whether destroy previous adou                          | `bool`                                                                                    | `false`                                  |    no    |
-| <a name="input_location"></a> [location](#input\_location)                                           | The Azure region where the resources will be deployed. | `string`                                                                                  | `"eastus"`                               |    no    |
-| <a name="input_rp_principal_id"></a> [rp\_principal\_id](#input\_rp\_principal\_id)                  | The principal ID of the resource provider.             | `string`                                                                                  | `"f0e0e122-3f80-44ed-95d2-f56e6fdc514c"` |    no    |
-| <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)                                     | The subnet mask for the network.                       | `string`                                                                                  | `"255.255.255.0"`                        |    no    |
+    * If the workflow runs successfully, the generated code is identical to Azure resources. Please merge the branch ASAP. If there are changes happened after export, the changes will be reverted.
+    * If the workflow run fails, you can check `./dev/<yourSiteName>/export-diff` to see what are the changes.
+
+* [Scale with automations](./doc/Scale-with-automation.md)
+
+**Expected outcome**:
+
+* A GitHub repository with Terraform code for # of sites, each containing custom settings for HCI clusters, AKS Arc clusters
+* A pre-defined CI/CD pipeline containing 3 stages: Dev, QA, Prod
+* Provisioning action will happen in your side (*merge the PR to `main`*)
+
+## Enable Arc extensions for all sites
+
+Any change merged into `main` branch will trigger the update pipeline. If the change fails in early stages, the deployment will be blocked so that this failure will not affect the production sites.
+
+Following tutorials help you to turn on opt-in features:
+
+* [Add HCI Insights](./doc/Add-HCI-Insights.md)
+* [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
+
+## Advanced topics
+
+- [Customize Stages](./doc/Customize-Stages.md)
+- [Update global parameters](./doc/Edit-Global-Parameters.md)
+- [Disable Telemetry](./doc/Disable-Telemetry.md)
+- [Untrack Resources from The Repository](./doc/Untrack-Resources.md)
+- [View your CI/CD pipeline running status](./doc/View-pipeline.md)
+- [TroubleShoot](./doc/TroubleShooting.md)
+
+## Ask for support
+
+[Open issue](https://github.com/Azure/Edge-infrastructure-quickstart-template/issues/new) or contact arcIaCSupport@microsoft.com for any issue or support
 
 ## License  
   
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.  
   
 ## Disclaimer  
-  
+
+'Preview Terms'. This repository (the "Preview") is subject to the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/en-us/support/legal/preview-supplemental-terms/). Unless otherwise noted, Customer should not use the Preview to process Personal Data or other Data that is subject to legal or regulatory compliance requirements.
+
+'Confidentiality'.The Preview and any associated materials or documentation are confidential information and subject to obligations in your Non-Disclosure Agreement with Microsoft.
+
 This repository is provided "as-is" without any warranties or support. Use at your own risk. Always test in a non-production environment before deploying to production.  
 
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+the rights to use your contribution. For details, visit [Microsoft opensource](https://cla.opensource.microsoft.com).
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide
 a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
@@ -276,8 +273,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
+trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.

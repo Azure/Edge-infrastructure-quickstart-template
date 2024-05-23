@@ -20,7 +20,7 @@ resource "azurerm_key_vault" "DeploymentKeyVault" {
 resource "azurerm_key_vault_secret" "AzureStackLCMUserCredential" {
   name         = "AzureStackLCMUserCredential"
   content_type = "Secret"
-  value        = base64encode("${var.domainAdminUser}:${var.domainAdminPassword}")
+  value        = base64encode("${var.deploymentUser}:${var.deploymentUserPassword}")
   key_vault_id = azurerm_key_vault.DeploymentKeyVault.id
   depends_on   = [azurerm_key_vault.DeploymentKeyVault]
   tags         = {}

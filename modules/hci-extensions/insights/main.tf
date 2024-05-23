@@ -68,7 +68,7 @@ resource "azapi_resource" "monitor_agent" {
   type      = "Microsoft.AzureStackHCI/clusters/ArcSettings/Extensions@2023-08-01"
   parent_id = var.arcSettingId
   name      = "AzureMonitorWindowsAgent"
-  body = jsonencode({
+  body = {
     properties = {
       extensionParameters = {
         autoUpgradeMinorVersion = false
@@ -78,9 +78,7 @@ resource "azapi_resource" "monitor_agent" {
         settings                = {}
       }
     }
-  })
-
-  ignore_missing_property = true
+  }
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "association" {

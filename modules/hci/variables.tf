@@ -12,8 +12,8 @@ variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
   validation {
-    condition     = length(var.siteId) < 9 && length(var.siteId) > 0
-    error_message = "value of siteId should be less than 9 characters and greater than 0 characters"
+    condition     = can(regex("^[a-zA-Z0-9-]{1,8}$", var.siteId))
+    error_message = "value of siteId should be less than 9 characters and greater than 0 characters and only contain alphanumeric characters and hyphens, this is the requirement of name prefix in hci deploymentsetting"
   }
 }
 
@@ -25,20 +25,18 @@ variable "servers" {
   }))
 }
 
-variable "domainAdminUser" {
-  sensitive   = true
+variable "deploymentUser" {
   type        = string
   description = "The username for the domain administrator account."
 }
 
-variable "domainAdminPassword" {
+variable "deploymentUserPassword" {
   sensitive   = true
   type        = string
   description = "The password for the domain administrator account."
 }
 
 variable "localAdminUser" {
-  sensitive   = true
   type        = string
   description = "The username for the local administrator account."
 }
@@ -86,14 +84,9 @@ variable "adouPath" {
   description = "The Active Directory OU path."
 }
 
-variable "subId" {
+variable "subscriptionId" {
   type        = string
   description = "The subscription ID for the Azure account."
-}
-
-variable "tenant" {
-  type        = string
-  description = "The tenant ID for the Azure account."
 }
 
 variable "servicePrincipalId" {
@@ -110,7 +103,6 @@ variable "servicePrincipalSecret" {
 
 variable "managementAdapters" {
   type    = list(string)
-  default = ["ethernet", "ethernet 2"]
 }
 
 variable "storageNetworks" {
@@ -121,9 +113,23 @@ variable "storageNetworks" {
   }))
 }
 
+variable "rdmaEnabled" {
+  type        = bool
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "storageConnectivitySwitchless" {
+  type        = bool
+  description = "Indicates whether storage connectivity is switchless."
+}
+
 variable "clusterName" {
   type = string
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
+  validation {
+    condition     = length(var.clusterName) < 16 && length(var.clusterName) > 0
+    error_message = "value of clusterName should be less than 16 characters and greater than 0 characters"
+  }
 }
 
 variable "customLocationName" {

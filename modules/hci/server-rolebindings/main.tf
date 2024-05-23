@@ -4,15 +4,17 @@ data "azurerm_arc_machine" "server" {
 }
 
 locals {
-  RoleList = [
-    "Azure Stack HCI Edge Devices role",
-    "Key Vault Secrets User",
-  ]
+  Roles = {
+    KVSU   = "Key Vault Secrets User",
+    ACMRM  = "Azure Connected Machine Resource Manager",
+    ASHDMR = "Azure Stack HCI Device Management Role",
+    Reader = "Reader"
+  }
 }
 
 resource "azurerm_role_assignment" "MachineRoleAssign" {
-  for_each             = toset(local.RoleList)
-  scope                = "/subscriptions/${var.subId}/resourceGroups/${var.resourceGroup.name}"
+  for_each             = local.Roles
+  scope                = "/subscriptions/${var.subscriptionId}/resourceGroups/${var.resourceGroup.name}"
   role_definition_name = each.value
   principal_id         = data.azurerm_arc_machine.server.identity[0].principal_id
 }

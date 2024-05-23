@@ -10,15 +10,33 @@ data "azurerm_arc_machine" "arcservers" {
 locals {
   storageAdapters  = flatten([for storageNetwork in var.storageNetworks : storageNetwork.networkAdapterName])
   combinedAdapters = setintersection(toset(var.managementAdapters), toset(local.storageAdapters))
-  combined         = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
-  combinedIntents = [{
+  converged        = (length(local.combinedAdapters) == length(var.managementAdapters)) && (length(local.combinedAdapters) == length(local.storageAdapters))
+
+  adapterProperties = {
+    jumboPacket             = ""
+    networkDirect           = "Disabled"
+    networkDirectTechnology = ""
+  }
+  rdmaAdapterProperties = {
+    jumboPacket             = "9014"
+    networkDirect           = "Enabled"
+    networkDirectTechnology = "RoCEv2"
+  }
+
+  switchlessAdapterProperties = {
+    jumboPacket             = "9014"
+    networkDirect           = "Enabled"
+    networkDirectTechnology = "iWARP"
+  }
+
+  convergedIntents = [{
     name = "ManagementComputeStorage",
     trafficType = [
       "Management",
       "Compute",
       "Storage"
     ],
-    adapter                            = var.managementAdapters,
+    adapter                            = flatten(var.managementAdapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
@@ -30,12 +48,8 @@ locals {
       priorityValue8021Action_Cluster = "",
       bandwidthPercentage_SMB         = ""
     },
-    overrideAdapterProperty = false,
-    adapterPropertyOverrides = {
-      jumboPacket             = "",
-      networkDirectTechnology = "",
-      networkDirect           = "Disabled"
-    }
+    overrideAdapterProperty  = false,
+    adapterPropertyOverrides = var.rdmaEnabled ? local.rdmaAdapterProperties : local.adapterProperties
   }]
 
   seperateIntents = [{
@@ -44,7 +58,7 @@ locals {
       "Management",
       "Compute"
     ],
-    adapter                            = var.managementAdapters
+    adapter                            = flatten(var.managementAdapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
     overrideAdapterProperty            = false,
@@ -81,20 +95,15 @@ locals {
         priorityValue8021Action_SMB     = "",
         bandwidthPercentage_SMB         = ""
       },
-      adapterPropertyOverrides = {
-        jumboPacket             = "",
-        networkDirect           = "Disabled",
-        networkDirectTechnology = ""
-      }
+      adapterPropertyOverrides = var.rdmaEnabled ? (var.storageConnectivitySwitchless ? local.switchlessAdapterProperties : local.rdmaAdapterProperties) : local.adapterProperties
   }]
 }
 
 
 resource "azapi_resource" "validatedeploymentsetting" {
-  count                     = local.combined ? 1 : 0
+  count                     = local.converged ? 1 : 0
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
-  schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.DefaultARBApplication,
@@ -105,16 +114,14 @@ resource "azapi_resource" "validatedeploymentsetting" {
     module.serverRoleBindings,
     azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
-  timeouts {
-    create = "30m"
-    update = "10m"
-    delete = "10m"
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.deploymentMode
+    ]
   }
-  // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = var.isExported ? "Deploy" : "Validate"
@@ -162,13 +169,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
-                intents                       = local.combinedIntents
-                storageNetworks               = var.storageNetworks
+                intents                       = local.convergedIntents
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath
@@ -182,14 +189,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
         ]
       }
     }
-  })
+  }
 }
 
 resource "azapi_resource" "validatedeploymentsetting_seperate" {
-  count                     = local.combined ? 0 : 1
+  count                     = local.converged ? 0 : 1
   type                      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
   name                      = "default"
-  schema_validation_enabled = false
   parent_id                 = azapi_resource.cluster.id
   depends_on = [
     azurerm_key_vault_secret.DefaultARBApplication,
@@ -198,16 +204,14 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
     azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster
   ]
-  timeouts {
-    create = "30m"
-    update = "10m"
-    delete = "10m"
-  }
   // ignore the deployment mode change after the first deployment
-  ignore_body_changes = [
-    "properties.deploymentMode"
-  ]
-  body = jsonencode({
+  lifecycle {
+    ignore_changes = [
+      body.properties.deploymentMode
+    ]
+  }
+
+  body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = "Validate" //Deploy
@@ -255,13 +259,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                     endingAddress   = var.endingAddress
                   }
                 ]
-                dnsServers = var.dnsServers
+                dnsServers = flatten(var.dnsServers)
               }]
-              physicalNodes = var.servers
+              physicalNodes = flatten(var.servers)
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.seperateIntents
-                storageNetworks               = var.storageNetworks
+                storageNetworks               = flatten(var.storageNetworks)
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adouPath
@@ -269,11 +273,10 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               optionalServices = {
                 customLocation = var.customLocationName
               }
-
             }
           }
         ]
       }
     }
-  })
+  }
 }
