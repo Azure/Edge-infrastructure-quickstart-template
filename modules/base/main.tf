@@ -65,7 +65,7 @@ module "hci-provisioners" {
 }
 */
 module "hci" {
-  depends_on                    = [module.hci-provisioners]
+  // depends_on                    = [module.hci-provisioners]
   source                        = "../hci"
   resourceGroup                 = azurerm_resource_group.rg
   siteId                        = var.siteId
