@@ -231,6 +231,7 @@ Following tutorials help you to turn on opt-in features:
 
 * [Add HCI Insights](./doc/Add-HCI-Insights.md)
 * [Add New Sites with Arc Site Manager](./doc/Add-Site-Manager.md)
+* [Add HCI VM by Marketplace Windows Server Image](./doc/Add-HCI-VM.md)
 
 ## Advanced topics
 

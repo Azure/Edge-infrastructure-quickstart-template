@@ -16,5 +16,6 @@ locals {
   aksArcName                 = "${var.siteId}-aksArc"
   vmName                     = "${var.siteId}-vm"
   vmAdminUsername            = "${var.siteId}admin"
+  domainJoinUserName         = "${var.siteId}vmuser"
   randomSuffix               = true
 }

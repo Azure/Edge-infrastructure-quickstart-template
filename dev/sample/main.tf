@@ -46,11 +46,6 @@
 #   servicePrincipalSecret        = var.servicePrincipalSecret
 #   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 
-#   # Region HCI extensions parameters
-#   # Uncomment this section will enable insights and alerts extensions on HCI.
-#   # enableAlerts   = false
-#   # enableInsights = false
-
 #   # Region HCI logical network parameters
 #   lnet-startingAddress = "<lnetStartingAddress>"
 #   lnet-endingAddress   = "<lnetEndingAddress>"  # This IP range should not overlap with HCI infra IP range.
@@ -66,6 +61,7 @@
 #   # Uncomment this section will create a windows server VM on HCI.
 #   # downloadWinServerImage = true
 #   # vmAdminPassword        = var.vmAdminPassword
+#   # domainJoinPassword     = var.domainJoinPassword
 
 #   # Region site manager parameters
 #   # Check ./doc/Add-Site-Manager.md for more information

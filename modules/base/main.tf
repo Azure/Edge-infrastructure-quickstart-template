@@ -154,15 +154,27 @@ module "vm-image" {
 }
 
 module "vm" {
-  count            = var.downloadWinServerImage ? 1 : 0
-  source           = "../hci-vm"
-  depends_on       = [module.vm-image]
-  location         = azurerm_resource_group.rg.location
-  customLocationId = module.hci.customlocation.id
-  resourceGroupId  = azurerm_resource_group.rg.id
-  vmName           = local.vmName
-  imageId          = module.vm-image.winServerImageId
-  logicalNetworkId = module.logical-network.logicalNetworkId
-  adminUsername    = local.vmAdminUsername
-  adminPassword    = var.vmAdminPassword
+  count               = var.downloadWinServerImage ? 1 : 0
+  source              = "../hci-vm"
+  depends_on          = [module.vm-image]
+  location            = azurerm_resource_group.rg.location
+  customLocationId    = module.hci.customlocation.id
+  resourceGroupId     = azurerm_resource_group.rg.id
+  vmName              = local.vmName
+  imageId             = module.vm-image.winServerImageId
+  logicalNetworkId    = module.logical-network.logicalNetworkId
+  adminUsername       = local.vmAdminUsername
+  adminPassword       = var.vmAdminPassword
+  vCPUCount           = var.vCPUCount
+  memoryMB            = var.memoryMB
+  dynamicMemory       = var.dynamicMemory
+  dynamicMemoryMax    = var.dynamicMemoryMax
+  dynamicMemoryMin    = var.dynamicMemoryMin
+  dynamicMemoryBuffer = var.dynamicMemoryBuffer
+  dataDiskParams      = var.dataDiskParams
+  privateIPAddress    = var.privateIPAddress
+  domainToJoin        = var.domainToJoin
+  domainTargetOu      = var.domainTargetOu
+  domainJoinUserName  = var.domainJoinUserName
+  domainJoinPassword  = var.domainJoinPassword
 }

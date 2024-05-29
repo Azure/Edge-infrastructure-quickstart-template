@@ -57,3 +57,10 @@ variable "vmAdminPassword" {
   sensitive   = true
   default     = ""
 }
+
+variable "domainJoinPassword" {
+  description = "Password of User with permissions to join the domain."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
