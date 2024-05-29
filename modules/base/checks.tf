@@ -1,4 +1,4 @@
-data "external" "aksIpCheck" {
+data "external" "lnetIpCheck" {
   program = ["powershell.exe", "-File", "${abspath(path.module)}/scripts/ip-range-overlap.ps1", var.startingAddress, var.endingAddress, var.aksArc-lnet-startingAddress, var.aksArc-lnet-endingAddress]
 
   lifecycle {

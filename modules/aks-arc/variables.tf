@@ -12,9 +12,9 @@ variable "aksArcName" {
   description = "The name of the hybrid aks"
 }
 
-variable "logicalNetworkName" {
+variable "logicalNetworkId" {
+  description = "The id of the logical network that the AKS nodes will be connected to."
   type        = string
-  description = "The name of the logical network"
 }
 
 variable "controlPlaneIp" {
@@ -25,48 +25,6 @@ variable "controlPlaneIp" {
 variable "arbId" {
   type        = string
   description = "The id of the arc bridge resource, this is used to update hybrid aks extension"
-}
-
-variable "usingExistingLogicalNetwork" {
-  type        = bool
-  description = "Whether using existing logical network"
-  default     = false
-}
-
-variable "startingAddress" {
-  description = "The starting IP address of the IP address range."
-  type        = string
-  default     = null
-}
-
-variable "endingAddress" {
-  description = "The ending IP address of the IP address range."
-  type        = string
-  default     = null
-}
-
-variable "defaultGateway" {
-  description = "The default gateway for the network."
-  type        = string
-  default     = null
-}
-
-variable "dnsServers" {
-  type        = list(string)
-  description = "A list of DNS server IP addresses."
-  default     = []
-}
-
-variable "addressPrefix" {
-  type        = string
-  description = "The CIDR prefix of the subnet that used by kubernetes cluster nodes, it will create VM with the ip address in this range"
-  default     = null
-}
-
-variable "vlanId" {
-  type        = string
-  description = "The vlan id of the logical network, default means no vlan id is specified"
-  default     = null
 }
 
 variable "sshPublicKey" {
@@ -98,12 +56,6 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validateSshKeyVault = (var.sshPublicKey == null && var.sshKeyVaultId == null) ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
   validateSshKey = (var.sshPublicKey == null && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
-}
-
-variable "enableAzureRBAC" {
-  type        = bool
-  description = "whether to enable azure rbac"
-  default     = false
 }
 
 variable "rbacAdminGroupObjectIds" {

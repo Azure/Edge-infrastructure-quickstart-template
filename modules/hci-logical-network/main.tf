@@ -1,10 +1,3 @@
-data "azapi_resource" "logicalNetwork" {
-  type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
-  parent_id = var.resourceGroup.id
-  name      = var.logicalNetworkName
-  count     = var.usingExistingLogicalNetwork ? 1 : 0
-}
-
 locals {
   subnet0PropertiesFull = {
     addressPrefix      = var.addressPrefix, //compute from starting address and ending address
@@ -34,10 +27,9 @@ locals {
 
 resource "azapi_resource" "logicalNetwork" {
   type      = "Microsoft.AzureStackHCI/logicalNetworks@2023-09-01-preview"
-  parent_id = var.resourceGroup.id
+  parent_id = var.resourceGroupId
   name      = var.logicalNetworkName
-  count     = var.usingExistingLogicalNetwork ? 0 : 1
-  location  = var.resourceGroup.location
+  location  = var.location
   lifecycle {
     precondition {
       condition     = length(var.startingAddress) > 0 && length(var.endingAddress) > 0 && length(var.defaultGateway) > 0 && length(var.dnsServers) > 0 && length(var.addressPrefix) > 0
@@ -63,8 +55,4 @@ resource "azapi_resource" "logicalNetwork" {
       vmSwitchName = "ConvergedSwitch(managementcompute)" // This is hardcoded for all cloud deployment hci cluster
     }
   }
-}
-
-locals {
-  logicalNetworkId = var.usingExistingLogicalNetwork ? data.azapi_resource.logicalNetwork[0].id : azapi_resource.logicalNetwork[0].id
 }

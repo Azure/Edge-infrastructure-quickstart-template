@@ -1,10 +1,13 @@
 data "azurerm_client_config" "current" {}
 
+resource "terraform_data" "logicalNetworkReplacement" {
+  count = var.isExported ? 0 : 1
+  input = var.logicalNetworkId
+}
+
 resource "azapi_resource" "connectedCluster" {
   type = "Microsoft.Kubernetes/connectedClusters@2024-01-01"
   depends_on = [
-    azapi_resource.logicalNetwork,
-    data.azapi_resource.logicalNetwork,
     azurerm_key_vault_secret.sshPublicKey,
     azurerm_key_vault_secret.sshPrivateKeyPem,
     terraform_data.waitAksVhdReady,
@@ -44,6 +47,9 @@ resource "azapi_resource" "connectedCluster" {
       body.properties.privateLinkState,
       body.properties.provisioningState,
     ]
+    replace_triggered_by = [
+      terraform_data.logicalNetworkReplacement,
+    ]
   }
 }
 locals {
@@ -67,7 +73,7 @@ resource "azapi_resource" "provisionedClusterInstance" {
       cloudProviderProfile = {
         infraNetworkProfile = {
           vnetSubnetIds = [
-            local.logicalNetworkId,
+            var.logicalNetworkId,
           ]
         }
       }

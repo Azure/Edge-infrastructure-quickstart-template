@@ -35,15 +35,3 @@ variable "rbacAdminGroupObjectIds" {
   # Add your default admin groups here. Refer to the documentation under doc/AKS-Arc-Admin-Groups.md for more information.
   # default     = ["<your-admin-group-object-id>"]
 }
-
-variable "aksArc-lnet-dnsServers" {
-  type        = list(string)
-  description = "A list of DNS server IP addresses."
-  default     = []
-}
-
-variable "aksArc-lnet-defaultGateway" {
-  type        = string
-  description = "The default gateway for the network."
-  default     = ""
-}

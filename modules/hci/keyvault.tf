@@ -4,6 +4,7 @@ resource "azurerm_key_vault" "DeploymentKeyVault" {
   name                = var.randomSuffix ? "${var.keyvaultName}-${random_integer.random_suffix.result}" : var.keyvaultName
   location            = var.resourceGroup.location
   resource_group_name = var.resourceGroup.name
+  tags                = {}
 
   enabled_for_deployment          = true
   enabled_for_template_deployment = true
