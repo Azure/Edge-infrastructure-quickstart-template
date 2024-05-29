@@ -1,6 +1,7 @@
 variable "domainFqdn" {
   description = "The domain FQDN."
   type        = string
+  default = "adaptivecloud.com"
 }
 
 variable "adouSuffix" {
