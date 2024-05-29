@@ -69,6 +69,6 @@
 
    # Region site manager parameters
    # Check ./doc/Add-Site-Manager.md for more information
-   country = "United States"
+   # country = "United States"
    # End region site manager parameters
  }

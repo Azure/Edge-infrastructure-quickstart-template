@@ -36,6 +36,7 @@ module "site-manager" {
 }
 
 //Prepare AD and arc server
+/*
 module "hci-provisioners" {
   depends_on             = [azurerm_resource_group.rg]
   count                  = var.enableProvisioners ? 1 : 0
@@ -62,7 +63,7 @@ module "hci-provisioners" {
   dcPort                 = var.dcPort
   serverPorts            = var.serverPorts
 }
-
+*/
 module "hci" {
   depends_on                    = [module.hci-provisioners]
   source                        = "../hci"
