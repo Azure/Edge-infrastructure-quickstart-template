@@ -9,7 +9,7 @@ locals {
   adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
   clusterName                = "${var.siteId}"
   customLocationName         = "${var.siteId}"
-  workspaceName              = "AdaptiveCloud-LAW-EUS"
+  workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
   dataCollectionRuleName     = "AzureStackHCI-${var.siteId}-dcr"
   aksArcName                 = "${var.siteId}-aksArc"

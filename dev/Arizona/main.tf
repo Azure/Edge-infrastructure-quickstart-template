@@ -42,7 +42,7 @@
    ]
    rdmaEnabled                   = true     // Change to true if RDMA is enabled.
    storageConnectivitySwitchless = false     // Change to true if storage connectivity is switchless.
-   enableProvisioners            = true      // Change to false when Arc servers are connected by yourself.
+   enableProvisioners            = false      // Change to false when Arc servers are connected by yourself.
    authenticationMethod          = "Credssp" // or "Default"
    subscriptionId                = var.subscriptionId
    domainAdminUser               = var.domainAdminUser
@@ -56,15 +56,15 @@
 
 
    # Region Hybrid AKS related parameters
-   aksArc-controlPlaneIp = "<aksArc-controlPlaneIp>"
+   aksArc-controlPlaneIp = "172.25.117.221"
 
    // the following value only need to provide if you want to create a new logical network, if not, set aksArc-lnet-usingExistingLogicalNetwork to true and specify the existing logical network name in logicalNetworkName
-   aksArc-lnet-startingAddress = "<aksArc-lnet-startingAddress>"
-   aksArc-lnet-endingAddress   = "<aksArc-lnet-endingAddress>"
-   aksArc-lnet-addressPrefix   = "<aksArc-lnet-addressPrefix>"
-   aksArc-lnet-defaultGateway  = "<aksArc-lnet-defaultGateway>"
-   aksArc-lnet-dnsServers      = ["<aksArc-lnet-dnsServer>"]
-   rbacAdminGroupObjectIds     = ["<rbacAdminGroupObjectId1>"]
+   aksArc-lnet-startingAddress = "172.25.117.200"
+   aksArc-lnet-endingAddress   = "172.25.117.220"
+   aksArc-lnet-addressPrefix   = "172.25.117.0/24"
+   aksArc-lnet-defaultGateway  = "172.25.117.1"
+   aksArc-lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]
+   rbacAdminGroupObjectIds     = ["be0c17dc-9a37-48c5-9691-751a27a4c1b9", "f5157bd2-8ce4-48b6-82df-69b9de7540a9", "904e7142-bfcf-4071-a326-6d798140dd03"]
    # End region of hybrid aks related parameters
 
    # Region site manager parameters
