@@ -46,21 +46,25 @@
 #   servicePrincipalSecret        = var.servicePrincipalSecret
 #   rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 
+#   # Region HCI logical network parameters
+#   lnet-startingAddress = "<lnetStartingAddress>"
+#   lnet-endingAddress   = "<lnetEndingAddress>"  # This IP range should not overlap with HCI infra IP range.
+#   lnet-addressPrefix   = "<lnetAddressPrefix>"  # E.g., 192.168.1.0/24
+#   lnet-defaultGateway  = "<lnetDefaultGateway>" # Default gateway can be same as HCI infra default gateway.
+#   lnet-dnsServers      = ["<lnetDnsServer1>"]   # DNS servers can be same as HCI infra DNS servers.
 
-#   # Region Hybrid AKS related parameters
-#   aksArc-controlPlaneIp = "<aksArc-controlPlaneIp>"
+#   # Region AKS Arc parameters
+#   aksArc-controlPlaneIp   = "<aksArcControlPlanIp>"      # An IP address in the logical network IP range.
+#   rbacAdminGroupObjectIds = ["<rbacAdminGroupObjectId>"] # An AAD group that will have the admin permission of this AKS Arc cluster. Check ./doc/AKS-Arc-Admin-Groups.md for details
 
-#   // the following value only need to provide if you want to create a new logical network, if not, set aksArc-lnet-usingExistingLogicalNetwork to true and specify the existing logical network name in logicalNetworkName
-#   aksArc-lnet-startingAddress = "<aksArc-lnet-startingAddress>"
-#   aksArc-lnet-endingAddress   = "<aksArc-lnet-endingAddress>"
-#   aksArc-lnet-addressPrefix   = "<aksArc-lnet-addressPrefix>"
-#   aksArc-lnet-defaultGateway  = "<aksArc-lnet-defaultGateway>"
-#   aksArc-lnet-dnsServers      = ["<aksArc-lnet-dnsServer>"]
-#   rbacAdminGroupObjectIds     = ["<rbacAdminGroupObjectId1>"]
-#   # End region of hybrid aks related parameters
+#   # Region HCI VM parameters
+#   # Uncomment this section will create a windows server VM on HCI.
+#   # downloadWinServerImage = true
+#   # vmAdminPassword        = var.vmAdminPassword
+#   # domainJoinPassword     = var.domainJoinPassword
 
 #   # Region site manager parameters
+#   # Uncomment this section will create site manager instance for the resource group.
 #   # Check ./doc/Add-Site-Manager.md for more information
-#   country = "<country>"
-#   # End region site manager parameters
+#   # country = "<country>"
 # }

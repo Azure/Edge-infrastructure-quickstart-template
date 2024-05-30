@@ -12,7 +12,10 @@ locals {
   workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
   dataCollectionRuleName     = "AzureStackHCI-${var.siteId}-dcr"
-  aksArcName                 = "${var.siteId}-aksArc"
   logicalNetworkName         = "${var.siteId}-logicalnetwork"
+  aksArcName                 = "${var.siteId}-aksArc"
+  vmName                     = "${var.siteId}-vm"
+  vmAdminUsername            = "${var.siteId}admin"
+  domainJoinUserName         = "${var.siteId}vmuser"
   randomSuffix               = true
 }
