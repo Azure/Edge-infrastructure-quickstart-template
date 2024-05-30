@@ -2,7 +2,7 @@
    source          = "../../modules/base"
    location        = "eastus"
    siteId          = "Arizona"
-   domainFqdn      = "adaptivecloud.com"
+   domainFqdn      = "adaptivecloudlab.com"
    startingAddress = "172.25.117.20"
    endingAddress   = "172.25.117.29"
    defaultGateway  = "172.25.117.1"
