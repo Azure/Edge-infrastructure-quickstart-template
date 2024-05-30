@@ -64,6 +64,7 @@
 #   # domainJoinPassword     = var.domainJoinPassword
 
 #   # Region site manager parameters
+#   # Uncomment this section will create site manager instance for the resource group.
 #   # Check ./doc/Add-Site-Manager.md for more information
-#   country = "<country>"
+#   # country = "<country>"
 # }
