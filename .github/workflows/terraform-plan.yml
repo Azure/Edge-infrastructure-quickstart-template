@@ -24,7 +24,8 @@ env:
   TF_VAR_servicePrincipalId: ${{ secrets.servicePrincipalId }}
   TF_VAR_servicePrincipalSecret: ${{ secrets.servicePrincipalSecret }}
   TF_VAR_rpServicePrincipalObjectId: ${{ secrets.rpServicePrincipalObjectId }}
-  TF_VAR_runnumber: ${{ github.run_number }}
+  TF_VAR_vmAdminPassword: ${{ secrets.vmAdminPassword }}
+  TF_VAR_domainJoinPassword: ${{ secrets.domainJoinPassword }}
 
 jobs:
     provide_paths:
