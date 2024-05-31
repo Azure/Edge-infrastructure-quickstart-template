@@ -48,7 +48,7 @@ locals {
       priorityValue8021Action_Cluster = "",
       bandwidthPercentage_SMB         = ""
     },
-    overrideAdapterProperty  = false,
+    overrideAdapterProperty  = true,
     adapterPropertyOverrides = var.rdmaEnabled ? local.rdmaAdapterProperties : local.adapterProperties
   }]
 
@@ -61,7 +61,7 @@ locals {
     adapter                            = flatten(var.managementAdapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
-    overrideAdapterProperty            = false,
+    overrideAdapterProperty            = true,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
       loadBalancingAlgorithm = ""
@@ -85,7 +85,7 @@ locals {
       adapter                            = local.storageAdapters,
       overrideVirtualSwitchConfiguration = false,
       overrideQosPolicy                  = false,
-      overrideAdapterProperty            = false,
+      overrideAdapterProperty            = true,
       virtualSwitchConfigurationOverrides = {
         enableIov              = "",
         loadBalancingAlgorithm = ""
