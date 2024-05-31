@@ -50,7 +50,10 @@ variable "rpServicePrincipalObjectId" {
   type        = string
   description = "The object ID of the HCI resource provider service principal."
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3965e254bb24f5efbd7dfedaf06d6fe0174379e2
 variable "vmAdminPassword" {
   description = "Admin password for the VM"
   type        = string
@@ -63,4 +66,8 @@ variable "domainJoinPassword" {
   type        = string
   sensitive   = true
   default     = ""
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3965e254bb24f5efbd7dfedaf06d6fe0174379e2
