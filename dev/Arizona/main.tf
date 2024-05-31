@@ -56,14 +56,14 @@
 
    # Region HCI logical network parameters
    lnet-startingAddress = "172.25.117.200"
-   lnet-endingAddress   = "172.25.117.220"   This IP range should not overlap with HCI infra IP range.
-   lnet-addressPrefix   = "172.25.117.0/24"   E.g., 192.168.1.0/24
-   lnet-defaultGateway  = "172.25.117.1"  Default gateway can be same as HCI infra default gateway.
-   lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]    DNS servers can be same as HCI infra DNS servers.
+   lnet-endingAddress   = "172.25.117.220"   //This IP range should not overlap with HCI infra IP range.
+   lnet-addressPrefix   = "172.25.117.0/24"   //E.g., 192.168.1.0/24
+   lnet-defaultGateway  = "172.25.117.1"  //Default gateway can be same as HCI infra default gateway.
+   lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]   // DNS servers can be same as HCI infra DNS servers.
 
-    Region AKS Arc parameters
-   aksArc-controlPlaneIp   = "172.25.117.221"       An IP address in the logical network IP range.
-   rbacAdminGroupObjectIds = ["be0c17dc-9a37-48c5-9691-751a27a4c1b9", "f5157bd2-8ce4-48b6-82df-69b9de7540a9", "904e7142-bfcf-4071-a326-6d798140dd03"]  An AAD group that will have the admin permission of this AKS Arc cluster. Check ./doc/AKS-Arc-Admin-Groups.md for details
+   # Region AKS Arc parameters
+   aksArc-controlPlaneIp   = "172.25.117.221"       //An IP address in the logical network IP range.
+   rbacAdminGroupObjectIds = ["be0c17dc-9a37-48c5-9691-751a27a4c1b9", "f5157bd2-8ce4-48b6-82df-69b9de7540a9", "904e7142-bfcf-4071-a326-6d798140dd03"] // An AAD group that will have the admin permission of this AKS Arc cluster. Check ./doc/AKS-Arc-Admin-Groups.md for details
 
   #  Region HCI VM parameters
   #  Uncomment this section will create a windows server VM on HCI.
