@@ -1,7 +1,7 @@
 variable "kubernetesVersion" {
   description = "The version of Kubernetes to use for the provisioned cluster."
   type        = string
-  default     = "1.25.11"
+  default     = "1.28.5"
 }
 
 variable "controlPlaneCount" {

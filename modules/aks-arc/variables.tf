@@ -70,7 +70,7 @@ variable "rbacAdminGroupObjectIds" {
 variable "kubernetesVersion" {
   type        = string
   description = "The kubernetes version"
-  default     = "1.25.11"
+  default     = "1.28.5"
 
   validation {
     condition     = can(regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", var.kubernetesVersion))
