@@ -1,13 +1,13 @@
 locals {
-  resourceGroupName          = "${var.siteId}-rg"
-  siteResourceName           = length(var.siteId) < 4 ? "${var.siteId}-site" : "${var.siteId}"
+  resourceGroupName          = "${var.siteId}"
+  siteResourceName           = "${var.siteId}"
   siteDisplayName            = "${var.siteId}"
   addressResourceName        = "${var.siteId}-address"
   deploymentUserName         = "${var.siteId}deploy"
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
   adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
-  clusterName                = "${var.siteId}-cl"
+  clusterName                = "${var.siteId}-hcicluster"
   customLocationName         = "${var.siteId}-customlocation"
   workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
@@ -16,6 +16,6 @@ locals {
   aksArcName                 = "${var.siteId}-aksArc"
   vmName                     = "${var.siteId}-vm"
   vmAdminUsername            = "${var.siteId}admin"
-  domainJoinUserName         = "${var.siteId}vmuser"
+  domainJoinUserName         = "djoin"
   randomSuffix               = true
 }
