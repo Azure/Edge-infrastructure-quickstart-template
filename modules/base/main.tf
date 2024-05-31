@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "rg" {
     ignore_changes = [tags]
   }
 }
-
+/*
 module "site-manager" {
   source              = "../site-manager"
   siteResourceName    = local.siteResourceName
@@ -34,7 +34,7 @@ module "site-manager" {
   phone               = var.phone
   phoneExtension      = var.phoneExtension
 }
-
+*/
 //Prepare AD and arc server
 module "hci-provisioners" {
   depends_on             = [azurerm_resource_group.rg]
