@@ -120,6 +120,7 @@ module "logical-network" {
   location           = azurerm_resource_group.rg.location
   customLocationId   = module.hci.customlocation.id
   logicalNetworkName = local.logicalNetworkName
+  vmSwitchName       = module.hci.vSwitchName
   startingAddress    = var.lnet-startingAddress
   endingAddress      = var.lnet-endingAddress
   dnsServers         = var.lnet-dnsServers == [] ? var.dnsServers : var.lnet-dnsServers

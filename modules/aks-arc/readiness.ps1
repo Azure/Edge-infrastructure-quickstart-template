@@ -20,7 +20,12 @@ while ($true) {
     $state = az aksarc get-versions --custom-location $customLocationResourceId
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
-    echo $state | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 100
+    try {
+        echo $state | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 100
+    } catch {
+        echo $state
+        throw $_
+    }
     $ready = $false
 
     foreach ($version in (echo $state  | ConvertFrom-Json).properties.values) {

@@ -18,6 +18,11 @@ variable "logicalNetworkName" {
   description = "The name of the logical network"
 }
 
+variable "vmSwitchName" {
+  description = "The name of the virtual switch that is used by the network."
+  type        = string
+}
+
 variable "startingAddress" {
   description = "The starting IP address of the IP address range."
   type        = string

@@ -52,7 +52,7 @@ resource "azapi_resource" "logicalNetwork" {
         name       = "default"
         properties = local.subnet0Properties
       }]
-      vmSwitchName = "ConvergedSwitch(managementcompute)" // This is hardcoded for all cloud deployment hci cluster
+      vmSwitchName = var.vmSwitchName
     }
   }
 }

@@ -60,3 +60,8 @@ output "arcSettings" {
   value       = data.azapi_resource.arcSettings
   description = "Arc settings instance after HCI connected."
 }
+
+output "vSwitchName" {
+  value       = local.converged ? "ConvergedSwitch(managementcomputestorage)" : "ConvergedSwitch(managementcompute)"
+  description = "The name of the virtual switch that is used by the network."
+}
