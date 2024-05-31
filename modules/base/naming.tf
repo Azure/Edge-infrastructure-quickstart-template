@@ -7,7 +7,7 @@ locals {
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
   adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
-  clusterName                = "${var.siteId}-hcicluster"
+  clusterName                = "${var.siteId}"
   customLocationName         = "${var.siteId}-customlocation"
   workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
