@@ -1,7 +1,7 @@
  module "base" {
    source          = "../../modules/base"
-   location        = "Orlando"
-   siteId          = basename(abspath(path.module))
+   location        = "EastUS"
+   siteId          = "Orlando"
    domainFqdn      = "adaptivecloudlab.com"
    startingAddress = "10.50.10.20"
    endingAddress   = "10.50.10.29"
