@@ -55,16 +55,20 @@ variable "sshPrivateKeyPemSecretName" {
 locals {
   # tflint-ignore: terraform_unused_declarations
   validateSshKeyVault = (var.sshPublicKey == null && var.sshKeyVaultId == null) ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
-  validateSshKey = (var.sshPublicKey == null && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
+  validateSshKey      = (var.sshPublicKey == null && var.sshPrivateKeyPemSecretName == "") ? tobool("sshPrivateKeyPemSecretName must be specified if sshPublicKey is not specified") : true
+  validateRbac        = (var.enableAzureRBAC == true && length(var.rbacAdminGroupObjectIds) == 0) ? tobool("At least one admin group object id must be specified") : true
+}
+
+variable "enableAzureRBAC" {
+  type        = bool
+  description = "Enable Azure RBAC for the kubernetes cluster"
+  default     = true
 }
 
 variable "rbacAdminGroupObjectIds" {
   type        = list(string)
   description = "The object id of the admin group of the azure rbac"
-  validation {
-    condition     = length(var.rbacAdminGroupObjectIds) > 0
-    error_message = "At least one admin group object id must be specified"
-  }
+  default     = []
 }
 
 variable "kubernetesVersion" {
