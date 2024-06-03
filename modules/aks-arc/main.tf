@@ -1,10 +1,5 @@
 data "azurerm_client_config" "current" {}
 
-resource "terraform_data" "logicalNetworkReplacement" {
-  count = var.isExported ? 0 : 1
-  input = var.logicalNetworkId
-}
-
 resource "azapi_resource" "connectedCluster" {
   type = "Microsoft.Kubernetes/connectedClusters@2024-01-01"
   depends_on = [
@@ -20,7 +15,7 @@ resource "azapi_resource" "connectedCluster" {
     properties = {
       aadProfile = {
         adminGroupObjectIDs = flatten(var.rbacAdminGroupObjectIds)
-        enableAzureRBAC     = true
+        enableAzureRBAC     = var.enableAzureRBAC
         tenantID            = data.azurerm_client_config.current.tenant_id
       }
       agentPublicKeyCertificate = "" //agentPublicKeyCertificate input must be empty for Connected Cluster of Kind: Provisioned Cluster
@@ -46,9 +41,6 @@ resource "azapi_resource" "connectedCluster" {
       body.properties.infrastructure,
       body.properties.privateLinkState,
       body.properties.provisioningState,
-    ]
-    replace_triggered_by = [
-      terraform_data.logicalNetworkReplacement,
     ]
   }
 }
