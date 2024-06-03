@@ -56,5 +56,5 @@ variable "addressPrefix" {
 variable "vlanId" {
   type        = string
   description = "The vlan id of the logical network, default means no vlan id is specified"
-  default     = null
+  default     = 43
 }
