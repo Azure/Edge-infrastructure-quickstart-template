@@ -2,7 +2,7 @@ locals {
   resourceGroupName          = "${var.siteId}"
   siteResourceName           = "${var.siteId}"
   siteDisplayName            = "${var.siteId}"
-  addressResourceName        = "${var.siteId}-address"
+  addressResourceName        = "${var.siteId}"
   deploymentUserName         = "${var.siteId}deploy"
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
