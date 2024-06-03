@@ -47,8 +47,8 @@
    rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 
 #   # Region HCI logical network parameters
-   lnet-startingAddress = "10.20.243.20"
-   lnet-endingAddress   = "10.20.243.49"  # This IP range should not overlap with HCI infra IP range.
+   lnet-startingAddress = "10.20.243.60"
+   lnet-endingAddress   = "10.20.243.90"  # This IP range should not overlap with HCI infra IP range.
    lnet-addressPrefix   = "10.20.243.0/24"  # E.g., 192.168.1.0/24
    lnet-defaultGateway  = "10.20.243.1" # Default gateway can be same as HCI infra default gateway.
    lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]   # DNS servers can be same as HCI infra DNS servers.
