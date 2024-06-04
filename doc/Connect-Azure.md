@@ -1,5 +1,5 @@
-# Connect GitHub Actions and Azure Use Azure CLI
-This doc is using Azure CLI to do the job, if you want to use Azure portal, see [Connect Azure using Portal](./Connect-Azure-Portal.md).
+# Connect GitHub Actions and Azure Use Portal
+This doc is using Azure portal to do the job, if you want to use Azure CLI, see [Connect Azure using Azure CLI](./Connect-Azure-Script.md).
 ## Prerequisite
 
 Ensure that you can create service principals in your tenant and you have the permission to assign roles.
@@ -10,71 +10,42 @@ Create `terraform` environment in your GitHub repository
 
 <img src="img/CreateRepoEnv.png" alt="createRepoEnv" width="800"/>
 
-the following script will do:
-1. Create a new service principle
-2. Setup federation credential for the github repo
-3. Grant Contributor/Key vault secrets officer/user access administrator to the service principal
-   
-> [!NOTE]
-> If you are reusing a existing service principal, this guide might not suit you because it will reset the service principal secret. try [Connect Azure using Portal](./Connect-Azure-Portal.md).
+Go to [Microsoft Entra Admin Center](https://entra.microsoft.com/#home) to create a service principal. Click **Applications** in the menu bar and then click **App Registrations** to list all the available service principals. Create a new one for IaC
 
-Replace '\<yourServicePrincipleName>' with the service principle name you want to create, replace '\<yourSubscription>' with the subscription you want to create hci, replace '\<orignizationName>/\<repoName>' with the orignization and name of your GitHub repo. Run following script in powershell.
+<img src="img/SP1.png" alt="SP1" width="800"/>
 
-```
-az login
-$spName="<yourServicePrincipleName>" #Replace it!
-$yoursubscription="<yourSubscription>" #Replace it!
-$yourreponame="<orignizationName>/<repoName>" #Replace it!
+Add **Federated credential** to the service principal.
 
-az account set --subscription $yoursubscription
+<img src="img/IaCCredentials.png" alt="IaCCredential" width="800"/>
 
-az ad sp create-for-rbac --name $spName
+Select `Environment` as entity type and input `terraform` to `Based on selection` input box
 
-$spid = az ad sp list --display-name $spName --query "[0].appId" -o tsv
-$reponamewithoutslash = $yourreponame -replace "/", "_"
-$jsonContent = @"
-{
-    "name": "${reponamewithoutslash}_environment_terraform",
-    "issuer": "https://token.actions.githubusercontent.com",
-    "subject": "repo:${yourreponame}:environment:terraform",
-    "description": "service principal for terraform environment for repo $yourreponame",
-    "audiences": [
-        "api://AzureADTokenExchange"
-    ]
-}
-"@
-Set-Content $jsonContent -Path "$env:TEMP/terraformenv.json"
-az ad app federated-credential create --id $spid --parameters "$env:TEMP/terraformenv.json"
-$jsonContent = @"
-{
-    "name": "repo_${reponamewithoutslash}_pull_request",
-    "issuer": "https://token.actions.githubusercontent.com",
-    "subject": "repo:${yourreponame}:pull_request",
-    "description": "service principal for pull request for repo $yourreponame",
-    "audiences": [
-        "api://AzureADTokenExchange"
-    ]
-}
-"@
-Set-Content $jsonContent -Path "$env:TEMP/pullrequest.json"
-az ad app federated-credential create --id $spid --parameters "$env:TEMP/pullrequest.json"
+<img src="img/CreateCredentials.png" alt="CreateCredential" width="800"/>
 
-$pass = az ad app credential reset --id $spid
+Repeat above steps to create another federation credential and Select `Pull Request` as entity type
 
-echo "grant permission Contributor/Key vault secrets officer/user access administrator to the service principal $spName"
-az role assignment create --role "Contributor" --assignee $spid --scope "/subscriptions/$yoursubscription"
-az role assignment create --role "Key vault secrets officer" --assignee $spid --scope "/subscriptions/$yoursubscription"
-az role assignment create --role "User Access Administrator" --assignee $spid --scope "/subscriptions/$yoursubscription"
+<img src="img/Terraform_plan_permission.png"  alt="CreatePlanCredential" width="800"/>
 
-$rpid=az ad sp list --filter "appid eq '1412d89f-b8a8-4111-b4fd-e82905cbd85d'" --query "[0].id"
+Add a **secret** into the service principal, then, save it to `servicePrincipalSecret`. We will need it in your IaC repository.
 
-echo "set sp related secret with"
-echo $pass
-$password = $pass | ConvertFrom-Json | Select-Object -ExpandProperty "password"
-echo "set repository secret rpServicePrincipalObjectId with $rpid"
-echo "set repository secret servicePrincipalSecret with $password"
+<img src="img/AddSecretes.png" alt="AddSecretes" width="800"/>
 
-```
+## Grant permissions for the service principal
+
+Grant the following permissions
+
+- Contributor (to create resource group / KeyVault / HCI cluster...)
+- Key Vault Secrets Officer (to create secret in Azure KeyVault)
+- User Access Administrator (to grant role for Arc-enabled servers)
+
+Go back to your Azure subscription page in Azure portal, select **IAM** -> **Add Role Assignment**, then grant the permissions as follows
+
+<img src="img/roleAssignment1.png" alt="assignRole1" width="800"/>
+
+<img src="img/assignRole2.png" alt="assignRole2" width="800"/>
+
+<img src="img/SelectMembers.png" alt="assignRole3" width="800"/>
+
 ## Setup GitHub repo secrets
 
 Go to your GitHub repository, click repository **Settings** , then go to **Secrets and variables**, select **Actions** to create **New repository secret**
@@ -89,17 +60,37 @@ Set up the following secrets：
 
 2. HCI secrets:
 
-    - domainAdminUser: create a new user name
-    - domainAdminPassword: create new password
-    - localAdminUser: username when you login to the local host
-    - localAdminPassword: password you use to login into the local host
-    - deploymentUserPassword
-    - servicePrincipalId
-    - servicePrincipalSecret (the script will echo the value)
-    - rpServicePrincipalObjectId (the script will echo the value)
+    - domainAdminUser: The admin user name of domain controller. (Leave it empty if you prepare AD yourself)
+    - domainAdminPassword: The admin user password of domain controller. (Leave it empty if you prepare AD yourself)
+    - localAdminUser: The admin user name of HCI hosts.
+    - localAdminPassword: The admin user password of HCI hosts.
+    - deploymentUserPassword: The password of deployment user which will be created during HCI deployment.
+    - servicePrincipalId: The **client** ID of the service principal for Arc Resource Bridge deployment. (Can be the same as AZURE_CLIENT_ID)
+    - servicePrincipalSecret: The client secret of the service principal for Arc Resource Bridge deployment.
+    - rpServicePrincipalObjectId (Check [Getting rpServicePrincipalObjectId](#getting-rpserviceprincipalobjectid) to get its value.)
 
 <img src="img/repoSecrets.png" alt="RepoSecrets" width="800"/>
 
+## Getting rpServicePrincipalObjectId
+
+### Use UI
+Go to [Microsoft Entra Admin Center](https://entra.microsoft.com/#home). Go to Identity -> Applications -> Enterprise applications. Remove the Application type filter.
+
+<img src="img/rpObj1.png" alt="rpObj1" width="800"/>
+
+Then, click the Application ID starts with filter. Input `1412d89f-b8a8-4111-b4fd-e82905cbd85d` and apply.
+
+<img src="img/rpObj2.png" alt="rpObj2" width="800"/>
+
+Click `Microsoft.AzureStackHCI Resource Provider`. Copy its Object ID, this value needs to be set to repository secret `rpServicePrincipalObjectId`.
+
+<img src="img/rpObj3.png" alt="rpObj3" width="800"/>
+
+### Use Az CLI
+
+Run `az ad sp list --filter "appid eq '1412d89f-b8a8-4111-b4fd-e82905cbd85d'"`. Copy the value in `id` field.
+
+<img src="img/rpObj4.png" alt="rpObj4" width="800"/>
 
 ---
 Next Step: [Configure Local Git](./Configure-Local-Git.md)
