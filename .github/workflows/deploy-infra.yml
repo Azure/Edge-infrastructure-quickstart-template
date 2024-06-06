@@ -15,10 +15,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running dev stage"
-    Orlando:
+    Arizona:
         uses: ./.github/workflows/site-cd-workflow.yml
         with:
-            working-directory: dev/Orlando
+            working-directory: dev/Arizona
         secrets: inherit
         needs: [dev]
     sample:
@@ -29,7 +29,7 @@ jobs:
         needs: [dev]
     qa:
         name: qa
-        needs: [dev,Orlando,sample]
+        needs: [dev,Arizona,sample]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
