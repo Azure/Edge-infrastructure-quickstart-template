@@ -33,6 +33,7 @@ if ($env:path -notlike "*$gitBashPath*") {
 
 echo "Enabling client CredSSP..."
 Set-Item wsman:localhost\client\trustedhosts -value *
+Enable-WSManCredSSP -Role Client -DelegateComputer *
 
 $key = 'hklm:\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation'
 if (!(Test-Path $key)) {
