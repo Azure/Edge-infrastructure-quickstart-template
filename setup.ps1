@@ -1,5 +1,8 @@
 param (
     [string] $subscriptionId,
+    [string] $resourceGroupName,
+    [string] $storageAccountName,
+    [string] $storageContainerName,
 
     [Parameter(ParameterSetName = 'Name')]
     [string] $servicePrincipalName,
@@ -15,7 +18,7 @@ $Script:ErrorActionPreference = "Stop"
 
 # Check az and gh cli are installed
 if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-    throw "Azure CLI is not installed. Please install it from https://aka.ms/installazurecli"
+    throw "Azure CLI is not installed. Please install it from https://aka.ms/installazurecliwindows"
 }
 
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
@@ -122,3 +125,38 @@ $localAdminPassword = Read-Host "Enter the local admin password of HCI hosts."
 gh secret set localAdminPassword -b $localAdminPassword
 $deploymentUserPassword = Read-Host "Enter the password for the deployment user."
 gh secret set deploymentUserPassword -b $deploymentUserPassword
+
+# Set local hook
+echo "Setting local hook..."
+git config --local core.hooksPath ./.azure/hooks/
+echo "Local hook set successfully. You can reset it by running 'git config --local --unset core.hooksPath'."
+
+# Set Terraform backend
+echo "Setting Terraform backend..."
+# check if the storage account exists
+$storageAccount = az storage account show --name $storageAccountName --resource-group $resourceGroupName
+if (-not $storageAccount) {
+    echo "Creating storage account $storageAccountName in resource group $resourceGroupName for terraform backend..."
+    az storage account create --name $storageAccountName --resource-group $resourceGroupName --sku Standard_LRS
+}
+$storageContainer = az storage container show --name $storageContainerName --account-name $storageAccountName --auth-mode login
+if (-not $storageContainer) {
+    echo "Creating storage container $storageContainerName in storage account $storageAccountName for terraform backend..."
+    az storage container create --name $storageContainerName --account-name $storageAccountName --auth-mode login
+}
+# check if the container is empty
+$blobCount = (az storage blob list --container-name $storageContainerName --account-name $storageAccountName | ConvertFrom-Json).Count
+if ($blobCount -gt 0) {
+    Write-Error "The storage container $storageContainerName in storage account $storageAccountName is not empty. Please empty it before setting it as Terraform backend."
+    exit 1
+}
+
+# Replace placeholders in ./.azure/backend.tf
+$backendTfPath = "./.azure/backend.tf"
+$backendTfContent = Get-Content $backendTfPath
+$backendTfContent = $backendTfContent -replace "<ResourceGroupName>", $resourceGroupName
+$backendTfContent = $backendTfContent -replace "<StorageAccountName>", $storageAccountName
+$backendTfContent = $backendTfContent -replace "<StorageContainerName>", $storageContainerName
+Set-Content -Path $backendTfPath -Value $backendTfContent
+
+echo "All set! You can use run self-hosted-runner.ps1 on the runner machine to set up self-hosted runner."
