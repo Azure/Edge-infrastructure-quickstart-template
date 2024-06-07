@@ -163,4 +163,6 @@ echo "Local development environment is set up successfully."
 Read-Host "You can continue to setup self-hosted runner. Press Enter to generate a token. Ctrl+C to exit"
 
 $token = gh api --method POST -H "Accept: application/vnd.github+json" "/repos/$gitHubRepoNameWithOwner/actions/runners/registration-token" | ConvertFrom-Json | Select-Object -ExpandProperty token
-echo "Token generated, please copy it and run the following command to register the runner: self-hosted-runner.ps1 $gitHubRepoNameWithOwner $token"
+echo "Token generated, please copy self-hosted-runner.ps1 to the runner machine and run it."
+Write-Warning "CAUTION: DO NOT RUN ON THIS COMPUTER UNLESS YOU WANT TO REGISTER YOUR DEV MACHINE AS RUNNER)"
+echo "./self-hosted-runner.ps1 $gitHubRepoNameWithOwner $token"
