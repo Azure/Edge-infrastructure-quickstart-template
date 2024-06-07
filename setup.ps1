@@ -159,4 +159,8 @@ $backendTfContent = $backendTfContent -replace "<StorageAccountName>", $storageA
 $backendTfContent = $backendTfContent -replace "<StorageContainerName>", $storageContainerName
 Set-Content -Path $backendTfPath -Value $backendTfContent
 
-echo "All set! You can use run self-hosted-runner.ps1 on the runner machine to set up self-hosted runner."
+echo "Local development environment is set up successfully."
+Read-Host "You can continue to setup self-hosted runner. Press Enter to generate a token. Ctrl+C to exit"
+
+$token = gh api --method POST -H "Accept: application/vnd.github+json" "/repos/$gitHubRepoNameWithOwner/actions/runners/registration-token" | ConvertFrom-Json | Select-Object -ExpandProperty token
+echo "Token generated, please copy it and run the following command to register the runner: self-hosted-runner.ps1 $gitHubRepoNameWithOwner $token"

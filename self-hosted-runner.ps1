@@ -1,4 +1,6 @@
 param (
+    [string] $gitHubRepoNameWithOwner,
+    [string] $runnerToken
 )
 
 $Script:ErrorActionPreference = "Stop"
@@ -20,15 +22,13 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Start-Process -FilePath $installer -Wait
 }
 
-$gitBashPath = "C:\Program Files\Git\usr\bin\"
-if (Get-Command git -ErrorAction SilentlyContinue) {
-    $gitBashPath = (Get-Command git).Source.Replace("cmd\git.exe", "usr\bin\")
-}
-$path = [System.Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine)
-if ($path -notlike "*$gitBashPath*") {
+$env:path = [System.Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine)
+
+$gitBashPath = (Get-Command git).Source.Replace("cmd\git.exe", "usr\bin\")
+if ($env:path -notlike "*$gitBashPath*") {
     echo "Adding default git bash location to system PATH..."
-    $path += ";$gitBashPath"
-    [System.Environment]::SetEnvironmentVariable('Path', $path, [System.EnvironmentVariableTarget]::Machine)
+    $env:path += ";$gitBashPath"
+    [System.Environment]::SetEnvironmentVariable('Path', $env:path, [System.EnvironmentVariableTarget]::Machine)
 }
 
 echo "Enabling client CredSSP..."
@@ -48,3 +48,10 @@ if (!(Test-Path $key)) {
 if (!(Get-ItemProperty -Path $key -Name 'AzureArcIaCAutomation' -ErrorAction SilentlyContinue)) {
     New-ItemProperty -Path $key -Name 'AzureArcIaCAutomation' -Value 'WSMAN/*' -PropertyType String -Force
 }
+
+echo "Registering self-hosted runner..."
+mkdir ar
+cd ar
+Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/v2.317.0/actions-runner-win-x64-2.317.0.zip -OutFile actions-runner-win-x64-2.317.0.zip
+Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/actions-runner-win-x64-2.317.0.zip", "$PWD")
+./config.cmd --url https://github.com/$gitHubRepoNameWithOwner --token $runnerToken --runasservice
