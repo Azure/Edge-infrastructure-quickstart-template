@@ -6,6 +6,10 @@ resource "azapi_resource" "domain_join" {
 
   parent_id = azapi_resource.hybrid_compute_machine.id
 
+  depends_on = [
+    azapi_resource.virtual_machine
+  ]
+
   body = {
     properties = {
       publisher               = "Microsoft.Compute"
