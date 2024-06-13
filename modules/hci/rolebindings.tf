@@ -27,4 +27,5 @@ module "serverRoleBindings" {
   resourceGroup  = var.resourceGroup
   serverName     = each.key
   subscriptionId = var.subscriptionId
+  keyVaultId     = azurerm_key_vault.DeploymentKeyVault.id
 }
