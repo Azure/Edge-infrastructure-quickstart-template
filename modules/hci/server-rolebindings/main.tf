@@ -5,7 +5,6 @@ data "azurerm_arc_machine" "server" {
 
 locals {
   Roles = {
-    KVSU   = "Key Vault Secrets User",
     ACMRM  = "Azure Connected Machine Resource Manager",
     ASHDMR = "Azure Stack HCI Device Management Role",
     Reader = "Reader"
@@ -19,7 +18,8 @@ resource "azurerm_role_assignment" "MachineRoleAssign" {
   principal_id         = data.azurerm_arc_machine.server.identity[0].principal_id
 }
 
-output "server" {
-  value       = data.azurerm_arc_machine.server
-  description = "The arc server object"
+resource "azurerm_role_assignment" "MachineRoleAssignForKv" {
+  scope                = var.keyVaultId
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azurerm_arc_machine.server.identity[0].principal_id
 }

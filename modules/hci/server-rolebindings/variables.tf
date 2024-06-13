@@ -9,3 +9,8 @@ variable "resourceGroup" {
 variable "subscriptionId" {
   description = "The subscription id."
 }
+
+variable "keyVaultId" {
+  description = "The resource id of the key vault."
+  type        = string
+}
