@@ -57,8 +57,8 @@ if (!(Test-Path $allowFreshCredentialsWhenNTLMOnlyKey)) {
     md $allowFreshCredentialsWhenNTLMOnlyKey
 }
 
-if (!(Get-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 'AzureArcIaCAutomation' -ErrorAction SilentlyContinue)) {
-    New-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 'AzureArcIaCAutomation' -Value 'WSMAN/*' -PropertyType String -Force
+if (!(Get-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 1 -ErrorAction SilentlyContinue)) {
+    New-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 1 -Value 'WSMAN/*' -PropertyType String -Force
 }
 
 echo "Registering self-hosted runner..."
