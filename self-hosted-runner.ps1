@@ -41,13 +41,24 @@ if (!(Test-Path $key)) {
 }
 New-ItemProperty -Path $key -Name AllowFreshCredentials -Value 1 -PropertyType Dword -Force            
 
-$key = Join-Path $key 'AllowFreshCredentials'
-if (!(Test-Path $key)) {
-    md $key
+$allowFreshCredentialsKey = Join-Path $key 'AllowFreshCredentials'
+if (!(Test-Path $allowFreshCredentialsKey)) {
+    md $allowFreshCredentialsKey
 }
 
-if (!(Get-ItemProperty -Path $key -Name 'AzureArcIaCAutomation' -ErrorAction SilentlyContinue)) {
-    New-ItemProperty -Path $key -Name 'AzureArcIaCAutomation' -Value 'WSMAN/*' -PropertyType String -Force
+if (!(Get-ItemProperty -Path $allowFreshCredentialsKey -Name 'AzureArcIaCAutomation' -ErrorAction SilentlyContinue)) {
+    New-ItemProperty -Path $allowFreshCredentialsKey -Name 'AzureArcIaCAutomation' -Value 'WSMAN/*' -PropertyType String -Force
+}
+
+New-ItemProperty -Path $key -Name AllowFreshCredentialsWhenNTLMOnly -Value 1 -PropertyType Dword -Force
+
+$allowFreshCredentialsWhenNTLMOnlyKey = Join-Path $key 'AllowFreshCredentialsWhenNTLMOnly'
+if (!(Test-Path $allowFreshCredentialsWhenNTLMOnlyKey)) {
+    md $allowFreshCredentialsWhenNTLMOnlyKey
+}
+
+if (!(Get-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 1 -ErrorAction SilentlyContinue)) {
+    New-ItemProperty -Path $allowFreshCredentialsWhenNTLMOnlyKey -Name 1 -Value 'WSMAN/*' -PropertyType String -Force
 }
 
 echo "Registering self-hosted runner..."
