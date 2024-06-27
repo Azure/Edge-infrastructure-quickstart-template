@@ -52,7 +52,7 @@
    lnet-endingAddress   = "172.25.118.55"   #This IP range should not overlap with HCI infra IP range.
    lnet-addressPrefix   = "172.25.118.0/26"   #E.g., 192.168.1.0/24
    lnet-defaultGateway  = "172.25.118.1" # Default gateway can be same as HCI infra default gateway.
-#   lnet-dnsServers      = ["<lnetDnsServer1>"]   # DNS servers can be same as HCI infra DNS servers.
+   lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]   # DNS servers can be same as HCI infra DNS servers.
 
 #   # Region AKS Arc parameters
    aksArc-controlPlaneIp   = "172.25.118.56"      # An IP address in the logical network IP range.
