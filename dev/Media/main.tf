@@ -8,7 +8,7 @@
    defaultGateway  = "172.25.118.1"
    dnsServers      = ["10.254.0.196",
                         "10.254.0.197"]
-   adouSuffix      = "OU=Media,OU=Hypervisors,OU=Servers,OU=Computers,OU=adaptivecloudlab,DC=adaptivecloudlab,DC=com"
+   adouSuffix      = "OU=Hypervisors,OU=Servers,OU=Computers,OU=adaptivecloudlab,DC=adaptivecloudlab,DC=com"
    domainServerIP  = "10.254.0.196"
    servers = [
      {
