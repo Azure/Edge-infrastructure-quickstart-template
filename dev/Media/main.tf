@@ -20,16 +20,16 @@
        ipv4Address = "172.25.118.12"
      }
    ]
-   managementAdapters = ["port0", "port1"]
+   managementAdapters = ["Port0", "Port1"]
    storageNetworks = [
      {
        name               = "Storage1Network",
-       networkAdapterName = "port0",
+       networkAdapterName = "Port0",
        vlanId             = "121"
      },
      {
        name               = "Storage2Network",
-       networkAdapterName = "port1",
+       networkAdapterName = "Port1",
        vlanId             = "122"
      }
    ]
