@@ -3,7 +3,7 @@ locals {
   siteResourceName           = "${var.siteId}"
   siteDisplayName            = "${var.siteId}"
   addressResourceName        = "${var.siteId}"
-  deploymentUserName         = "${var.siteId}deploy"
+  deploymentUserName         = "ACHCIOB"
   witnessStorageAccountName  = "${lower(var.siteId)}wit"
   keyvaultName               = "${var.siteId}-kv"
   adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
