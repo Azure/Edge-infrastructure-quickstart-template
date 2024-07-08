@@ -1,5 +1,5 @@
 # module "base" {
-#   source          = "../../modules/base"
+#   source          = "../../modules/hci+aks+vm"
 #   location        = "<location>"
 #   siteId          = basename(abspath(path.module))
 #   domainFqdn      = "<domainFqdn>"
@@ -58,10 +58,9 @@
 #   rbacAdminGroupObjectIds = ["<rbacAdminGroupObjectId>"] # An AAD group that will have the admin permission of this AKS Arc cluster. Check ./doc/AKS-Arc-Admin-Groups.md for details
 
 #   # Region HCI VM parameters
-#   # Uncomment this section will create a windows server VM on HCI.
-#   # downloadWinServerImage = true
-#   # vmAdminPassword        = var.vmAdminPassword
-#   # domainJoinPassword     = var.domainJoinPassword
+#   downloadWinServerImage = true
+#   vmAdminPassword        = var.vmAdminPassword
+#   domainJoinPassword     = var.domainJoinPassword
 
 #   # Region site manager parameters
 #   # Uncomment this section will create site manager instance for the resource group.
