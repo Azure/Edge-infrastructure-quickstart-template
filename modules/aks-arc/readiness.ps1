@@ -17,7 +17,7 @@ while ($true) {
         az account set --subscription $env:ARM_SUBSCRIPTION_ID
     }
 
-    $state = az aksarc get-versions --custom-location $customLocationResourceId
+    $state = az aksarc get-versions --custom-location $customLocationResourceId -o json
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
     try {
