@@ -6,7 +6,7 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-az config set extension.use_dynamic_install=yes_without_prompt
+az extension add --name aksarc --yes
 
 while ($true) {
     if ($env:ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
@@ -16,8 +16,8 @@ while ($true) {
         az login --federated-token $token --tenant $env:ARM_TENANT_ID -u $env:ARM_CLIENT_ID --service-principal
         az account set --subscription $env:ARM_SUBSCRIPTION_ID
     }
-
-    $state = az aksarc get-versions --custom-location $customLocationResourceId -o json 2>$null
+    
+    $state = az aksarc get-versions --custom-location $customLocationResourceId -o json
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
     try {
