@@ -17,9 +17,16 @@ while ($true) {
         az account set --subscription $env:ARM_SUBSCRIPTION_ID
     }
     
-    $state = az aksarc get-versions --custom-location $customLocationResourceId -o json
+    $state = az aksarc get-versions --custom-location $customLocationResourceId -o json --only-show-errors
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
+
+    # Workaround for a bug in the CLI
+    if (!$state.StartsWith("{")) {
+        $pos = $state.IndexOf('"')
+        $state = $state.Substring($pos)
+        $state = "{$state"
+    }
     try {
         echo $state | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 100
     } catch {
