@@ -18,20 +18,18 @@ while ($true) {
     }
     
     $state = az aksarc get-versions --custom-location $customLocationResourceId -o json --only-show-errors
+    $state = "$state".Replace("`n", "").Replace("`r", "").Replace("`t", "").Replace(" ", "")
+    echo $state
+
     $pos = $state.IndexOf("{")
     $state = $state.Substring($pos)
+    $quotePos = $state.IndexOf('"')
 
-    # Workaround for a bug in the CLI
-    if (!$state.StartsWith("{")) {
-        $pos = $state.IndexOf('"')
-        $state = $state.Substring($pos)
+    # Workaround for warning messages in the CLI
+    if ($quotePos -gt 1) {
+        echo "workaround for warning messages in the CLI"
+        $state = $state.Substring($quotePos)
         $state = "{$state"
-    }
-    try {
-        echo $state | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 100
-    } catch {
-        echo $state
-        throw $_
     }
     $ready = $false
 
