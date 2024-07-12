@@ -1,7 +1,7 @@
  module "base" {
    source          = "../../modules/base"
    location        = "eastus"
-   siteId          = "California"
+   siteId          = "Media"
    domainFqdn      = "adaptivecloudlab.com"
    startingAddress = "172.22.85.10"
    endingAddress   = "172.22.85.19"
@@ -50,7 +50,7 @@
   #  Region HCI logical network parameters
    lnet-startingAddress = "172.22.85.40"
    lnet-endingAddress   = "172.22.85.55"   #This IP range should not overlap with HCI infra IP range.
-   lnet-addressPrefix   = "172.22.85.0/24"   #E.g., 192.168.1.0/24
+   lnet-addressPrefix   = "172.22.85.0/26"   #E.g., 192.168.1.0/24
    lnet-defaultGateway  = "172.22.85.1" # Default gateway can be same as HCI infra default gateway.
    lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]   # DNS servers can be same as HCI infra DNS servers.
 
