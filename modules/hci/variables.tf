@@ -12,7 +12,7 @@ variable "siteId" {
   type        = string
   description = "A unique identifier for the site."
   validation {
-    condition     = can(regex("^[a-zA-Z0-9-]{1,8}$", var.siteId))
+    condition     = can(regex("^[a-zA-Z0-9-]{1,16}$", var.siteId))
     error_message = "value of siteId should be less than 9 characters and greater than 0 characters and only contain alphanumeric characters and hyphens, this is the requirement of name prefix in hci deploymentsetting"
   }
 }
