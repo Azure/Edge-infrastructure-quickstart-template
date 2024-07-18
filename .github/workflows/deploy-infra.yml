@@ -15,12 +15,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running dev stage"
-    Arizona:
-        uses: ./.github/workflows/site-cd-workflow.yml
-        with:
-            working-directory: dev/Arizona
-        secrets: inherit
-        needs: [dev]
     Media:
         uses: ./.github/workflows/site-cd-workflow.yml
         with:
@@ -33,9 +27,15 @@ jobs:
             working-directory: dev/sample
         secrets: inherit
         needs: [dev]
+    Toronto:
+        uses: ./.github/workflows/site-cd-workflow.yml
+        with:
+            working-directory: dev/Toronto
+        secrets: inherit
+        needs: [dev]
     qa:
         name: qa
-        needs: [dev,Arizona,Media,sample]
+        needs: [dev,Media,sample,Toronto]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
