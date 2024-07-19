@@ -156,6 +156,7 @@ jobs:
               id: fmt
               run: terraform fmt -check
               working-directory: ${{ matrix.path }}
+              continue-on-error: true
               
             - name: Terraform Validate
               id: validate
@@ -197,6 +198,7 @@ jobs:
                   const output = `#### Terraform plan run for \`${{ matrix.path }}\`
                   #### Terraform Initialization 🤖\`${{ steps.init.outcome }}\`
                   #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+                  #### You can run terraform fmt to fix the formatting issues
                   #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
                   #### Terraform Plan 🤖\`${{ steps.plan.outcome }}\`
               
