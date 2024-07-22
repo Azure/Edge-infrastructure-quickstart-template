@@ -39,9 +39,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
+    Colorado:
+        uses: ./.github/workflows/site-cd-workflow.yml
+        with:
+            working-directory: qa/Colorado
+        secrets: inherit
+        needs: [qa]
     prod:
         name: prod
-        needs: [qa]
+        needs: [qa,Colorado]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running prod stage"
