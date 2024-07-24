@@ -1,7 +1,7 @@
  module "base" {
    source          = "../../modules/base"
    location        = "eastus"
-   siteId          = "Media"
+   siteId          = "Colorado"
    domainFqdn      = "adaptivecloudlab.com"
    startingAddress = "172.25.118.20"
    endingAddress   = "172.25.118.29"
@@ -12,29 +12,29 @@
    domainServerIP  = "10.254.0.196"
    servers = [
      {
-       name        = "Media-Node1",
-       ipv4Address = "172.25.118.11"
+       name        = "CO-Node1",
+       ipv4Address = "172.25.118.21"
      },
      {
-       name        = "Media-Node2",
-       ipv4Address = "172.25.118.12"
+       name        = "CO-Node2",
+       ipv4Address = "172.25.118.23"
      }
    ]
-   managementAdapters = ["Port0", "Port1"]
+   managementAdapters = ["Port3", "Port4"]
    storageNetworks = [
      {
        name               = "Storage1Network",
        networkAdapterName = "Port0",
-       vlanId             = "121"
+       vlanId             = "711"
      },
      {
        name               = "Storage2Network",
        networkAdapterName = "Port1",
-       vlanId             = "122"
+       vlanId             = "712"
      }
    ]
    rdmaEnabled                   = true     // Change to true if RDMA is enabled.
-   storageConnectivitySwitchless = false     // Change to true if storage connectivity is switchless.
+   storageConnectivitySwitchless = true     // Change to true if storage connectivity is switchless.
    enableProvisioners            = false      // Change to false when Arc servers are connected by yourself.
    authenticationMethod          = "Credssp" // or "Default"
    subscriptionId                = var.subscriptionId
