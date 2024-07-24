@@ -3,9 +3,9 @@
    location        = "eastus"
    siteId          = "Colorado"
    domainFqdn      = "adaptivecloudlab.com"
-   startingAddress = "172.25.118.20"
-   endingAddress   = "172.25.118.29"
-   defaultGateway  = "172.25.118.1"
+   startingAddress = "172.22.82.10"
+   endingAddress   = "172.22.82.19"
+   defaultGateway  = "172.22.82.1"
    dnsServers      = ["10.254.0.196",
                         "10.254.0.197"]
    adouSuffix      = "OU=Hypervisors,OU=Servers,OU=Computers,OU=adaptivecloudlab,DC=adaptivecloudlab,DC=com"
@@ -13,11 +13,11 @@
    servers = [
      {
        name        = "CO-Node1",
-       ipv4Address = "172.25.118.21"
+       ipv4Address = "172.22.82.21"
      },
      {
        name        = "CO-Node2",
-       ipv4Address = "172.25.118.23"
+       ipv4Address = "172.22.82.23"
      }
    ]
    managementAdapters = ["Port3", "Port4"]
@@ -48,14 +48,14 @@
    rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 
   #  Region HCI logical network parameters
-   lnet-startingAddress = "172.25.118.40"
-   lnet-endingAddress   = "172.25.118.55"   #This IP range should not overlap with HCI infra IP range.
-   lnet-addressPrefix   = "172.25.118.0/26"   #E.g., 192.168.1.0/24
-   lnet-defaultGateway  = "172.25.118.1" # Default gateway can be same as HCI infra default gateway.
+   lnet-startingAddress = "172.22.82.40"
+   lnet-endingAddress   = "172.22.82.55"   #This IP range should not overlap with HCI infra IP range.
+   lnet-addressPrefix   = "172.22.82.0/26"   #E.g., 192.168.1.0/24
+   lnet-defaultGateway  = "172.22.82.1" # Default gateway can be same as HCI infra default gateway.
    lnet-dnsServers      = ["10.254.0.196", "10.254.0.197"]   # DNS servers can be same as HCI infra DNS servers.
 
 #   # Region AKS Arc parameters
-   aksArc-controlPlaneIp   = "172.25.118.56"      # An IP address in the logical network IP range.
+   aksArc-controlPlaneIp   = "172.22.82.56"      # An IP address in the logical network IP range.
    rbacAdminGroupObjectIds = ["be0c17dc-9a37-48c5-9691-751a27a4c1b9", "f5157bd2-8ce4-48b6-82df-69b9de7540a9"] # An AAD group that will have the admin permission of this AKS Arc cluster. Check ./doc/AKS-Arc-Admin-Groups.md for details
 
 #   # Region HCI VM parameters
