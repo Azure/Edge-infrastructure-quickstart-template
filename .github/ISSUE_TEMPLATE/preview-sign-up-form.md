@@ -15,5 +15,5 @@ assignees: xwen11
 ## What's your email address?
 *We are going to send a couple of SAS tokens to this email address*
 
-## What's your subscriptions?
-*Our service in private preview is limited in region West US, We will add a feature flag to your subscription and you can only use these subscriptions for our service in Azure portal*
+## What's your subscriptions? (Optional, if you want to use UX)
+*Our UX service in private preview is limited in region West Central US, We will add a feature flag to your subscription and you can only use these subscriptions to use our service in Azure portal*
