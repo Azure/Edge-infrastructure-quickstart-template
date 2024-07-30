@@ -39,6 +39,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"
+    California:
+        uses: ./.github/workflows/site-cd-workflow.yml
+        with:
+            working-directory: qa/California
+        secrets: inherit
+        needs: [qa]
     Colorado:
         uses: ./.github/workflows/site-cd-workflow.yml
         with:
@@ -47,7 +53,7 @@ jobs:
         needs: [qa]
     prod:
         name: prod
-        needs: [qa,Colorado]
+        needs: [qa,California,Colorado]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running prod stage"
