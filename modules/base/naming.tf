@@ -1,13 +1,13 @@
 locals {
-  resourceGroupName          = "${var.siteId}-rg"
+  resourceGroupName          = "RG_SUPERMARKETSTORES_HCIPLATFORM_${var.siteId}_NONPROD_AUE"
   siteResourceName           = length(var.siteId) < 4 ? "${var.siteId}-site" : "${var.siteId}"
   siteDisplayName            = "${var.siteId}"
   addressResourceName        = "${var.siteId}-address"
   deploymentUserName         = "${var.siteId}deploy"
-  witnessStorageAccountName  = "${lower(var.siteId)}wit"
+  witnessStorageAccountName  = "${lower(var.siteId)}witness"
   keyvaultName               = "${var.siteId}-kv"
-  adouPath                   = "OU=${var.siteId},${var.adouSuffix}"
-  clusterName                = "${var.siteId}-cl"
+  adouPath                   = "OU=HCIServers,OU=SMK${var.siteId},${var.adouSuffix}"
+  clusterName                = "${var.siteId}CC001"
   customLocationName         = "${var.siteId}-customlocation"
   workspaceName              = "${var.siteId}-workspace"
   dataCollectionEndpointName = "${var.siteId}-dce"
@@ -17,5 +17,5 @@ locals {
   vmName                     = "${var.siteId}-vm"
   vmAdminUsername            = "${var.siteId}admin"
   domainJoinUserName         = "${var.siteId}vmuser"
-  randomSuffix               = true
+  randomSuffix               = false
 }
