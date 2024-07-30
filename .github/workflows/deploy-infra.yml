@@ -15,15 +15,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
          - run: echo "running dev stage"
-    sample:
+    SV1407:
         uses: ./.github/workflows/site-cd-workflow.yml
         with:
-            working-directory: dev/sample
+            working-directory: dev/SV1407
         secrets: inherit
         needs: [dev]
     qa:
         name: qa
-        needs: [dev,sample]
+        needs: [dev,SV1407]
         runs-on: ubuntu-latest
         steps:
          - run: echo "running qa stage"

@@ -6,7 +6,7 @@ locals {
   deploymentUserName         = "${var.siteId}deploy"
   witnessStorageAccountName  = "${lower(var.siteId)}witness"
   keyvaultName               = "${var.siteId}-kv"
-  adouPath                   = "OU=HCIServers,OU=${var.siteId},${var.adouSuffix}"
+  adouPath                   = "OU=HCIServers,OU=SMK${var.siteId},${var.adouSuffix}"
   clusterName                = "${var.siteId}CC001"
   customLocationName         = "${var.siteId}-customlocation"
   workspaceName              = "${var.siteId}-workspace"
