@@ -92,6 +92,7 @@ jobs:
         rm ./az-edge-module-export
     # Generate sample csv file to scale
     - name: Run az-edge-site-scale generate
+      id: export
       run: |
         mkdir -p ./.azure/scale
         cat ./.azure/export.json | jq -r '.[]|[.baseModulePath, .groupPath] | @tsv' |
@@ -105,7 +106,7 @@ jobs:
         rm ./.azure/export.json
     # Commit and push the changes
     - name: Commit and push the changes
-      if: always()
+      if: steps.export.outcome == 'success'
       run: |
         git config --global user.email "exporter@iac.microsoft.com"
         git config --global user.name "IaC Exporter"
