@@ -56,6 +56,8 @@ jobs:
       run: |
         ./az-edge-site-scale scale -c ./.azure/scale.csv
         rm ./az-edge-site-scale
+    - name: Clean up
+      run: |
         rm ./.azure/scale.csv
     # Commit and push the changes
     - name: Commit and push the changes
