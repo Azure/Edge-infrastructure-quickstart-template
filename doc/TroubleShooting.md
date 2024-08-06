@@ -1,13 +1,5 @@
 # Trouble Shooting
 
-## Cannot download az-edge-site-scale
-
-<img src="./img/troubleshooting_sas.png" width="800" />
-
-The problem is the SAS token repo secret is not being set or incorrect.
-
-Solution: Add `PRIVATE_PREVIEW_SAS` to your GitHub repo secrets.
-
 ## Fail to run Terrafrom Apply
 
 <img src="./img/troubleshooting_infraapply.png" width="800"/>
