@@ -1,5 +1,10 @@
+locals {
+  is_windows = length(regexall("^[a-z]:", lower(abspath(path.root)))) > 0
+  program = local.is_windows ? "powershell.exe" : "pwsh"
+}
+
 data "external" "lnetIpCheck" {
-  program = ["powershell.exe", "-File", "${abspath(path.module)}/scripts/ip-range-overlap.ps1", var.startingAddress, var.endingAddress, var.lnet-startingAddress, var.lnet-endingAddress]
+  program = [local.program, "-File", "${abspath(path.module)}/scripts/ip-range-overlap.ps1", var.startingAddress, var.endingAddress, var.lnet-startingAddress, var.lnet-endingAddress]
 
   lifecycle {
     postcondition {
