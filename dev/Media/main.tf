@@ -60,9 +60,9 @@
 
 #   # Region HCI VM parameters
 #   # Uncomment this section will create a windows server VM on HCI.
-    downloadWinServerImage = true
-    vmAdminPassword        = var.vmAdminPassword
-    domainJoinPassword     = var.domainJoinPassword
+#    downloadWinServerImage = true
+#    vmAdminPassword        = var.vmAdminPassword
+#    domainJoinPassword     = var.domainJoinPassword
 
 #   # Region site manager parameters
 #   # Uncomment this section will create site manager instance for the resource group.
