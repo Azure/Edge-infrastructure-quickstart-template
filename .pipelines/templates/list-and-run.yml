@@ -1,0 +1,36 @@
+parameters:
+  - name: directory
+    type: string
+
+jobs:
+  - job: list
+    displayName: List directory
+    steps:
+      - powershell: |
+          $jobs = @{}
+          $sites = ls -Directory ${{ parameters.directory }}
+          foreach ($site in $sites) {$jobs[$site.Name] = @{'siteId'=$site.Name}}
+          $json = echo $jobs | ConvertTo-Json -Depth 10 -Compress
+          Write-Host "##vso[task.setvariable variable=targets;isOutput=true]$json"
+          Write-Host "##vso[task.setvariable variable=apply;isOutput=true]$($sites.Length -gt 0)"
+        name: setTargets
+      - script: |
+          echo $(setTargets.apply)
+          echo $(setTargets.targets)
+        name: echovar
+
+  - job: apply
+    dependsOn: list
+    timeoutInMinutes: 360
+    cancelTimeoutInMinutes: 1
+    displayName: Apply site
+    variables:
+      apply: $[ dependencies.list.outputs['setTargets.apply'] ]
+    condition: and(succeeded(), eq(variables['apply'], true))
+    strategy:
+      matrix: $[ dependencies.list.outputs['setTargets.targets'] ]
+    steps:
+      - template: ./site-cd-steps.yml
+        parameters:
+          stage: ${{ parameters.directory }}
+          siteId: $(siteId)

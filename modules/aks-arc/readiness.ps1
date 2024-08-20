@@ -16,6 +16,19 @@ while ($true) {
         az login --federated-token $token --tenant $env:ARM_TENANT_ID -u $env:ARM_CLIENT_ID --service-principal
         az account set --subscription $env:ARM_SUBSCRIPTION_ID
     }
+
+    if ($env:ADO_ACCESS_TOKEN) {
+        $resp = Invoke-WebRequest -Method POST -Uri "$env:OIDC_REQUEST_URL" -Headers @{"Authorization" = "bearer $env:ADO_ACCESS_TOKEN"; "Content-Type" = "application/json"}
+        $token = (echo $resp.Content | ConvertFrom-Json).oidcToken
+        
+        az login --federated-token $token --tenant $env:ARM_TENANT_ID -u $env:ARM_CLIENT_ID --service-principal
+        az account set --subscription $env:ARM_SUBSCRIPTION_ID
+    }
+
+    if ($env:ARM_CLIENT_SECRET) {
+        az login -u $env:ARM_CLIENT_ID -p $env:ARM_CLIENT_SECRET --tenant $env:ARM_TENANT_ID --service-principal
+        az account set --subscription $env:ARM_SUBSCRIPTION_ID
+    }
     
     $state = az aksarc get-versions --custom-location $customLocationResourceId -o json --only-show-errors
     $state = "$state".Replace("`n", "").Replace("`r", "").Replace("`t", "").Replace(" ", "")

@@ -1,0 +1,25 @@
+name: $(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd).$(DayOfYear)$(Rev:r)
+
+trigger: none
+
+pool: <your_pool_name> # TODO: Change this to your pool name
+
+stages:
+  - stage: init
+    jobs:
+    - template: templates/init.yml
+  - stage: dev
+    jobs:
+    - template: templates/list-and-run.yml
+      parameters:
+        directory: dev
+  - stage: qa
+    jobs:
+    - template: templates/list-and-run.yml
+      parameters:
+        directory: qa
+  - stage: prod
+    jobs:
+    - template: templates/list-and-run.yml
+      parameters:
+        directory: prod

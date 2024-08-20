@@ -1,0 +1,21 @@
+jobs:
+  - job: init
+    steps:
+      - powershell: |
+          touch global.auto.tfvars
+      
+      - task: CopyFiles@2
+        displayName: Copy file
+        condition: always()
+        inputs:
+          Contents: |
+            global.auto.tfvars
+          targetFolder: "$(Build.ArtifactStagingDirectory)"
+          flattenFolders: true
+      
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Artifact
+        condition: always()
+        inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+          ArtifactName: "drop"
