@@ -16,6 +16,11 @@ resource "azurerm_key_vault" "DeploymentKeyVault" {
   public_network_access_enabled = true
   sku_name                      = "standard"
 
+  timeouts {
+    create = "30m"
+    read   = "30m"
+    delete = "30m"
+  }
 }
 
 resource "azurerm_key_vault_secret" "AzureStackLCMUserCredential" {

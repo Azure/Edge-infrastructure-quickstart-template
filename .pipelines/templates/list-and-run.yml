@@ -14,6 +14,7 @@ jobs:
           Write-Host "##vso[task.setvariable variable=targets;isOutput=true]$json"
           Write-Host "##vso[task.setvariable variable=apply;isOutput=true]$($sites.Length -gt 0)"
         name: setTargets
+        
       - script: |
           echo $(setTargets.apply)
           echo $(setTargets.targets)

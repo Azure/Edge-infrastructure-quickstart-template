@@ -9,15 +9,6 @@ parameters:
   - name: azureConnectionName
     type: string
     default: <your_service_connection_name> # TODO: Change this to your service connection name
-  - name: backendAzureRmResourceGroupName
-    type: string
-    default: <your_backend_rg_name> # TODO: Change this to your backend storage account resource group name
-  - name: backendAzureRmStorageAccountName
-    type: string
-    default: <your_backend_sa_name> # TODO: Change this to your backend storage account name
-  - name: backendAzureRmContainerName
-    type: string
-    default: <your_backend_container_name> # TODO: Change this to your backend storage account container name
 
 steps:
   - task: AzureKeyVault@2
@@ -28,13 +19,14 @@ steps:
       SecretsFilter: "*"
       RunAsPreJob: false
 
-  - task: AzurePowerShell@5
+  - task: AzureCLI@2
     displayName: Set secrets to tfvars
     inputs:
       azureSubscription: ${{ parameters.azureConnectionName }}
-      azurePowerShellVersion: LatestVersion
-      ScriptType: 'InlineScript'
-      Inline: |
+      scriptType: ps
+      useGlobalConfig: true
+      scriptLocation: inlineScript
+      inlineScript: |
         $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
         $subscriptionId = (Get-AzContext).Subscription.id
         echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$subscriptionId"
@@ -58,7 +50,7 @@ steps:
           try {
             $key = echo "${{ parameters.siteId }}-$($secret.Name)"
             echo "Finding $key"
-            $value = Get-AzKeyVaultSecret -VaultName "${{ parameters.keyVaultName }}" -Name "$key" -AsPlainText
+            $value = az keyvault secret show --vault-name "${{ parameters.keyVaultName }}" --name "$key" --query value -o tsv
             if (!$value) {
               throw "site secret not found for $($secret.Name)"
             }
@@ -69,7 +61,7 @@ steps:
             echo $_
             try {
               echo "Finding $($secret.Name)"
-              $value = Get-AzKeyVaultSecret -VaultName "${{ parameters.keyVaultName }}" -Name "$($secret.Name)" -AsPlainText
+              $value = az keyvault secret show --vault-name "${{ parameters.keyVaultName }}" --name "$($secret.Name)" --query value -o tsv
               if (!$value) {
                 throw "$secret not found!"
               }
@@ -95,8 +87,17 @@ steps:
         *.auto.tfvars
       targetFolder: "${{ parameters.stage }}/${{ parameters.siteId }}"
   
+  - powershell: |
+      if (-not (Test-Path ado-token-converter.exe)) {
+        wget https://aka.ms/ado-token-converter -O ado-token-converter.exe
+      }
+    displayName: Download ado-token-converter.exe
+
+  - task: TerraformInstaller@1
+    displayName: Install terraform
+  
   - task: AzureCLI@2
-    displayName: Fetch credentials for azure
+    displayName: 'terraform init'
     inputs:
       azureSubscription: ${{ parameters.azureConnectionName }}
       scriptType: ps
@@ -104,86 +105,103 @@ steps:
       useGlobalConfig: true
       scriptLocation: inlineScript
       inlineScript: |
-        try {
-          echo "servicePrincipalId: $env:servicePrincipalId"
-          echo "servicePrincipalKey: $env:servicePrincipalKey"
-          echo "idToken: $env:idToken"
-          echo "##[command]set ARM_TENANT_ID"
-          echo "##vso[task.setvariable variable=ARM_TENANT_ID;issecret=true]$env:tenantId"
-          echo "##[command]set ARM_SUBSCRIPTION_ID"
-          echo "##vso[task.setvariable variable=ARM_CLIENT_ID;issecret=true]$env:servicePrincipalId"
-          echo "##[command]set ARM_CLIENT_SECRET"
-          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$env:servicePrincipalKey"
-          echo "##[command]set OIDC_REQUEST_URL"
-          $OIDC_REQUEST_URL="${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}"
-          echo "##vso[task.setvariable variable=OIDC_REQUEST_URL]$OIDC_REQUEST_URL"
-          echo "##[command]set ADO_ACCESS_TOKEN"
-          echo "##vso[task.setvariable variable=ADO_ACCESS_TOKEN;issecret=true]$(System.AccessToken)"
-        } catch {
-          echo $_
+        $env:ARM_USE_AZUREAD = 'true'
+        $env:ARM_SUBSCRIPTION_ID = az account show --query id --output tsv
+        $env:ARM_TENANT_ID = $env:tenantId
+        $env:ARM_CLIENT_ID = $env:servicePrincipalId
+        $env:ARM_USE_OIDC = 'true'
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
+        echo "##[command]Start ado-token-converter.exe"
+        $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
+        sleep 15
+        echo "Check whether converter is running"
+        if ($job.State -ne "Running") {
+          Receive-Job -Job $job
+          throw "Failed to start converter"
         }
-  
-  - powershell: |
-      echo "ARM_CLIENT_SECRET: $env:ARM_CLIENT_SECRET"
-      echo "OIDC_REQUEST_URL: $env:OIDC_REQUEST_URL"
-      echo "ADO_ACCESS_TOKEN: $env:ADO_ACCESS_TOKEN"
-      if (-not $env:ARM_CLIENT_SECRET -and -not $env:ADO_ACCESS_TOKEN) {
-        throw "No credentials found!"
-      }
-    env:
-      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-      OIDC_REQUEST_URL: $(OIDC_REQUEST_URL)
-      ADO_ACCESS_TOKEN: $(ADO_ACCESS_TOKEN)
-    displayName: 'Check env vars'
-
-  - task: TerraformInstaller@1
-    displayName: Install terraform
-  
-  - task: TerraformTaskV4@4
-    displayName: 'terraform init'
-    inputs:
-      command: init
-      backendType: azurerm
-      # Service connection to authorize backend access. Supports Subscription & Management Group Scope
-      backendServiceArm: ${{ parameters.azureConnectionName }}
-      backendAzureRmResourceGroupName: ${{ parameters.backendAzureRmResourceGroupName }}
-      backendAzureRmStorageAccountName: ${{ parameters.backendAzureRmStorageAccountName }}
-      backendAzureRmContainerName: ${{ parameters.backendAzureRmContainerName }}
-      backendAzureRmKey: ${{ parameters.siteId }}.tfstate
+        echo "##[command]terraform init"
+        try {
+          terraform init
+        } finally {
+          echo "Stop oidc token job"
+          Stop-Job -Job $job
+        }
       workingDirectory: "${{ parameters.stage }}/${{ parameters.siteId }}"
   
-  - task: TerraformTaskV4@4
-    name: terraformPlan
+  - task: AzureCLI@2
     displayName: 'terraform plan'
-    env:
-      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-      OIDC_REQUEST_URL: $(OIDC_REQUEST_URL)
-      ADO_ACCESS_TOKEN: $(ADO_ACCESS_TOKEN)
     inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      commandOptions: '-input=false -out ${{ parameters.siteId }}.tfplan'
-      environmentServiceNameAzureRM: ${{ parameters.azureConnectionName }}
+      azureSubscription: ${{ parameters.azureConnectionName }}
+      scriptType: ps
+      addSpnToEnvironment: true
+      useGlobalConfig: true
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env:ARM_USE_AZUREAD = 'true'
+        $env:ARM_SUBSCRIPTION_ID = az account show --query id --output tsv
+        $env:ARM_TENANT_ID = $env:tenantId
+        $env:ARM_CLIENT_ID = $env:servicePrincipalId
+        $env:ARM_USE_OIDC = 'true'
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
+        echo "##[command]Start ado-token-converter.exe"
+        $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
+        sleep 15
+        echo "Check whether converter is running"
+        if ($job.State -ne "Running") {
+          Receive-Job -Job $job
+          throw "Failed to start converter"
+        }
+        echo "##[command]terraform plan -input=false -out ${{ parameters.siteId }}.tfplan"
+        try {
+          terraform plan -input=false -out ${{ parameters.siteId }}.tfplan
+        } finally {
+          echo "Stop oidc token job"
+          Stop-Job -Job $job
+        }
       workingDirectory: "${{ parameters.stage }}/${{ parameters.siteId }}"
-  
-  - task: TerraformTaskV4@4
-    displayName: Apply Terraform Plan
-    condition: eq(variables['terraformPlan.changesPresent'], 'true')
-    env:
-      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-      OIDC_REQUEST_URL: $(OIDC_REQUEST_URL)
-      ADO_ACCESS_TOKEN: $(ADO_ACCESS_TOKEN)
+
+  - task: AzureCLI@2
+    displayName: 'terraform apply'
     inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      commandOptions: '-auto-approve -input=false ${{ parameters.siteId }}.tfplan'
-      environmentServiceNameAzureRM: ${{ parameters.azureConnectionName }}
+      azureSubscription: ${{ parameters.azureConnectionName }}
+      scriptType: ps
+      addSpnToEnvironment: true
+      useGlobalConfig: true
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env:ARM_USE_AZUREAD = 'true'
+        $env:ARM_SUBSCRIPTION_ID = az account show --query id --output tsv
+        $env:ARM_TENANT_ID = $env:tenantId
+        $env:ARM_CLIENT_ID = $env:servicePrincipalId
+        $env:ARM_USE_OIDC = 'true'
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
+        echo "##[command]Start ado-token-converter.exe"
+        $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
+        sleep 15
+        echo "Check whether converter is running"
+        if ($job.State -ne "Running") {
+          Receive-Job -Job $job
+          throw "Failed to start converter"
+        }
+        echo "##[command]terraform apply -auto-approve -input=false ${{ parameters.siteId }}.tfplan"
+        try {
+          terraform apply -auto-approve -input=false ${{ parameters.siteId }}.tfplan
+        } finally {
+          echo "Stop oidc token job"
+          Stop-Job -Job $job
+        }
       workingDirectory: "${{ parameters.stage }}/${{ parameters.siteId }}"
   
   - task: CopyFiles@2
     displayName: Copy tfplan
+    condition: always()
     inputs:
       Contents: |
+        ado-token-converter.${{ parameters.siteId }}.log
+        ${{ parameters.stage }}/${{ parameters.siteId }}/${{ parameters.siteId }}.token
         ${{ parameters.stage }}/${{ parameters.siteId }}/${{ parameters.siteId }}.tfplan
         ${{ parameters.stage }}/${{ parameters.siteId }}/${{ parameters.siteId }}.auto.tfvars
       targetFolder: $(Build.ArtifactStagingDirectory)
@@ -191,6 +209,7 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifact
+    condition: always()
     inputs:
       PathtoPublish: "$(Build.ArtifactStagingDirectory)"
       ArtifactName: "drop-${{ parameters.stage }}"
