@@ -110,7 +110,7 @@ steps:
         $env:ARM_TENANT_ID = $env:tenantId
         $env:ARM_CLIENT_ID = $env:servicePrincipalId
         $env:ARM_USE_OIDC = 'true'
-        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace $("$(System.CollectionUri)".TrimEnd("/")), "http://localhost:8080"
         $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
         echo "##[command]Start ado-token-converter.exe"
         $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
@@ -143,7 +143,7 @@ steps:
         $env:ARM_TENANT_ID = $env:tenantId
         $env:ARM_CLIENT_ID = $env:servicePrincipalId
         $env:ARM_USE_OIDC = 'true'
-        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace $("$(System.CollectionUri)".TrimEnd("/")), "http://localhost:8080"
         $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
         echo "##[command]Start ado-token-converter.exe"
         $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
@@ -176,7 +176,7 @@ steps:
         $env:ARM_TENANT_ID = $env:tenantId
         $env:ARM_CLIENT_ID = $env:servicePrincipalId
         $env:ARM_USE_OIDC = 'true'
-        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace "https://msazure.visualstudio.com", "http://localhost:8080"
+        $env:ACTIONS_ID_TOKEN_REQUEST_URL = "${env:SYSTEM_OIDCREQUESTURI}?api-version=7.1&serviceConnectionId=${env:AZURESUBSCRIPTION_SERVICE_CONNECTION_ID}" -replace $("$(System.CollectionUri)".TrimEnd("/")), "http://localhost:8080"
         $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN = "$(System.AccessToken)"
         echo "##[command]Start ado-token-converter.exe"
         $job = Start-Job { $(System.DefaultWorkingDirectory)/ado-token-converter.exe | Out-File -FilePath $(System.DefaultWorkingDirectory)/ado-token-converter.${{ parameters.siteId }}.log -Append }
