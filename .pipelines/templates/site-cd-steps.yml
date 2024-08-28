@@ -28,7 +28,7 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-        $subscriptionId = (Get-AzContext).Subscription.id
+        $subscriptionId = az account show --query id --output tsv
         echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID;issecret=true]$subscriptionId"
         echo "subscriptionId=`"$subscriptionId`"" > ${{ parameters.siteId }}.auto.tfvars
 
