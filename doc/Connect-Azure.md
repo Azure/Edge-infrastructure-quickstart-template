@@ -1,4 +1,4 @@
-# Connect GitHub Actions and Azure Using interactive Script
+# Connect GitHub Actions and Azure Using Interactive Script
 
 ## Steps
 

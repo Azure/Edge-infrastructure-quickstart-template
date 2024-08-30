@@ -1,4 +1,4 @@
-# Connect GitHub Actions and Azure Use Azure CLI
+# Connect GitHub Actions and Azure Using Azure CLI
 This doc is using Azure CLI to do the job, if you want to do this with interactive script, see [Connect Azure using Interactive Script](./Connect-Azure.md),if you want to use Azure portal, see [Connect Azure using Portal](./Connect-Azure-Portal.md).
 ## Prerequisite
 
