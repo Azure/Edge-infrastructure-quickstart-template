@@ -1,13 +1,19 @@
 # Setup Self Hosted runners
 
 1. Prepare a Windows machine.
-2. Install [Git](https://git-scm.com/downloads). Add `Git` to path. Run `git --version` to validate.
-3. Add `<Git installation root>\usr\bin` to **system** path. The default path is `C:\Program Files\Git\usr\bin`. 
-4. Install [Az CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). Run `az --version` to validate installation.
-5. Follow the first answer in [PowerShell Remoting - StackOverflow](https://stackoverflow.com/questions/18113651/powershell-remoting-policy-does-not-allow-the-delegation-of-user-credentials), finish client side settings to allow remote PowerShell HCI servers from runners.
-![psRemoting](./img/psRemoting.png)
-6. [Register self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners). Make sure that the runner process is running as Administrator. **Shorten the work folder of your runner as much as possible to avoid Windows path length limit.** E.g., `C:\_r\_w`
-![runner](./img/selfHostRunner.png)
+2. [Download](https://github.com/Azure/Edge-infrastructure-quickstart-template/releases/download/v0.0.1/self-hosted-runner.ps1) the automation script
+3. Get the runner key
+   1. if you do this with Connect Azure script, Press enter will give you the whole command for step 4
+   2. if you want to do this with gh powershell command
+   ```
+   gh api --method POST -H "Accept: application/vnd.github+json" "/repos/<YourRepositoryOwner>/<YourRepositoryName>/actions/runners/registration-token" | ConvertFrom-Json | Select-Object -ExpandProperty token
+   ```
+   3. if you want to do this with GitHub UI
+   ![Get GitHub Runner Token](./img/get_runner_token.png) 
+4. Run the script in runner machine
+```
+./self-hosted-runner.ps1 -gitHubRepoNameWithOwner <YourRepositoryOwner>/<YourRepositoryName>  -runnerToken <step3Token> 
+```
 
 ---
 Next Step: Continue on [Add-first-site](./Add-first-Site.md)
