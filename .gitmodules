@@ -1,4 +1,8 @@
-[submodule "modules/hci-akc-quick-module"]
-	path = modules/hci-akc-quick-module
+[submodule "modules/hci-aks-quick-module"]
+	path = modules/hci-aks-quick-module
+	url = https://github.com/Infrastructure-as-code-Automation/HCIAKS-quickstart-template-terraform.git
+	branch = main
+[submodule "dev/hci-aks-quick-example"]
+	path = dev/hci-aks-quick-example
 	url = https://github.com/Infrastructure-as-code-Automation/HCIAKS-quickstart-template-terraform.git
 	branch = main
