@@ -162,6 +162,17 @@ steps:
         }
       workingDirectory: "${{ parameters.stage }}/${{ parameters.siteId }}"
 
+  - template: ./telemetry.yml
+    parameters:
+      name: "plan"
+      directory: "${{ parameters.stage }}/${{ parameters.siteId }}"
+      condition: succeeded
+  - template: ./telemetry.yml
+    parameters:
+      name: "plan"
+      directory: "${{ parameters.stage }}/${{ parameters.siteId }}"
+      condition: failed
+
   - task: AzureCLI@2
     displayName: 'terraform apply'
     inputs:
@@ -194,6 +205,17 @@ steps:
           Stop-Job -Job $job
         }
       workingDirectory: "${{ parameters.stage }}/${{ parameters.siteId }}"
+
+  - template: ./telemetry.yml
+    parameters:
+      name: "apply"
+      directory: "${{ parameters.stage }}/${{ parameters.siteId }}"
+      condition: succeeded
+  - template: ./telemetry.yml
+    parameters:
+      name: "apply"
+      directory: "${{ parameters.stage }}/${{ parameters.siteId }}"
+      condition: failed
   
   - task: CopyFiles@2
     displayName: Copy tfplan

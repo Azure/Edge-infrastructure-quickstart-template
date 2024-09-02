@@ -1,0 +1,42 @@
+parameters:
+  - name: name
+    type: string
+  - name: directory
+    type: string
+  - name: condition
+    values:
+      - failed
+      - succeeded
+
+steps:
+  - powershell: |
+      if ("${{ parameters.condition }}" -eq "succeeded") {
+        $fullName = "${{ parameters.name }}-success"
+      } else {
+        $fullName = "${{ parameters.name }}-failure"
+      }
+      $body = @{
+        "name" = "EventData";
+        "time" = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+        "iKey" = "b565e06f-9e18-4198-a62b-764a48d4e187";
+        "data" = @{
+          "baseType" = "EventData";
+          "baseData" = @{
+            "name" = "$fullName";
+            "properties" = @{
+              "workflow" = "$(Build.DefinitionName)";
+              "run_number" = "$(Build.BuildNumber)";
+              "actor" = "$(Build.RequestedFor)";
+              "repository" = "$(System.CollectionUri)$(Build.Repository.Name)";
+              "event_name" = "$(Build.Reason)";
+              "directory" = "${{ parameters.directory }}";
+            }
+          }
+        }
+      }
+      $bodyJson = $body | ConvertTo-Json -Depth 10 -Compress
+      echo "##[command]Send telemetry: $bodyJson"
+      Invoke-WebRequest -Uri "https://dc.services.visualstudio.com/v2/track" -Method Post -Body $bodyJson -ContentType "application/json"
+    workingDirectory: ${{ parameters.directory }}
+    displayName: "Telemetry: ${{ parameters.name }}-${{ parameters.condition }}"
+    condition: ${{ parameters.condition }}()
