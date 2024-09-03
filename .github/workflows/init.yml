@@ -1,0 +1,30 @@
+name: Cleanup and Setup Virtual Environment
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  setup-virtualenv:
+    needs: automation-cleanup
+    name: Terraform
+    # runs-on: [windows-latest]
+    runs-on: [self-hosted]
+    environment: terraform
+
+    steps:
+      - name: Output private ip
+        if: success()
+        run: |
+          echo -n "Empty file for download in side-cd-workflow.yml" > "${{ runner.temp }}/global.auto.tfvars"
+          cat "${{ runner.temp }}/global.auto.tfvars"
+
+      - name: Upload private ip
+        uses: actions/upload-artifact@v3
+        with:
+          name: globaltfvars
+          path: "${{ runner.temp }}/global.auto.tfvars"
+          if-no-files-found: error
