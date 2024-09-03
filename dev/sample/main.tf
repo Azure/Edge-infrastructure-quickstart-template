@@ -8,7 +8,7 @@ module "base" {
   defaultGateway  = "192.168.1.1"
   dnsServers      = ["192.168.1.254"]
   adouSuffix      = "DC=jumpstart,DC=local"
-  domainServerIP  = "192.168.1.254"
+  domainServerIP  = "10.1.0.4"
   servers = [
     {
       name        = "AzSHOST1",
