@@ -1,6 +1,8 @@
 name: Terraform apply infra change
 
 on:
+  push:
+    branches: ["main"]
   schedule:
   - cron:  0 20 * * 0,3 # every Sunday and Wednesday at 20:00 UTC
   workflow_dispatch:
