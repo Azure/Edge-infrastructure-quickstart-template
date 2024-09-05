@@ -23,3 +23,10 @@ jobs:
     secrets: inherit
     with:
       directory: qa
+    
+  prod:
+    needs: [dev]
+    uses: ./.github/workflows/list-and-run.yml
+    secrets: inherit
+    with:
+      directory: prod
