@@ -30,7 +30,7 @@ env:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: ${{ inputs.working-directory }}
     # runs-on: [windows-latest]
     runs-on: [self-hosted]
     environment: terraform

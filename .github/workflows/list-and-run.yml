@@ -1,0 +1,51 @@
+name: List and Run
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: true
+        type: string
+
+jobs:
+  list:
+    runs-on: windows-latest
+    outputs:
+      matrix: ${{ steps.setTargets.outputs.matrix }}
+      apply: ${{ steps.setTargets.outputs.apply }}
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: List directory
+        id: setTargets
+        shell: pwsh
+        run: |
+          $inputDirectory = "${{ inputs.directory }}"
+          $fullPath = Join-Path $pwd ${{ inputs.directory }}
+          $sites = Get-ChildItem -Directory $fullPath
+          
+          $array = @()
+          foreach ($site in $sites) {
+            $array += @{
+              'siteId' = $site.Name
+              'workingDirectory' = ($inputDirectory + '/' + $site.Name).Replace('\', '/')
+            }
+          }
+          $json = ConvertTo-Json -InputObject $array -Compress
+          
+          echo "matrix=$json" >> $env:GITHUB_OUTPUT
+          
+          $apply = if ($sites.Length -gt 0) { 'true' } else { 'false' }
+          echo "apply=$apply" >> $env:GITHUB_OUTPUT
+  apply:
+    needs: [list]
+    if: ${{ needs.list.outputs.apply == 'true' }}
+    strategy:
+      matrix:
+        site: ${{ fromJson(needs.list.outputs.matrix) }}
+    uses: ./.github/workflows/site-cd-workflow.yml
+    with:
+      working-directory: ${{ matrix.site.workingDirectory }}
+    secrets: inherit
