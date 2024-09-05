@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   dev:
-    needs: [init]
     uses: ./.github/workflows/list-and-run.yml
     secrets: inherit
     with:
@@ -25,7 +24,7 @@ jobs:
       directory: qa
     
   prod:
-    needs: [dev]
+    needs: [qa]
     uses: ./.github/workflows/list-and-run.yml
     secrets: inherit
     with:
