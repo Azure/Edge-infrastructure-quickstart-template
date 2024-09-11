@@ -1,17 +1,17 @@
 variable "servers" {
-  description = "A list of servers with their names and IPv4 addresses."
   type = list(object({
     name        = string
     ipv4Address = string
   }))
+  description = "A list of servers with their names and IPv4 addresses."
 }
 
-variable "startingAddress" {
+variable "starting_address" {
   description = "The starting IP address of the IP address range."
   type        = string
 }
 
-variable "endingAddress" {
+variable "ending_address" {
   description = "The ending IP address of the IP address range."
   type        = string
 }

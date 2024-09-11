@@ -1,33 +1,33 @@
-variable "rpServicePrincipalObjectId" {
+variable "rp_service_principal_object_id" {
   default     = ""
   type        = string
   description = "The object ID of the HCI resource provider service principal."
 }
 
-variable "deploymentUserPassword" {
+variable "deployment_user_password" {
   sensitive   = true
   type        = string
   description = "The password for deployment user."
 }
 
-variable "localAdminUser" {
+variable "local_admin_user" {
   type        = string
   description = "The username for the local administrator account."
 }
 
-variable "localAdminPassword" {
+variable "local_admin_password" {
   sensitive   = true
   type        = string
   description = "The password for the local administrator account."
 }
 
-variable "servicePrincipalId" {
+variable "service_principal_id" {
   type        = string
   sensitive   = true
   description = "The service principal ID for ARB."
 }
 
-variable "servicePrincipalSecret" {
+variable "service_principal_secret" {
   type        = string
   sensitive   = true
   description = "The service principal secret."

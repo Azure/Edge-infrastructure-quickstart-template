@@ -1,29 +1,29 @@
 # Pass through variables
-variable "domainAdminUser" {
+variable "domain_admin_user" {
   type        = string
   description = "The username for the domain administrator account."
 }
 
-variable "domainAdminPassword" {
-  sensitive   = true
+variable "domain_admin_password" {
+  # sensitive   = true
   type        = string
   description = "The password for the domain administrator account."
 }
 
 # Virtual host related variables
-variable "virtualHostIp" {
+variable "virtual_host_ip" {
   type        = string
   description = "The virtual host IP address."
   default     = ""
 }
 
-variable "dcPort" {
+variable "dc_port" {
   type        = number
   description = "Domain controller winrm port in virtual host"
   default     = 5985
 }
 
-variable "serverPorts" {
+variable "server_ports" {
   type        = map(number)
   description = "Server winrm ports in virtual host"
   default     = {}
