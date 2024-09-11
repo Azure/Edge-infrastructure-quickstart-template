@@ -3,6 +3,8 @@ name: Terraform apply infra change
 on:
   schedule:
   - cron:  0 20 * * 0,3 # every Sunday and Wednesday at 20:00 UTC
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -15,7 +17,6 @@ jobs:
     secrets: inherit
 
   dev:
-    needs: [init]
     uses: ./.github/workflows/list-and-run.yml
     secrets: inherit
     with:
@@ -27,3 +28,11 @@ jobs:
     secrets: inherit
     with:
       directory: qa
+    
+  prod:
+    needs: [qa]
+    uses: ./.github/workflows/list-and-run.yml
+    secrets: inherit
+    with:
+      directory: prod
+

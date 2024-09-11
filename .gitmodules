@@ -1,0 +1,4 @@
+[submodule "modules/res-azurestackhci-cluster"]
+	path = modules/res-azurestackhci-cluster
+	url = https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster
+	branch = personal/hangxu/var

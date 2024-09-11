@@ -36,15 +36,15 @@ module "base" {
   storageConnectivitySwitchless = false     // Change to true if storage connectivity is switchless.
   enableProvisioners            = true      // Change to false when Arc servers are connected by yourself.
   authenticationMethod          = "Credssp" // or "Default"
-  subscriptionId                = var.subscriptionId
-  domainAdminUser               = var.domainAdminUser
-  domainAdminPassword           = var.domainAdminPassword
-  localAdminUser                = var.localAdminUser
-  localAdminPassword            = var.localAdminPassword
-  deploymentUserPassword        = var.deploymentUserPassword
-  servicePrincipalId            = var.servicePrincipalId
-  servicePrincipalSecret        = var.servicePrincipalSecret
-  rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
+  subscriptionId                = var.subscription_id
+  domainAdminUser               = var.domain_admin_user
+  domainAdminPassword           = var.domain_admin_password
+  localAdminUser                = var.local_admin_user
+  localAdminPassword            = var.local_admin_password
+  deploymentUserPassword        = var.deployment_user_password
+  servicePrincipalId            = var.service_principal_id
+  servicePrincipalSecret        = var.service_principal_secret
+  rpServicePrincipalObjectId    = var.rp_service_principal_object_id
 
   # Region HCI logical network parameters
   lnet-startingAddress = "192.168.1.171"
@@ -59,9 +59,9 @@ module "base" {
 
   # Region HCI VM parameters
   # Uncomment this section will create a windows server VM on HCI.
-  # downloadWinServerImage = true
-  # vmAdminPassword        = var.vmAdminPassword
-  # domainJoinPassword     = var.domainJoinPassword
+  downloadWinServerImage = true
+  vmAdminPassword        = var.vm_admin_password
+  domainJoinPassword     = var.domain_join_password
 
   # Region site manager parameters
   # Uncomment this section will create site manager instance for the resource group.
