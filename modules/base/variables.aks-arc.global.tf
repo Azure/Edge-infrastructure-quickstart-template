@@ -1,16 +1,16 @@
-variable "kubernetesVersion" {
+variable "kubernetes_version" {
   description = "The version of Kubernetes to use for the provisioned cluster."
   type        = string
   default     = "1.28.5"
 }
 
-variable "controlPlaneCount" {
+variable "control_plane_count" {
   description = "The number of control plane nodes for the Kubernetes cluster."
   type        = number
   default     = 1
 }
 
-variable "agentPoolProfiles" {
+variable "agent_pool_profiles" {
   description = "The agent pool profiles for the Kubernetes cluster."
   type = list(object({
     count             = number
@@ -29,7 +29,7 @@ variable "agentPoolProfiles" {
   }]
 }
 
-variable "rbacAdminGroupObjectIds" {
+variable "rbac_admin_group_object_ids" {
   description = "The object id of the Azure AD group that will be assigned the 'cluster-admin' role in the Kubernetes cluster."
   type        = list(string)
   # Add your default admin groups here. Refer to the documentation under doc/AKS-Arc-Admin-Groups.md for more information.

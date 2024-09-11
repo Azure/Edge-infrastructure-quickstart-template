@@ -1,35 +1,34 @@
-variable "domainFqdn" {
+variable "domain_fqdn" {
   description = "The domain FQDN."
   type        = string
 }
 
-variable "adouSuffix" {
+variable "adou_suffix" {
   type        = string
   description = "The suffix of Active Directory OU path."
 }
 
-variable "subnetMask" {
-  default     = "255.255.255.0"
+variable "subnet_mask" {
   type        = string
   description = "The subnet mask for the network."
+  default     = "255.255.255.0"
 }
 
-variable "defaultGateway" {
+variable "default_gateway" {
   description = "The default gateway for the network."
   type        = string
 }
 
-variable "dnsServers" {
+variable "dns_servers" {
   type        = list(string)
   description = "A list of DNS server IP addresses."
 }
 
-variable "managementAdapters" {
+variable "management_adapters" {
   type    = list(string)
-  default = ["ethernet", "ethernet 2"]
 }
 
-variable "storageNetworks" {
+variable "storage_networks" {
   type = list(object({
     name               = string
     networkAdapterName = string
@@ -37,12 +36,12 @@ variable "storageNetworks" {
   }))
 }
 
-variable "rdmaEnabled" {
+variable "rdma_enabled" {
   type        = bool
   description = "Indicates whether RDMA is enabled."
 }
 
-variable "storageConnectivitySwitchless" {
+variable "storage_connectivity_switchless" {
   type        = bool
   description = "Indicates whether storage connectivity is switchless."
 }
