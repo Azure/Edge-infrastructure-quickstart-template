@@ -55,7 +55,7 @@ variable "vm_admin_password" {
   description = "Admin password for the VM"
   type        = string
   sensitive   = true
-  default     = ""
+  default     = "!!123abc!!123abc"
 }
 
 variable "domain_join_password" {
@@ -63,4 +63,9 @@ variable "domain_join_password" {
   type        = string
   sensitive   = true
   default     = ""
+}
+
+variable "dc_ip" {
+  type        = string
+  description = "The IP address of the domain controller."
 }

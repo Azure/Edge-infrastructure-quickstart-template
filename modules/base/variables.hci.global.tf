@@ -36,11 +36,6 @@ variable "storage_networks" {
   }))
 }
 
-variable "rdma_enabled" {
-  type        = bool
-  description = "Indicates whether RDMA is enabled."
-}
-
 variable "storage_connectivity_switchless" {
   type        = bool
   description = "Indicates whether storage connectivity is switchless."

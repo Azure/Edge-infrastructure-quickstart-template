@@ -26,7 +26,10 @@ variable "dc_port" {
 variable "server_ports" {
   type        = map(number)
   description = "Server winrm ports in virtual host"
-  default     = {}
+  default     =  {
+    "AzSHOST1" = 15985,
+    "AzSHOST2" = 25985
+  }
 }
 
 

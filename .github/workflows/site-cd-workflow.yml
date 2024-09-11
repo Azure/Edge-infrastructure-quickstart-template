@@ -59,6 +59,13 @@ jobs:
           node-version: latest
       - run: node --version
 
+      # Download global tfvars
+      - name: Download global tfvars
+        uses: actions/download-artifact@v3
+        with:
+          name: globaltfvars
+          path: ${{ inputs.working-directory }}
+
       # Install the latest version of Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
