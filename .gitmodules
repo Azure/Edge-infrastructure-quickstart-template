@@ -2,3 +2,15 @@
 	path = modules/res-azurestackhci-cluster
 	url = https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster
 	branch = personal/hangxu/var
+[submodule "modules/azurestackhci-cluster"]
+	path = modules/azurestackhci-cluster
+	url = https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster
+	branch = personal/hangxu/var
+[submodule "modules/azurestackhci-logicalnetwork"]
+	path = modules/azurestackhci-logicalnetwork
+	url = https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-logicalnetwork
+	branch = personal/hangxu/var
+[submodule "modules/azuremonitorwindowsagent"]
+	path = modules/azuremonitorwindowsagent
+	url = https://github.com/Azure/terraform-azurerm-avm-ptn-azuremonitorwindowsagent
+	branch = personal/hangxu/var

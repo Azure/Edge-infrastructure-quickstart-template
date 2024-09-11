@@ -76,8 +76,9 @@ module "hci_server_provisioner" {
 }
 
 module "hci_cluster" {
-  source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.0"
+  source = "../azurestackhci-cluster"
+  # source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
+  # version = "~>0.0"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
@@ -96,7 +97,6 @@ module "hci_cluster" {
   servers                         = var.servers
   management_adapters             = var.management_adapters
   storage_networks                = var.storage_networks
-  rdma_enabled                    = var.rdma_enabled
   storage_connectivity_switchless = var.storage_connectivity_switchless
   custom_location_name            = local.custom_location_name
   witness_storage_account_name    = local.witness_storage_account_name
@@ -112,8 +112,9 @@ module "hci_cluster" {
 }
 
 module "hci_logicalnetwork" {
-  source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
-  version = "~>0.0"
+  source = "../azurestackhci-logicalnetwork"
+  # source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
+  # version = "~>0.0"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
@@ -157,8 +158,9 @@ locals {
 }
 
 module "hci_insights" {
-  source  = "Azure/avm-ptn-azuremonitorwindowsagent/azurerm"
-  version = "~>0.2"
+  source = "../azuremonitorwindowsagent"
+  # source  = "Azure/avm-ptn-azuremonitorwindowsagent/azurerm"
+  # version = "~>0.2"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
