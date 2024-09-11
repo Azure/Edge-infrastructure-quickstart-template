@@ -1,13 +1,14 @@
 module "base" {
   source           = "../../modules/base"
   location         = "eastus"
-  site_id          = basename(abspath(path.module))
+  site_id          = "s27"
   domain_fqdn      = "jumpstart.local"
   starting_address = "192.168.1.55"
   ending_address   = "192.168.1.65"
   default_gateway  = "192.168.1.1"
   dns_servers      = ["192.168.1.254"]
   adou_suffix      = "DC=jumpstart,DC=local"
+  virtual_host_ip  = var.dc_ip
   dc_ip            = var.dc_ip
   servers = [
     {
