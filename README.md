@@ -161,13 +161,12 @@ This scenario provides a quick and efficient way to establish a new site with ed
 * A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
-### Scale more sites (Private Preview)
+### Scale more sites
 
 **Overview**: Automatically configure scaling settings based on the parameters defined in the previous steps.
 
 **Steps**:
 
-* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
 * Confirm and update the global configurations: If you would like to update the pre-filled values of the global configurations, follow the guidance [Edit-Global-Parameters](./doc/Edit-Global-Parameters.md) to make the change.
 * Get the scaling code based on the quick-start template:
     1. Create a new branch from `main` by running `git checkout -b <yourFeatureBranch>`
@@ -180,13 +179,11 @@ This scenario provides a quick and efficient way to establish a new site with ed
 * A PR containing a pre-defined CI/CD pipeline with the 3 stages: Dev, QA, Prod
 * Provisioning action will happen in your side (*merge the PR to `main`*)
 
-## Scenario 2: Convert your PoC site settings into IaC code, then scale (Private Preview)
+## Scenario 2: Convert your PoC site settings into IaC code, then scale
 
 **Overview**: If you already have a PoC Site modeled within a resource group. This scenario will codify the existing resources and translate them into Terraform modules, then using automations to replicate the custom templates for multiple sites.
 
 **Steps**:
-
-* This feature is currently in **Private Preview**. Before you begin: [Sign up Private Preview](./doc/sign-up-Private-Preview.md)
  > [!IMPORTANT]
  > Resources under the resource group must belong to one single site. Code generation **doesn't** support resource groups containing multiple HCI clusters for now.
 * Convert the PoC site into IaC code:
