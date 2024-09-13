@@ -7,6 +7,12 @@ If you convert your PoC site settings into IaC code, then the sample csv file ca
 
 If you scale by static template, you need to run `./az-edge-site-scale generate -c ./.azure/scale.csv -s ./dev/<yourSiteName>` to get the scaling csv file. You can find a spreadsheet under `./.azure`. The spreadsheet contains all the entries which need customized inputs from you per site.
 
+# Download az-edge-site-scale(optional)
+If you scale by static template, download the az-edge-site-scale by
+* Windows: Run `./private_preview.ps1`
+* Linux: Run `./private_preview.sh`
+
+If you convert your PoC site settings into IaC code, you don't need to do the step as you already has the scale.csv
 
 # Scale with automations
 
