@@ -17,13 +17,26 @@ data "azurerm_client_config" "current" {}
 
 module "edge_site" {
   source  = "Azure/avm-res-edge-site/azurerm"
-  version = "~>0.0"
+  version = "~>0.1"
 
   enable_telemetry = var.enable_telemetry
 
   location              = azurerm_resource_group.rg.location
   address_resource_name = local.address_resource_name
   country               = var.country
+  city                  = var.city
+  company_name          = var.company_name
+  postal_code           = var.postal_code
+  state_or_province     = var.state_or_province
+  street_address_1      = var.street_address_1
+  street_address_2      = var.street_address_2
+  street_address_3      = var.street_address_3
+  zip_extended_code     = var.zip_extended_code
+  contact_name          = var.contact_name
+  email_list            = var.email_list
+  mobile                = var.mobile
+  phone                 = var.phone
+  phone_extension       = var.phone_extension
   resource_group_id     = azurerm_resource_group.rg.id
   site_display_name     = local.site_display_name
   site_resource_name    = local.site_resource_name
@@ -32,7 +45,7 @@ module "edge_site" {
 # Prepare AD
 module "hci_ad_provisioner" {
   source  = "Azure/avm-ptn-hci-ad-provisioner/azurerm"
-  version = "~>0.0"
+  version = "~>0.1"
 
   count            = var.enable_provisioners ? 1 : 0
   enable_telemetry = var.enable_telemetry
@@ -52,7 +65,7 @@ module "hci_ad_provisioner" {
 # Prepare arc server
 module "hci_server_provisioner" {
   source  = "Azure/avm-ptn-hci-server-provisioner/azurerm"
-  version = "~>0.0"
+  version = "~>0.1"
 
   for_each = var.enable_provisioners ? {
     for index, server in var.servers :
@@ -77,59 +90,125 @@ module "hci_server_provisioner" {
 
 module "hci_cluster" {
   source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.0"
+  version = "~>0.4"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
 
-  location                        = azurerm_resource_group.rg.location
-  name                            = local.cluster_name
-  resource_group_name             = azurerm_resource_group.rg.name
-  site_id                         = var.site_id
-  domain_fqdn                     = var.domain_fqdn
-  starting_address                = var.starting_address
-  ending_address                  = var.ending_address
-  subnet_mask                     = var.subnet_mask
-  default_gateway                 = var.default_gateway
-  dns_servers                     = var.dns_servers
-  adou_path                       = local.adou_path
-  servers                         = var.servers
-  management_adapters             = var.management_adapters
-  storage_networks                = var.storage_networks
-  rdma_enabled                    = var.rdma_enabled
-  storage_connectivity_switchless = var.storage_connectivity_switchless
-  custom_location_name            = local.custom_location_name
-  witness_storage_account_name    = local.witness_storage_account_name
-  keyvault_name                   = local.keyvault_name
-  random_suffix                   = local.random_suffix
-  deployment_user                 = local.deployment_user_name
-  deployment_user_password        = var.deployment_user_password
-  local_admin_user                = var.local_admin_user
-  local_admin_password            = var.local_admin_password
-  service_principal_id            = var.service_principal_id
-  service_principal_secret        = var.service_principal_secret
-  rp_service_principal_object_id  = var.rp_service_principal_object_id
+  location             = azurerm_resource_group.rg.location
+  name                 = local.cluster_name
+  cluster_tags         = var.cluster_tags
+  resource_group_name  = azurerm_resource_group.rg.name
+  site_id              = var.site_id
+  domain_fqdn          = var.domain_fqdn
+  adou_path            = local.adou_path
+  servers              = var.servers
+  custom_location_name = local.custom_location_name
+  eu_location          = var.eu_location
+  operation_type       = var.operation_type
+  configuration_mode   = var.configuration_mode
+
+  # Network settings
+  starting_address    = var.starting_address
+  ending_address      = var.ending_address
+  subnet_mask         = var.subnet_mask
+  default_gateway     = var.default_gateway
+  dns_servers         = var.dns_servers
+  management_adapters = var.management_adapters
+
+  # Intent settings
+  intent_name                       = var.intent_name
+  rdma_enabled                      = var.rdma_enabled
+  override_adapter_property         = var.override_adapter_property
+  qos_policy_overrides              = var.qos_policy_overrides
+  compute_intent_name               = var.compute_intent_name
+  compute_override_adapter_property = var.compute_override_adapter_property
+  compute_qos_policy_overrides      = var.compute_qos_policy_overrides
+  compute_rdma_enabled              = var.compute_rdma_enabled
+  storage_networks                  = var.storage_networks
+  storage_adapter_ip_info           = var.storage_adapter_ip_info
+  storage_connectivity_switchless   = var.storage_connectivity_switchless
+  storage_intent_name               = var.storage_intent_name
+  storage_override_adapter_property = var.storage_override_adapter_property
+  storage_qos_policy_overrides      = var.storage_qos_policy_overrides
+  storage_rdma_enabled              = var.storage_rdma_enabled
+
+  # Witness settings
+  witness_path                                = var.witness_path
+  witness_type                                = var.witness_type
+  random_suffix                               = local.random_suffix
+  create_witness_storage_account              = var.create_witness_storage_account
+  witness_storage_account_name                = var.witness_storage_account_name == "" ? local.witness_storage_account_name : var.witness_storage_account_name
+  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name
+  cross_tenant_replication_enabled            = var.cross_tenant_replication_enabled
+  account_replication_type                    = var.account_replication_type
+  allow_nested_items_to_be_public             = var.allow_nested_items_to_be_public
+  azure_service_endpoint                      = var.azure_service_endpoint
+  min_tls_version                             = var.min_tls_version
+  storage_tags                                = var.storage_tags
+
+  # Deployment secrets key vault settings
+  use_legacy_key_vault_model                   = var.use_legacy_key_vault_model
+  create_key_vault                             = var.create_key_vault
+  keyvault_name                                = var.keyvault_name == "" ? local.keyvault_name : var.keyvault_name
+  key_vault_location                           = var.key_vault_location
+  key_vault_resource_group                     = var.key_vault_resource_group
+  keyvault_tags                                = var.keyvault_tags
+  keyvault_purge_protection_enabled            = var.keyvault_purge_protection_enabled
+  keyvault_soft_delete_retention_days          = var.keyvault_soft_delete_retention_days
+  azure_stack_lcm_user_credential_content_type = var.azure_stack_lcm_user_credential_content_type
+  azure_stack_lcm_user_credential_tags         = var.azure_stack_lcm_user_credential_tags
+  default_arb_application_content_type         = var.default_arb_application_content_type
+  default_arb_application_tags                 = var.default_arb_application_tags
+  local_admin_credential_content_type          = var.local_admin_credential_content_type
+  local_admin_credential_tags                  = var.local_admin_credential_tags
+  witness_storage_key_content_type             = var.witness_storage_key_content_type
+  witness_storage_key_tags                     = var.witness_storage_key_tags
+
+  # Security settings
+  hvci_protection                  = var.hvci_protection
+  drtm_protection                  = var.drtm_protection
+  drift_control_enforced           = var.drift_control_enforced
+  credential_guard_enforced        = var.credential_guard_enforced
+  side_channel_mitigation_enforced = var.side_channel_mitigation_enforced
+  smb_cluster_encryption           = var.smb_cluster_encryption
+  smb_signing_enforced             = var.smb_signing_enforced
+  bitlocker_boot_volume            = var.bitlocker_boot_volume
+  bitlocker_data_volumes           = var.bitlocker_data_volumes
+  wdac_enforced                    = var.wdac_enforced
+
+  # Credentials settings
+  deployment_user                = local.deployment_user_name
+  deployment_user_password       = var.deployment_user_password
+  local_admin_user               = var.local_admin_user
+  local_admin_password           = var.local_admin_password
+  service_principal_id           = var.service_principal_id
+  service_principal_secret       = var.service_principal_secret
+  rp_service_principal_object_id = var.rp_service_principal_object_id
 }
 
 module "hci_logicalnetwork" {
   source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
-  version = "~>0.0"
+  version = "~>0.2"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
 
-  location            = azurerm_resource_group.rg.location
-  name                = local.logical_network_name
-  resource_group_name = azurerm_resource_group.rg.name
-  resource_group_id   = azurerm_resource_group.rg.id
-  custom_location_id  = module.hci_cluster.customlocation.id
-  vm_switch_name      = module.hci_cluster.v_switch_name
-  starting_address    = var.lnet_starting_address
-  ending_address      = var.lnet_ending_address
-  dns_servers         = length(var.lnet_dns_servers) == 0 ? var.dns_servers : var.lnet_dns_servers
-  default_gateway     = var.lnet_default_gateway == "" ? var.default_gateway : var.lnet_default_gateway
-  address_prefix      = var.lnet_address_prefix
-  vlan_id             = var.lnet_vlan_id
+  location             = azurerm_resource_group.rg.location
+  name                 = local.logical_network_name
+  resource_group_name  = azurerm_resource_group.rg.name
+  logical_network_tags = var.logical_network_tags
+  resource_group_id    = azurerm_resource_group.rg.id
+  custom_location_id   = module.hci_cluster.customlocation.id
+  vm_switch_name       = module.hci_cluster.v_switch_name
+  starting_address     = var.lnet_starting_address
+  ending_address       = var.lnet_ending_address
+  dns_servers          = length(var.lnet_dns_servers) == 0 ? var.dns_servers : var.lnet_dns_servers
+  default_gateway      = var.lnet_default_gateway == "" ? var.default_gateway : var.lnet_default_gateway
+  address_prefix       = var.lnet_address_prefix
+  vlan_id              = var.lnet_vlan_id
+  route_name           = var.route_name
+  subnet_0_name        = var.subnet_0_name
 }
 
 module "aks_arc" {
@@ -153,25 +232,36 @@ module "aks_arc" {
 }
 
 locals {
-  server_names = [for server in var.servers : server.name]
+  arc_server_ids = { for server in var.servers : server.name => "${azurerm_resource_group.rg.id}/providers/Microsoft.HybridCompute/machines/${server.name}" }
 }
 
 module "hci_insights" {
   source  = "Azure/avm-ptn-azuremonitorwindowsagent/azurerm"
-  version = "~>0.2"
+  version = "~>0.4"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
 
-  count                            = var.enable_insights ? 1 : 0
-  resource_group_name              = azurerm_resource_group.rg.name
-  server_names                     = local.server_names
-  arc_setting_id                   = module.hci_cluster.arc_settings.id
-  data_collection_rule_resource_id = var.data_collection_rule_resource_id
-  create_data_collection_resources = var.data_collection_rule_resource_id == "" ? true : false
-  data_collection_rule_name        = local.data_collection_rule_name
-  data_collection_endpoint_name    = local.data_collection_endpoint_name
-  workspace_name                   = local.workspace_name
+  count                                   = var.enable_insights ? 1 : 0
+  resource_group_name                     = azurerm_resource_group.rg.name
+  arc_server_ids                          = local.arc_server_ids
+  arc_setting_id                          = module.hci_cluster.arc_settings.id
+  data_collection_rule_resource_id        = var.data_collection_rule_resource_id
+  create_data_collection_resources        = var.data_collection_rule_resource_id == "" ? true : false
+  data_collection_resources_location      = azurerm_resource_group.rg.location
+  data_collection_rule_name               = local.data_collection_rule_name
+  data_collection_rule_tags               = var.data_collection_rule_tags
+  data_collection_rule_destination_id     = var.data_collection_rule_destination_id
+  data_collection_endpoint_name           = local.data_collection_endpoint_name
+  data_collection_endpoint_tags           = var.data_collection_endpoint_tags
+  workspace_name                          = local.workspace_name
+  workspace_tags                          = var.workspace_tags
+  sku                                     = var.sku
+  cmk_for_query_forced                    = var.cmk_for_query_forced
+  immediate_data_purge_on_30_days_enabled = var.immediate_data_purge_on_30_days_enabled
+  retention_in_days                       = var.retention_in_days
+  counter_specifiers                      = var.counter_specifiers
+  x_path_queries                          = var.x_path_queries
 }
 
 resource "azapi_resource" "hci_alerts" {

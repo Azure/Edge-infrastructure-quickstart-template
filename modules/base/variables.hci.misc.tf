@@ -33,8 +33,8 @@ variable "service_principal_secret" {
   description = "The service principal secret."
 }
 
-# variable "location"       "ref/main/location"
-# variable "siteId"         "ref/main/siteId"
-# variable "siteName"       "ref/main/siteName"
-# variable "subscriptionId" "ref/main/subscriptionId"
-# variable "deploymentUser" "ref/naming/deploymentUserName"
+# variable "location"        "ref/main/location"
+# variable "site_id"         "ref/main/site_id"
+# variable "site_name"       "ref/main/site_name"
+# variable "subscription_id" "ref/main/subscription_id"
+# variable "deployment_user" "ref/naming/deployment_userName"
