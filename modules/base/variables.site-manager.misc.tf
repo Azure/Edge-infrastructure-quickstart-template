@@ -1,1 +1,1 @@
-# variable "siteId"         "ref/main/siteId"
+# variable "site_id"  "ref/main/site_id"
