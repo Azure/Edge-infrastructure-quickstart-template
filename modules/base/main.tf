@@ -19,6 +19,7 @@ module "edge_site" {
   source  = "Azure/avm-res-edge-site/azurerm"
   version = "~>0.1"
 
+  count            = var.country != "" ? 1 : 0
   enable_telemetry = var.enable_telemetry
 
   location              = azurerm_resource_group.rg.location
@@ -189,18 +190,17 @@ module "hci_cluster" {
 
 module "hci_logicalnetwork" {
   source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
-  version = "~>0.2"
+  version = "~>0.3"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
 
   location             = azurerm_resource_group.rg.location
-  name                 = local.logical_network_name
-  resource_group_name  = azurerm_resource_group.rg.name
-  logical_network_tags = var.logical_network_tags
   resource_group_id    = azurerm_resource_group.rg.id
   custom_location_id   = module.hci_cluster.customlocation.id
   vm_switch_name       = module.hci_cluster.v_switch_name
+  name                 = local.logical_network_name
+  logical_network_tags = var.logical_network_tags
   starting_address     = var.lnet_starting_address
   ending_address       = var.lnet_ending_address
   dns_servers          = length(var.lnet_dns_servers) == 0 ? var.dns_servers : var.lnet_dns_servers
