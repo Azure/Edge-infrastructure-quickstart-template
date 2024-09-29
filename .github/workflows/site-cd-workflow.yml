@@ -18,12 +18,17 @@ env:
   ARM_USE_OIDC: true
   TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   TF_VAR_local_admin_user: ${{ secrets.localAdminUser }}
+  TF_VAR_hci_0_local_admin_user: ${{ secrets.localAdminUser }}
   TF_VAR_local_admin_password: ${{ secrets.localAdminPassword }}
+  TF_VAR_hci_0_local_admin_password: ${{ secrets.localAdminPassword }}
   TF_VAR_domain_admin_user: ${{ secrets.domainAdminUser }}
   TF_VAR_domain_admin_password: ${{ secrets.domainAdminPassword }}
   TF_VAR_deployment_user_password: ${{ secrets.deploymentUserPassword }}
+  TF_VAR_hci_0_deployment_user_password: ${{ secrets.deploymentUserPassword }}
   TF_VAR_service_principal_id: ${{ secrets.servicePrincipalId }}
+  TF_VAR_hci_0_service_principal_id: ${{ secrets.servicePrincipalId }}
   TF_VAR_service_principal_secret: ${{ secrets.servicePrincipalSecret }}
+  TF_VAR_hci_0_service_principal_secret: ${{ secrets.servicePrincipalSecret }}
   TF_VAR_rp_service_principal_object_id: ${{ secrets.rpServicePrincipalObjectId }}
   TF_VAR_vm_admin_password: ${{ secrets.vmAdminPassword }}
   TF_VAR_domain_join_password: ${{ secrets.domainJoinPassword }}
