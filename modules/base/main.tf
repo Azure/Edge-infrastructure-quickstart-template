@@ -91,23 +91,24 @@ module "hci_server_provisioner" {
 
 module "hci_cluster" {
   source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.4"
+  version = "~>0.8"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
 
-  location             = azurerm_resource_group.rg.location
-  name                 = local.cluster_name
-  cluster_tags         = var.cluster_tags
-  resource_group_name  = azurerm_resource_group.rg.name
-  site_id              = var.site_id
-  domain_fqdn          = var.domain_fqdn
-  adou_path            = local.adou_path
-  servers              = var.servers
-  custom_location_name = local.custom_location_name
-  eu_location          = var.eu_location
-  operation_type       = var.operation_type
-  configuration_mode   = var.configuration_mode
+  location                = azurerm_resource_group.rg.location
+  name                    = local.cluster_name
+  cluster_tags            = var.cluster_tags
+  resource_group_id       = azurerm_resource_group.rg.id
+  resource_group_location = azurerm_resource_group.rg.location
+  site_id                 = var.site_id
+  domain_fqdn             = var.domain_fqdn
+  adou_path               = local.adou_path
+  servers                 = var.servers
+  custom_location_name    = local.custom_location_name
+  eu_location             = var.eu_location
+  operation_type          = var.operation_type
+  configuration_mode      = var.configuration_mode
 
   # Network settings
   starting_address    = var.starting_address
@@ -190,7 +191,7 @@ module "hci_cluster" {
 
 module "hci_logicalnetwork" {
   source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
-  version = "~>0.3"
+  version = "~>0.4"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
@@ -200,6 +201,7 @@ module "hci_logicalnetwork" {
   custom_location_id   = module.hci_cluster.customlocation.id
   vm_switch_name       = module.hci_cluster.v_switch_name
   name                 = local.logical_network_name
+  ip_allocation_method = "Static"
   logical_network_tags = var.logical_network_tags
   starting_address     = var.lnet_starting_address
   ending_address       = var.lnet_ending_address
@@ -213,14 +215,14 @@ module "hci_logicalnetwork" {
 
 module "aks_arc" {
   source  = "Azure/avm-res-hybridcontainerservice-provisionedclusterinstance/azurerm"
-  version = "~>0.0"
+  version = "~>0.3"
 
   depends_on       = [module.hci_cluster, module.hci_logicalnetwork]
   enable_telemetry = var.enable_telemetry
 
   location                    = azurerm_resource_group.rg.location
   name                        = local.aks_arc_name
-  resource_group_name         = azurerm_resource_group.rg.name
+   resource_group_id          = azurerm_resource_group.rg.id
   custom_location_id          = module.hci_cluster.customlocation.id
   logical_network_id          = module.hci_logicalnetwork.resource_id
   agent_pool_profiles         = var.agent_pool_profiles
