@@ -100,7 +100,6 @@ module "hci_cluster" {
   name                    = local.cluster_name
   cluster_tags            = var.cluster_tags
   resource_group_id       = azurerm_resource_group.rg.id
-  resource_group_location = azurerm_resource_group.rg.location
   site_id                 = var.site_id
   domain_fqdn             = var.domain_fqdn
   adou_path               = local.adou_path
