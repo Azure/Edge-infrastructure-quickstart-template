@@ -222,7 +222,7 @@ module "aks_arc" {
 
   location                    = azurerm_resource_group.rg.location
   name                        = local.aks_arc_name
-   resource_group_id          = azurerm_resource_group.rg.id
+  resource_group_id           = azurerm_resource_group.rg.id
   custom_location_id          = module.hci_cluster.customlocation.id
   logical_network_id          = module.hci_logicalnetwork.resource_id
   agent_pool_profiles         = var.agent_pool_profiles
