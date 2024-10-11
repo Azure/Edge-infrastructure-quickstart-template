@@ -96,19 +96,18 @@ module "hci_cluster" {
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
 
-  location                = azurerm_resource_group.rg.location
-  name                    = local.cluster_name
-  cluster_tags            = var.cluster_tags
-  resource_group_id       = azurerm_resource_group.rg.id
-  resource_group_location = azurerm_resource_group.rg.location
-  site_id                 = var.site_id
-  domain_fqdn             = var.domain_fqdn
-  adou_path               = local.adou_path
-  servers                 = var.servers
-  custom_location_name    = local.custom_location_name
-  eu_location             = var.eu_location
-  operation_type          = var.operation_type
-  configuration_mode      = var.configuration_mode
+  location             = azurerm_resource_group.rg.location
+  name                 = local.cluster_name
+  cluster_tags         = var.cluster_tags
+  resource_group_id    = azurerm_resource_group.rg.id
+  site_id              = var.site_id
+  domain_fqdn          = var.domain_fqdn
+  adou_path            = local.adou_path
+  servers              = var.servers
+  custom_location_name = local.custom_location_name
+  eu_location          = var.eu_location
+  operation_type       = var.operation_type
+  configuration_mode   = var.configuration_mode
 
   # Network settings
   starting_address    = var.starting_address
@@ -222,7 +221,7 @@ module "aks_arc" {
 
   location                    = azurerm_resource_group.rg.location
   name                        = local.aks_arc_name
-   resource_group_id          = azurerm_resource_group.rg.id
+  resource_group_id           = azurerm_resource_group.rg.id
   custom_location_id          = module.hci_cluster.customlocation.id
   logical_network_id          = module.hci_logicalnetwork.resource_id
   agent_pool_profiles         = var.agent_pool_profiles
