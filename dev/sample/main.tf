@@ -12,7 +12,7 @@
 #   servers = [
 #     {
 #       name         = "<server1Name>",
-#       ipv4_address = "<server1Ipv4Address>"
+#       ipv4Address = "<server1Ipv4Address>"
 #     },
 #     {
 #       name        = "<server2Name>",
