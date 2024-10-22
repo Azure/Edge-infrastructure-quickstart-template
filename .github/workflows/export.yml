@@ -34,6 +34,8 @@ env:
   TF_VAR_vm_admin_password: ${{ secrets.vmAdminPassword }}
   TF_VAR_domain_join_password: ${{ secrets.domainJoinPassword }}
   HCI_RP_SP_ID: ${{ secrets.rpServicePrincipalObjectId }}
+  AZ_EDGE_MODULE_EXPORT_SKIP_VERIFY: ${{ secrets.AZ_EDGE_MODULE_EXPORT_SKIP_VERIFY }}
+  AZ_EDGE_MODULE_EXPORT_SKIP_COMPARE: ${{ secrets.AZ_EDGE_MODULE_EXPORT_SKIP_COMPARE }}
 
 jobs:
   export:
