@@ -1,10 +1,9 @@
 name: Export Azure resource into config
 
 on:
-  push:
+  pull_request:
     branches:
-      - '**'
-      - '!main'
+      - "main"
     paths:
       - '.azure/export.json'
   workflow_call:
@@ -112,4 +111,9 @@ jobs:
         git add .
         git commit -m "Export Azure resource into config"
         git push
+
+  plan:
+    needs: [export]
+    uses: ./.github/workflows/terraform-plan.yml
+    secrets: inherit
     
