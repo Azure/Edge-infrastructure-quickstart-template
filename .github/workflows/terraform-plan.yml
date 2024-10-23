@@ -41,6 +41,8 @@ jobs:
               uses: actions/checkout@v3
               with:
                 fetch-depth: 0
+                ref: ${{ github.head_ref }}
+
             - name: Check diff to see what content is changed
               id: check_diff
               run: |
@@ -132,6 +134,9 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+              with:
+                fetch-depth: 0 
+                ref: ${{ github.head_ref }}
 
             - name: Log in to Azure using OIDC
               uses: azure/login@v1
