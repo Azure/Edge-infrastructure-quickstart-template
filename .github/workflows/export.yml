@@ -3,7 +3,7 @@ name: Export Azure resource into config
 on:
   pull_request:
     branches:
-      - "main"
+      - 'main'
     paths:
       - '.azure/export.json'
   workflow_call:
@@ -45,6 +45,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
     # checkout to input branch when input branch is not empty
     - name: Checkout to input branch
       if: ${{ inputs.branch != '' }}
