@@ -135,7 +135,6 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
               with:
-                fetch-depth: 0 
                 ref: ${{ github.head_ref }}
 
             - name: Log in to Azure using OIDC
