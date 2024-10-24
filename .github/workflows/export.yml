@@ -1,10 +1,9 @@
 name: Export Azure resource into config
 
 on:
-  push:
+  pull_request:
     branches:
-      - '**'
-      - '!main'
+      - 'main'
     paths:
       - '.azure/export.json'
   workflow_call:
@@ -16,6 +15,8 @@ on:
 permissions:
   contents: write
   id-token: write
+  pull-requests: write
+  issues: write
 
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -44,6 +45,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
     # checkout to input branch when input branch is not empty
     - name: Checkout to input branch
       if: ${{ inputs.branch != '' }}
@@ -112,4 +115,9 @@ jobs:
         git add .
         git commit -m "Export Azure resource into config"
         git push
+
+  plan:
+    needs: [export]
+    uses: ./.github/workflows/terraform-plan.yml
+    secrets: inherit
     
