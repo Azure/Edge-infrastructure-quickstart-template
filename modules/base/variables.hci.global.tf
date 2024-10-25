@@ -52,6 +52,18 @@ variable "rdma_enabled" {
   description = "Indicates whether RDMA is enabled."
 }
 
+variable "rdma_jumbo_packet" {
+  type        = string
+  description = "The jumbo packet size for RDMA."
+  default     = "9014"
+}
+
+variable "rdma_protocol" {
+  type        = string
+  description = "The RDMA protocol."
+  default     = "RoCEv2"
+}
+
 variable "storage_connectivity_switchless" {
   type        = bool
   description = "Indicates whether storage connectivity is switchless."
@@ -105,6 +117,12 @@ variable "compute_override_adapter_property" {
   description = "Indicates whether to override adapter property for compute."
 }
 
+variable "compute_override_qos_policy" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to override QoS policy for compute."
+}
+
 variable "compute_qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
@@ -123,6 +141,18 @@ variable "compute_rdma_enabled" {
   type        = bool
   default     = false
   description = "Indicates whether RDMA is enabled for compute."
+}
+
+variable "compute_rdma_jumbo_packet" {
+  type        = string
+  default     = "9014"
+  description = "The jumbo packet size for RDMA of compute network."
+}
+
+variable "compute_rdma_protocol" {
+  type        = string
+  default     = "RoCEv2"
+  description = "The RDMA protocol of compute network."
 }
 
 variable "keyvault_name" {
@@ -239,6 +269,12 @@ variable "override_adapter_property" {
   description = "Indicates whether to override adapter property."
 }
 
+variable "override_qos_policy" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to override QoS policy."
+}
+
 variable "qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
@@ -265,6 +301,12 @@ variable "storage_override_adapter_property" {
   description = "Indicates whether to override adapter property for storagte."
 }
 
+variable "storage_override_qos_policy" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to override QoS policy for storage."
+}
+
 variable "storage_qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
@@ -283,6 +325,18 @@ variable "storage_rdma_enabled" {
   type        = bool
   default     = false
   description = "Indicates whether RDMA is enabled for storage. Storage RDMA will be enabled if either rdma_enabled or storage_rdma_enabled is set to true."
+}
+
+variable "storage_rdma_jumbo_packet" {
+  type        = string
+  default     = "9014"
+  description = "The jumbo packet size for RDMA of storage network."
+}
+
+variable "storage_rdma_protocol" {
+  type        = string
+  default     = "RoCEv2"
+  description = "The RDMA protocol of storage network."
 }
 
 variable "storage_tags" {
