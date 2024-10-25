@@ -91,7 +91,7 @@ module "hci_server_provisioner" {
 
 module "hci_cluster" {
   source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.8"
+  version = "~>0.10"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
@@ -118,21 +118,35 @@ module "hci_cluster" {
   management_adapters = var.management_adapters
 
   # Intent settings
-  intent_name                       = var.intent_name
-  rdma_enabled                      = var.rdma_enabled
-  override_adapter_property         = var.override_adapter_property
-  qos_policy_overrides              = var.qos_policy_overrides
+  # Converged network settings
+  intent_name               = var.intent_name
+  rdma_enabled              = var.rdma_enabled
+  rdma_jumbo_packet         = var.rdma_jumbo_packet
+  rdma_protocol             = var.rdma_protocol
+  override_adapter_property = var.override_adapter_property
+  override_qos_policy       = var.override_qos_policy
+  qos_policy_overrides      = var.qos_policy_overrides
+
+  # Compute_Management network settings
   compute_intent_name               = var.compute_intent_name
-  compute_override_adapter_property = var.compute_override_adapter_property
-  compute_qos_policy_overrides      = var.compute_qos_policy_overrides
   compute_rdma_enabled              = var.compute_rdma_enabled
+  compute_rdma_jumbo_packet         = var.compute_rdma_jumbo_packet
+  compute_rdma_protocol             = var.compute_rdma_protocol
+  compute_override_adapter_property = var.compute_override_adapter_property
+  compute_override_qos_policy       = var.compute_override_qos_policy
+  compute_qos_policy_overrides      = var.compute_qos_policy_overrides
+
+  # Storage network settings
   storage_networks                  = var.storage_networks
   storage_adapter_ip_info           = var.storage_adapter_ip_info
   storage_connectivity_switchless   = var.storage_connectivity_switchless
   storage_intent_name               = var.storage_intent_name
-  storage_override_adapter_property = var.storage_override_adapter_property
-  storage_qos_policy_overrides      = var.storage_qos_policy_overrides
   storage_rdma_enabled              = var.storage_rdma_enabled
+  storage_rdma_jumbo_packet         = var.storage_rdma_jumbo_packet
+  storage_rdma_protocol             = var.storage_rdma_protocol
+  storage_override_adapter_property = var.storage_override_adapter_property
+  storage_override_qos_policy       = var.storage_override_qos_policy
+  storage_qos_policy_overrides      = var.storage_qos_policy_overrides
 
   # Witness settings
   witness_path                                = var.witness_path
