@@ -45,6 +45,7 @@ jobs:
     strategy:
       matrix:
         site: ${{ fromJson(needs.list.outputs.matrix) }}
+      fail-fast: false
     uses: ./.github/workflows/site-cd-workflow.yml
     with:
       working-directory: ${{ matrix.site.workingDirectory }}

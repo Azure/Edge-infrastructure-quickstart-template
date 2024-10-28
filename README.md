@@ -210,7 +210,7 @@ This scenario provides a quick and efficient way to establish a new site with ed
     <img src="./doc/img/view_commit_for_export.png" width="600" />
 
     * If the workflow runs successfully, the generated code is identical to Azure resources. Please merge the branch ASAP. If there are changes happened after export, the changes will be reverted.
-    * If the workflow run fails, you can check `./dev/<yourSiteName>/export-diff` to see what are the changes.
+    * If the workflow run fails, you can check `./dev/<yourSiteName>/export-report/plan.txt` to see what are the changes.
 
 * [Scale with automations](./doc/Scale-with-automation.md)
 

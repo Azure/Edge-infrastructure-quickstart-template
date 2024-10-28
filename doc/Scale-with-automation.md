@@ -9,8 +9,8 @@ If you scale by static template, you need to run `./az-edge-site-scale generate 
 
 # Download az-edge-site-scale(optional)
 If you scale by static template, download the az-edge-site-scale by
-* Windows: Run `./private_preview.ps1`
-* Linux: Run `./private_preview.sh`
+* Windows: Run `./download_scale_binary.ps1`
+* Linux: Run `./download_scale_binary.sh`
 
 If you convert your PoC site settings into IaC code, you don't need to do the step as you already has the scale.csv
 
