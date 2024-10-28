@@ -11,8 +11,8 @@
 4. *(Optional)* Skip this step if you haven't provisioned Arc for servers yet.
 
    If the Arc servers are already provisioned by yourself, go to `dev/<your location>/imports.tf` and uncomment the import block, change the placeholders to your resource group that contains the Arc servers. Open `dev/<your location>/main.tf` and add `enableProvisioners = false` in the module block.
-
-5. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
+5. *(Optional)* Change default settings in the QuickStart template following [Edit Global Parameters](./Edit-Global-Parameters.md)
+6. Create a pull request to `main`. After approval, changes will be applied automatically. After the successful deployment, following resources will be created:
     1. A resource group name `<site>-rg`
     2. A KeyVault named `<site>-kv`: Contains secrets that used for deploy
     3. Arc servers that make up the HCI cluster
@@ -21,7 +21,7 @@
     6. Arc Resource Bridge named `<site>-cl-arcbridge`
     7. Custom location of ARB named `<site>-customLocation`
     8. Two storage paths named `UserStorage1`, `UserStorage2`
-6. After the pull request is merged, new sites will be applied.
+7. After the pull request is merged, new sites will be applied.
 
 ## Next Step
 
