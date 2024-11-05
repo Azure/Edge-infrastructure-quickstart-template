@@ -245,7 +245,7 @@ Following tutorials help you to turn on opt-in features:
 
 ## License  
   
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.  
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information. This repository includes a script that will download binary files into your environment, which remain subject to your relevant customer agreement with Microsoft.
   
 ## Disclaimer  
 
