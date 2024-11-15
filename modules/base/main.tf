@@ -228,7 +228,7 @@ module "hci_logicalnetwork" {
 
 module "aks_arc" {
   source  = "Azure/avm-res-hybridcontainerservice-provisionedclusterinstance/azurerm"
-  version = "~>0.3"
+  version = "~>0.5"
 
   depends_on       = [module.hci_cluster, module.hci_logicalnetwork]
   enable_telemetry = var.enable_telemetry
@@ -242,6 +242,7 @@ module "aks_arc" {
   ssh_key_vault_id            = module.hci_cluster.keyvault.id
   control_plane_ip            = var.aks_arc_control_plane_ip
   kubernetes_version          = var.kubernetes_version
+  enable_workload_identity    = var.enable_workload_identity
   control_plane_count         = var.control_plane_count
   rbac_admin_group_object_ids = var.rbac_admin_group_object_ids
 }
@@ -343,7 +344,7 @@ resource "azapi_resource" "hci_win_image" {
 module "hci-vm" {
   count                 = var.download_win_server_image ? 1 : 0
   source                = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
-  version               = "~>0.1"
+  version               = "~>0.3"
   depends_on            = [azapi_resource.hci_win_image]
   location              = azurerm_resource_group.rg.location
   custom_location_id    = module.hci_cluster.customlocation.id
