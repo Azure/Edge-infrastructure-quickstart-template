@@ -81,7 +81,7 @@ resource "azurerm_role_assignment" "hci_rp_role_assign" {
 # Prepare arc server
 module "hci_server_provisioner" {
   source  = "Azure/avm-ptn-hci-server-provisioner/azurerm"
-  version = "~>0.3"
+  version = "~>0.2"
 
   depends_on = [azurerm_role_assignment.hci_rp_role_assign, module.hci_ad_provisioner]
   for_each = var.enable_provisioners ? {
