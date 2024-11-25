@@ -63,11 +63,27 @@ module "hci_ad_provisioner" {
   adou_path                = local.adou_path
 }
 
+data "azuread_service_principal" "hci_rp" {
+  count = var.rp_service_principal_object_id == "" ? 1 : 0
+
+  client_id = "1412d89f-b8a8-4111-b4fd-e82905cbd85d"
+}
+
+resource "azurerm_role_assignment" "hci_rp_role_assign" {
+  count                = var.enable_provisioners ? 1 : 0
+  principal_id         = var.rp_service_principal_object_id == "" ? data.azuread_service_principal.hci_rp[0].object_id : var.rp_service_principal_object_id
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Azure Connected Machine Resource Manager"
+
+  depends_on = [data.azuread_service_principal.hci_rp]
+}
+
 # Prepare arc server
 module "hci_server_provisioner" {
   source  = "Azure/avm-ptn-hci-server-provisioner/azurerm"
-  version = "~>0.1"
+  version = "~>0.2"
 
+  depends_on = [azurerm_role_assignment.hci_rp_role_assign, module.hci_ad_provisioner]
   for_each = var.enable_provisioners ? {
     for index, server in var.servers :
     server.name => server.ipv4Address
@@ -91,23 +107,24 @@ module "hci_server_provisioner" {
 
 module "hci_cluster" {
   source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.10"
+  version = "~>0.11"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
 
-  location             = azurerm_resource_group.rg.location
-  name                 = local.cluster_name
-  cluster_tags         = var.cluster_tags
-  resource_group_id    = azurerm_resource_group.rg.id
-  site_id              = var.site_id
-  domain_fqdn          = var.domain_fqdn
-  adou_path            = local.adou_path
-  servers              = var.servers
-  custom_location_name = local.custom_location_name
-  eu_location          = var.eu_location
-  operation_type       = var.operation_type
-  configuration_mode   = var.configuration_mode
+  location                       = azurerm_resource_group.rg.location
+  name                           = local.cluster_name
+  cluster_tags                   = var.cluster_tags
+  resource_group_id              = azurerm_resource_group.rg.id
+  site_id                        = var.site_id
+  domain_fqdn                    = var.domain_fqdn
+  adou_path                      = local.adou_path
+  servers                        = var.servers
+  custom_location_name           = local.custom_location_name
+  eu_location                    = var.eu_location
+  operation_type                 = var.operation_type
+  configuration_mode             = var.configuration_mode
+  create_hci_rp_role_assignments = !var.enable_provisioners
 
   # Network settings
   starting_address    = var.starting_address
