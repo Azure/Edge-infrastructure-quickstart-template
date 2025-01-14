@@ -18,7 +18,7 @@ variable "logical_network_tags" {
 
 variable "route_name" {
   type        = string
-  default     = "default"
+  default     = null
   description = "The name of the route"
 }
 
