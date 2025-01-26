@@ -49,4 +49,5 @@ jobs:
     uses: ./.github/workflows/site-cd-workflow.yml
     with:
       working-directory: ${{ matrix.site.workingDirectory }}
+      siteId: ${{ matrix.site.siteId }}
     secrets: inherit
