@@ -17,7 +17,7 @@ data "azurerm_client_config" "current" {}
 
 module "edge_site" {
   source  = "Azure/avm-res-edge-site/azurerm"
-  version = "~>0.1"
+  version = "~>1.0"
 
   count            = var.country != "" ? 1 : 0
   enable_telemetry = var.enable_telemetry
@@ -46,7 +46,7 @@ module "edge_site" {
 # Prepare AD
 module "hci_ad_provisioner" {
   source  = "Azure/avm-ptn-hci-ad-provisioner/azurerm"
-  version = "~>0.1"
+  version = "~>1.0"
 
   count            = var.enable_provisioners ? 1 : 0
   enable_telemetry = var.enable_telemetry
@@ -81,7 +81,7 @@ resource "azurerm_role_assignment" "hci_rp_role_assign" {
 # Prepare arc server
 module "hci_server_provisioner" {
   source  = "Azure/avm-ptn-hci-server-provisioner/azurerm"
-  version = "~>0.2"
+  version = "~>1.0"
 
   depends_on = [azurerm_role_assignment.hci_rp_role_assign, module.hci_ad_provisioner]
   for_each = var.enable_provisioners ? {
@@ -107,7 +107,7 @@ module "hci_server_provisioner" {
 
 module "hci_cluster" {
   source  = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  version = "~>0.11"
+  version = "~>1.0"
 
   depends_on       = [module.hci_server_provisioner, module.hci_ad_provisioner]
   enable_telemetry = var.enable_telemetry
@@ -221,7 +221,7 @@ module "hci_cluster" {
 
 module "hci_logicalnetwork" {
   source  = "Azure/avm-res-azurestackhci-logicalnetwork/azurerm"
-  version = "~>0.4"
+  version = "~>1.0"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
@@ -245,7 +245,7 @@ module "hci_logicalnetwork" {
 
 module "aks_arc" {
   source  = "Azure/avm-res-hybridcontainerservice-provisionedclusterinstance/azurerm"
-  version = "~>0.5"
+  version = "~>1.0"
 
   depends_on       = [module.hci_cluster, module.hci_logicalnetwork]
   enable_telemetry = var.enable_telemetry
@@ -270,7 +270,7 @@ locals {
 
 module "hci_insights" {
   source  = "Azure/avm-ptn-azuremonitorwindowsagent/azurerm"
-  version = "~>0.4"
+  version = "~>1.0"
 
   depends_on       = [module.hci_cluster]
   enable_telemetry = var.enable_telemetry
@@ -361,7 +361,7 @@ resource "azapi_resource" "hci_win_image" {
 module "hci-vm" {
   count                 = var.download_win_server_image ? 1 : 0
   source                = "Azure/avm-res-azurestackhci-virtualmachineinstance/azurerm"
-  version               = "~>0.3"
+  version               = "~>1.0"
   depends_on            = [azapi_resource.hci_win_image]
   location              = azurerm_resource_group.rg.location
   custom_location_id    = module.hci_cluster.customlocation.id

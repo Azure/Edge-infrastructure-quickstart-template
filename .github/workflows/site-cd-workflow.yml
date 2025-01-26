@@ -6,6 +6,10 @@ on:
       working-directory:
         required: true
         type: string
+      siteId:
+        required: true
+        type: string
+
 
 permissions:
   id-token: write
@@ -79,9 +83,9 @@ jobs:
         run: terraform plan -input=false -out="${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
 
       - name: Upload the plan
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tf-plan
+          name: tf-plan-${{ inputs.siteId }}
           path: "${{ runner.temp }}/${{ inputs.working-directory }}/out.tfplan"
 
       # Telemetry: Plan Successful
